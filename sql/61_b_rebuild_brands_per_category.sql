@@ -1,0 +1,1 @@
+ALTER TABLE brands_per_category AUTO_INCREMENT=1

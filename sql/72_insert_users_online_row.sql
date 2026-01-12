@@ -1,0 +1,1 @@
+INSERT INTO `users_online` (`users_count`, `public_count`, `total_count`, `when`) VALUES ( {{users}}, {{public}}, {{total}}, {{when}} )

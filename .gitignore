@@ -1,0 +1,6 @@
+.git.nosync
+.DS_Store
+include
+run
+jobs
+tmp

@@ -1,0 +1,578 @@
+3.7.0
+
+Moved away private keys
+
+
+3.6.22
+
+Display users online count
+
+
+3.6.21
+
+NEXI 2O26
+
+
+3.6.20
+
+Subscriptions: if a user made a trial but later subscribed then don't sospend them when the trial is over
+
+
+3.6.19
+
+Subscriptions: send email for expected incoming bank transfers and suspend the account
+
+
+3.6.18
+
+Trials: suspend users in expired trials - fixed bug
+
+
+3.6.17
+
+Trials: suspend users in expired trials
+
+
+3.6.16
+
+Subscriptions: fixed `last_payment_did_failed` value when deactivating subscription
+
+
+3.6.15
+
+Subscriptions: better transaction 'label'
+
+
+3.6.14
+
+Subscriptions: implemented subscription duration
+
+
+3.6.13
+
+Subscriptions: when cash-in VAT included value is rounded to 2 decimals
+
+
+3.6.12
+
+Subscriptions: payment outcome email to customer in italian end english
+
+
+3.6.11
+
+Subscriptions: payment request switches to 'RC' = "Rinnovo carta" if the payment fails
+
+
+3.6.10
+
+DONT_CACHE: the document must have old release date (-3yrs) but has not been read in the past two years
+
+
+3.6.9
+
+AUTOEXPIRE: the document must have old release date but has not been read in the past three years
+
+
+3.6.8
+
+Set DONT_CACHE = 0 date on documents with very old EXPIRE date
+
+
+3.6.7
+
+Set EXPIRE date on documents with very old RELEASE date
+
+
+3.6.6
+
+Fixed bug causing wrong renewal data on credit card subscriptions
+
+
+3.6.5
+
+Added CheckCert to send a email warning when www.pinaxo.com cert is about to expire
+
+
+3.6.4
+
+Updated SMTP config and `sender` address
+
+
+3.6.3
+
+Idrolab productlist: a query string ?from=pinaxo is added to the URL
+
+
+3.6.2
+
+Php-Fpm is not checked during deployment
+
+
+3.6.1
+
+When cashing in also client is emailed
+
+
+3.6.0
+
+Automated cash-in of expired subs. and deactivation of expired canceled subs.
+
+
+3.5.17
+
+php-fpm: check that wordpress is not blocked and a php-fpm restart is needed
+
+
+3.5.16
+
+qr_count: count unique QRs
+
+
+3.5.15
+
+QR Code Count Table: order by qr count desc and colorize prettier
+
+
+3.5.14
+
+Update QR Code Count Table in Blog Pages (It + En)
+
+
+3.5.12
+
+Load PhpSpreadsheet from include/3rd-parts
+
+
+3.5.11
+
+The count of QR codes detected is stored into db
+
+
+3.5.10
+
+Added QR-Code link detection
+
+
+3.5.9
+
+Use MASTER(/SLAVE)_STORAGE_DIR instead of PATH_TO_MASTER(/SLAVE)_VOLUME
+Backups are synced only on backup drive since the master storage volume is also the root volume
+
+
+3.5.8
+
+Product price date is stored too
+
+
+3.5.7
+
+Added `products_source` in products.js to recognize pricelists from idrolab
+
+
+3.5.6
+
+Only documents of idrolab partners are tagged
+
+
+3.5.5
+
+Fucked up xls goes to badxls/ instead of private/
+
+
+3.5.4
+
+Searches per brand stats (Trends) are built per year per category
+
+
+3.5.3
+
+Build searches per brand statistics
+
+
+3.5.2
+
+Backup separately databases data and structure
+
+
+3.5.1
+
+Minor fixes
+
+
+3.5.0
+
+Independent pages color calculation restored. Fully cache V2
+
+
+3.4.9
+
+Cache V1 abandoned
+
+
+3.4.8
+
+Cache V1 is deleted from all documents
+Meta and Covers are rendered based on `covers_md5` and `meta_md5`
+
+
+3.4.7
+
+Cache V1 is no longer built for new documents
+
+
+3.4.6
+
+PdfSize (pdfsize) passes `-cachev2 yes`
+(however still page packing is never requested,
+the tool is used only for getting pages count and cover pixels size)
+
+
+3.4.5
+
+Fix DbDocumentQquery returns the number of affected rows on INSERT, UPDATE, DELETE;
+Refactory of function names: db functions are prefixed with `Db`
+
+
+3.4.4
+
+Calculates and stores cache+cachev2 size
+
+
+3.4.3
+
+Fix documents with missing MD5 in the db
+
+
+3.4.2
+
+Implemented cache v2 `dont_cache` param on documents
+
+
+3.4.1
+
+Removed HD and pages color (the latter is now included in cache v2)
+
+
+3.4.0
+
+Implemented cache v2
+
+
+3.3.5
+
+Page colors save `pagescolor_md5` to know if page colors have to be (re)generated
+
+
+3.3.4
+
+New jpeg quality set to 0.70 on all resolutions, both HD and non-HD. No more documents-to-HD
+
+
+3.3.3
+
+Unset referenced variable in foreach()
+
+
+3.3.2
+
+Redesigned updates emailing
+
+
+3.3.1
+
+Autorestart when library (include) is detected
+
+
+3.3.0
+
+Improved database backup
+
+
+3.2.24
+
+Removed pricelist version
+
+
+3.2.23
+
+Send price list updates to mailing list
+
+
+3.2.22
+
+Fixed and improved Pricelist loader
+
+
+3.2.21
+
+Send email notifications for notes on expired documents
+
+
+3.2.20
+
+Send `alive` during process of big price lists
+
+
+3.2.19
+
+Adapted to new live action
+
+
+3.2.18
+
+Log the pricelists uploaded
+
+
+3.2.16
+
+Introduced WorkerAlive
+
+
+3.2.15
+
+Restart the worker if memory exceed limit 1GB
+
+
+3.2.11
+
+Transcode from digital pricelist code to PDF pricelist code
+
+
+3.2.10
+
+Max memory 2GB
+
+
+3.2.9
+
+Compute excel price lists multi-sheet & ignore initial rows
+
+
+3.2.7
+
+Compute excel price lists with improvements
+
+
+3.2.6
+
+Compute excel price lists
+
+
+3.2.5
+
+Users online
+
+
+3.2.4
+
+Rebuild brands per category
+
+
+3.2.3
+
+Delete expired sessions
+
+
+3.3.2
+
+Added cover width 944px
+
+
+3.2.1
+
+Fix sent documents
+Pages color
+Removed platform from user agent identification
+
+
+3.1.3
+
+Added BigDataCloud to parse the user agent
+
+
+3.1.2
+
+More fixes operated by PurgeSentDocuments
+
+
+3.1.1
+
+PurgeSentDocuments
+
+
+3.1.0
+
+EventsSmall
+run/ files are deleted on quit
+
+3.0.0
+
+Introduced constants support in queries
+run/ directory with process running
+Intrduced normal mode and heavy duty mode
+
+
+2.9.0
+
+Removed SSL Cert renewal code
+
+
+2.8.1
+
+UserStack
+
+
+2.8.0
+
+What's My Browser
+
+
+2.7.1
+
+Purge Live Action table
+
+
+2.7.0
+
+Produce and save document metadata
+
+
+2.6.3
+
+Removed targetLeft and targetTop from links
+
+
+2.6.2
+
+Idrolab tagging is paused during backup
+
+
+2.6.1
+
+Idrolab stats
+
+
+2.6.0
+
+Idrolab document tagging
+
+
+2.5.3
+
+Implemented "immediate" mode: accepted instructions `-cmd` and `-sync`
+
+
+2.5.2
+
+Minor fix in db backup archive system
+
+
+2.5.1
+
+Implemented log rotation
+
+
+2.5.0
+
+Generate pdfff and pdfidx of inbox documents
+
+
+2.4.6
+
+Added SSL certificates renewal procedure
+
+
+2.4.5
+
+Added backup of tct & iconclick databases
+
+
+2.4.4
+
+When building cache also pdfidx is rebuilt as sometimes it is corrupt when coming from the inbox (sent documents)
+
+
+2.4.3
+
+Use new `Arrays` functions
+
+
+2.4.2
+
+Database backup is paused during system backup
+Backups are copied to master and slave volume via rsync
+
+
+2.4.1
+
+fixed bug in database backup archive logic
+
+
+2.4.0
+
+Perform backup of databases and delete old backups
+Worker deletes bot generated event records
+Main loop refactory
+DbDocumentQuery returns the number of affected rows for INSERT, UPDATE, DELETE queries
+Worker may stop when rendering covers or cache (document will be left locked)
+[pdfff, pdfidx, pdfjpg have been modified to ignore CTRL-C]
+
+
+2.3.3
+
+QueryLoad: queries loaded from disk are cached
+KeepDrivesSpinning: separate (longer) touch time
+
+
+2.3.2
+
+PathIsSafe: `document_id` is checked
+
+
+2.3.1
+
+Slave is syncronized into WorkerRun (avoiding multiple syncs for same document at each partial op)
+
+
+2.3.0
+
+Live sync of BackupHD (slave Volume)
+read constants from webapp config.json file
+
+
+2.2.3
+
+Added hostname to email logs
+
+
+2.2.2
+
+Cache is not rendered (and deleted if present) when a command `all` or `cache` is issued on a long time expired document
+ConsistencyCheck: cache may not be present (long time expired document)
+fix: RunDocumentWithCommand: `worker_cmd` is cleared whether execution succeeds or fails
+Slow pages: 2 levels of slow rendering
+Introduced "NOTICE" log for minor alerts
+
+
+2.2.1
+
+Records and logs slow rendering pages + minor improvements
+DocumentUpdateAndUnlock: fields not meant to be changed are removed
+RunDocumentWithCommand: Warn for a command `all` or `cache` on documents too old to be cached
+Execute: send stderr to stdout catching both
+RunDocumentToCache: sets the cache_hd value if resolutions='[]' (rebuild all)
+startup: changed "how to stop" message
+
+
+2.1.1
+
+WORKER_SIGNALS: the worker can run without signals support
+EnoughtDiskSpace: check if the repository is available
+
+
+2.0.0
+
+Initial release, ported from worker.py version 1.5.6
+
+
+

@@ -1,0 +1,1 @@
+TRUNCATE TABLE brands_per_category
