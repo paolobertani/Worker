@@ -9,6 +9,7 @@ SELECT
         `duration`,
         `vat`,
         `num_contratto`,
+        `pan`,
         `pan_expire`,
         `user_id`,
         `group_id`

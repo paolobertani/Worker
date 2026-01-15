@@ -24,7 +24,7 @@ function Subscriptions()
 function SubscriptionsCCSuspendExpired()
 {
     $milliseconds = Milliseconds();
-    WorkerLog( WORKER_INFO, "Suspending expired CC subscriptions...", 0, false, false, 1 );
+    WorkerLog( WORKER_INFO, "Suspending expired credit-card subscriptions...", 0, false, false, 1 );
 
     $count = 0;
 
@@ -69,7 +69,7 @@ function SubscriptionsCCSuspendExpired()
 
     $logdb = $count > 0 ? true : false;
     $milliseconds = Milliseconds( $milliseconds );
-    WorkerLog( WORKER_INFO, "Deactivated $count expired CC subscriptions: $milliseconds ms", 0, $logdb, false, 1 );
+    WorkerLog( WORKER_INFO, "Deactivated $count expired credit-card subscriptions: $milliseconds ms", 0, $logdb, false, 1 );
     WorkerAlive();
     sleep(3);
 }
@@ -83,7 +83,7 @@ function SubscriptionsCCSuspendExpired()
 function SubscriptionsBTSuspendExpired()
 {
     $milliseconds = Milliseconds();
-    WorkerLog( WORKER_INFO, "Suspending expired BT subscriptions...", 0, false, false, 1 );
+    WorkerLog( WORKER_INFO, "Suspending expired bank-transfer subscriptions...", 0, false, false, 1 );
 
     $count = 0;
 
@@ -130,7 +130,7 @@ function SubscriptionsBTSuspendExpired()
 
     $logdb = $count > 0 ? true : false;
     $milliseconds = Milliseconds( $milliseconds );
-    WorkerLog( WORKER_INFO, "Deactivated $count expired BT subscriptions: $milliseconds ms", 0, $logdb, false, 1 );
+    WorkerLog( WORKER_INFO, "Deactivated $count expired bank-transfer subscriptions: $milliseconds ms", 0, $logdb, false, 1 );
     WorkerAlive();
     sleep(3);
 }
@@ -295,30 +295,36 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         $payment_id = "?";
     }
 
-    $num_contratto = $subscription[ 'num_contratto' ];
-    $subscription_id = $subscription[ 'id' ];
-    $pan_expire = $subscription[ 'pan_expire' ];
-    $amount = $subscription[ 'amount' ];
-    $duration = $subscription[ 'duration' ];
-    $vat = $subscription[ 'vat' ];
-    $user_id = $subscription[ 'user_id' ];
-    $group_id = $subscription[ 'group_id' ];
+    $num_contratto =    $subscription[ 'num_contratto' ];
+    $subscription_id =  $subscription[ 'id' ];
+    $pan_expire =       $subscription[ 'pan_expire' ];
+    $amount =           $subscription[ 'amount' ];
+    $duration =         $subscription[ 'duration' ];
+    $vat =              $subscription[ 'vat' ];
+    $user_id =          $subscription[ 'user_id' ];
+    $group_id =         $subscription[ 'group_id' ];
     $subscription_description = $subscription[ 'description' ];
-    $valid_until_day = $subscription[ 'valid_until_day' ];
-    $valid_until = $subscription[ 'valid_until' ];
+    $valid_until_day =  $subscription[ 'valid_until_day' ];
+    $valid_until =      $subscription[ 'valid_until' ];
 
-    $amount_nexi = round( $duration * $amount * ( 1 + $vat / 100 ), 2 );
+    $from =             date( "Y-m-d" );
+    $to =               SubscriptionsGetValidUntil( $valid_until_day, $valid_until, $duration );
+    $pan =              $subscription[ 'pan' ];
+    $nexi_id =          NEXI_ALIAS_RECURR;
+    $nexi_key =         '*' . substr( NEXI_KEY_RECURR, -4, 4 );
 
-    $requestUrl = NEXI_URL_RECURR;
-    $alias = NEXI_ALIAS_RECURR;
-    $secret = NEXI_KEY_RECURR;
-    $numContratto = $num_contratto;
-    $when = date( 'Y-m-d H:i:s', time() );
-    $codTrans = "PINAXO SUBS {$subscription_id} TRNS {$payment_id}";
-    $importo = intval( round( $amount_nexi * 100 ) );
-    $divisa = '978'; // EUR
-    $timeStamp = time() * 1000;
-    $scadenza = ''; // $pan_expire;
+    $amount_nexi =      round( $duration * $amount * ( 1 + $vat / 100 ), 2 );
+
+    $requestUrl =       NEXI_URL_RECURR;
+    $alias =            NEXI_ALIAS_RECURR;
+    $secret =           NEXI_KEY_RECURR;
+    $numContratto =     $num_contratto;
+    $when =             date( 'Y-m-d H:i:s', time() );
+    $codTrans =         "PINAXO SUBS {$subscription_id} TRNS {$payment_id}";
+    $importo =          intval( round( $amount_nexi * 100 ) );
+    $divisa =           '978'; // EUR
+    $timeStamp =        time() * 1000;
+    $scadenza =         ''; // $pan_expire;
     $mac = sha1(
         'apiKey=' . $alias .
         'numeroContratto=' . $numContratto .
@@ -331,13 +337,13 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     );
 
     $requestParams = [
-        'apiKey' => $alias,
-        'numeroContratto' => $numContratto,
-        'codiceTransazione' => $codTrans,
-        'importo' => "$importo",
-        'divisa' => "$divisa",
-        'timeStamp' => "$timeStamp",
-        'mac' => $mac
+        'apiKey' =>             $alias,
+        'numeroContratto' =>    $numContratto,
+        'codiceTransazione' =>  $codTrans,
+        'importo' =>            "$importo",
+        'divisa' =>             "$divisa",
+        'timeStamp' =>          "$timeStamp",
+        'mac' =>                $mac
     ];
 
     $json = json_encode( $requestParams );
@@ -407,6 +413,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     {
         $ok = false;
         $message = $response['errore']['messaggio'];
+        /** ** ** **/ file_put_contents( "/Users/administrator/Desktop/nexi_error_response.txt", var_export( $response, true ) . "\n\n---\n\n", FILE_APPEND );
     }
 
     $error = '';
@@ -418,7 +425,12 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         'when' => $when,
         'success' => ( $ok ? 1 : 0 ),
         'amount_nexi' => $amount_nexi,
-        'codTrans' => $codTrans
+        'codTrans' => $codTrans,
+        'from' => $from,
+        'to' => $to,
+        'pan' => $pan,
+        'nexi_id' => $nexi_id,
+        'nexi_key' => $nexi_key
     ] );
 
     if( $result === false )
