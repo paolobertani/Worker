@@ -39,23 +39,23 @@ define( 'PATH_TO_BAD_XLS',          '/Users/administrator/www/www.pinaxo.com/htm
 define( 'WORKER_INTERVAL_CACHE',             11 );   // Cache operations time interval
 define( 'WORKER_INTERVAL_TOUCH',             90 );   // Touch time interval to keep drives spinning
 define( 'WORKER_INTERVAL_DELETEBOTS',       900 );   // Bot generated records removal time interval
-define( 'WORKER_INTERVAL_DATABASES',       1800 );   // Database backup time interval
-define( 'WORKER_INTERVAL_LOGROTATE',        600 );   // Log rotation time interval
-define( 'WORKER_INTERVAL_IDROLABSTATS',     900 );   // Idrolab stats generation interval
+define( 'WORKER_INTERVAL_DATABASES',        510 );   // Database backup time interval
+define( 'WORKER_INTERVAL_LOGROTATE',        509 );   // Log rotation time interval
+define( 'WORKER_INTERVAL_IDROLABSTATS',     508 );   // Idrolab stats generation interval
 define( 'WORKER_INTERVAL_LIVEACTION',        60 );   // Live Action management interval
 define( 'WORKER_INTERVAL_EVENTSSMALL',       40 );   // Cut events_small and recalcs 30days user usage
-define( 'WORKER_INTERVAL_PURGESDOCS',       250 );   // Purge Sent Documents table from spurious records
-define( 'WORKER_INTERVAL_DEL_EXPS',        1200 );   // Delete expired sessions
-define( 'WORKER_INTERVAL_REBUILD_BPC',     3500 );   // Rebuild brands per category
+define( 'WORKER_INTERVAL_PURGESDOCS',       505 );   // Purge Sent Documents table from spurious records
+define( 'WORKER_INTERVAL_DEL_EXPS',         506 );   // Delete expired sessions
+define( 'WORKER_INTERVAL_REBUILD_BPC',      507 );   // Rebuild brands per category
 define( 'WORKER_INTERVAL_USERS_ONLINE',      25 );   // Populate users online count table
 define( 'WORKER_INTERVAL_XLS',                6 );   // Load XLS price lists
 define( 'WORKER_INTERVAL_TRANSCODE',          7 );   // Transcode products codes to match with the codes on the PDFs
-define( 'WORKER_INTERVAL_UPDATES_MAILING', 1200 );   // Send updates emails to mailing list
-define( 'WORKER_INTERVAL_STATS',           1400 );   // Build statistics
-define( 'WORKER_INTERVAL_QRTABLE',         1500 );   // Update QR Code Count Table in Blog Pages (It + En)
-define( 'WORKER_INTERVAL_CHECK_PHP_FPM',     45 );   // Check if PHP-FPM need a restart due to Wordpress issues
-define( 'WORKER_INTERVAL_SUBSCRIPTIONS',     30 );   // Cash in expired subscriptions
-define( 'WORKER_INTERVAL_TRIALS',            29 );   // Suspend users in expired trials
+define( 'WORKER_INTERVAL_UPDATES_MAILING',  501);   // Send updates emails to mailing list
+define( 'WORKER_INTERVAL_STATS',            502 );   // Build statistics
+define( 'WORKER_INTERVAL_QRTABLE',          503 );   // Update QR Code Count Table in Blog Pages (It + En)
+define( 'WORKER_INTERVAL_CHECK_PHP_FPM',    504 );   // Check if PHP-FPM need a restart due to Wordpress issues
+define( 'WORKER_INTERVAL_SUBSCRIPTIONS',    301 );   // Cash in expired subscriptions
+define( 'WORKER_INTERVAL_TRIALS',           302 );   // Suspend users in expired trials
 define( 'WORKER_INTERVAL_CHECK_CERT',   3600*24 );   // Check cert every day
 define( 'WORKER_INTERVAL_AUTO_EXPIRE',  3600*24 );   // Check autoexpire every day
 define( 'WORKER_INTERVAL_AUTO_UNCACHE', 3600*24 );   // Check remove from cache every day
