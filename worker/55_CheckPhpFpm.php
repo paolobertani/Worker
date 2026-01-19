@@ -19,20 +19,20 @@ function CheckPhpFpm()
 
     $restart = false;
 
-    $status = CheckPhpFpmCurl( 'https://www.pinaxo.com/blog/it', /*timeout=*/40 );
+    $status = CheckPhpFpmCurl( 'https://www.pinaxo.com/blog/it/', /*timeout=*/40 );
     if( $status !== 200 && $status !== 301 )
     {
         $restart = true;
-        WorkerLog( WORKER_WARNING, "PHP-FPM: https://www.pinaxo.com/blog/it is not responding, restarting php-fpm; status=$status", 0, true, true, true );
+        WorkerLog( WORKER_WARNING, "PHP-FPM: https://www.pinaxo.com/blog/it/ is not responding, restarting php-fpm; status=$status", 0, true, true, true );
     }
 
     if( ! $restart )
     {
-        $status = CheckPhpFpmCurl( 'https://www.pinaxo.com/blog/en', /*timeout=*/40 );
+        $status = CheckPhpFpmCurl( 'https://www.pinaxo.com/blog/en/', /*timeout=*/40 );
 	    if( $status !== 200 && $status !== 301 )
         {
             $restart = true;
-            WorkerLog( WORKER_WARNING, "PHP-FPM: https://www.pinaxo.com/blog/en is not responding, restarting php-fpm; status=$status", 0, true, true, true );
+            WorkerLog( WORKER_WARNING, "PHP-FPM: https://www.pinaxo.com/blog/en/ is not responding, restarting php-fpm; status=$status", 0, true, true, true );
         }
     }
 
@@ -69,6 +69,14 @@ function CheckPhpFpmCurl( $url, $timeout = 15, &$response = '', &$errnum = 0 )
     curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER,   0 );
 
     curl_setopt( $handle, CURLOPT_TIMEOUT,          $timeout );
+
+    curl_setopt( $handle, CURLOPT_HTTPHEADER, [ // macOS Safari
+        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language: it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Accept-Encoding: gzip, deflate, br',
+        'Connection: keep-alive',
+        'Upgrade-Insecure-Requests: 1',
+    ] );
 
 
     // Send request, get response
