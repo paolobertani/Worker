@@ -128,7 +128,7 @@ function ManagePricelist()
 
             for( $x = 1; $x <= 52; $x++ )
             {
-                $value = $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $x, $header_y )->getValue();
+                $value = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $x, $header_y ] )->getValue();
                 $value = strtolower( trim( $value ) );
 
                 if( $value == 'codice'       && $codeColumn === 0 ) { $codeColumn = $x; }
@@ -195,47 +195,47 @@ function ManagePricelist()
 
             if( true )
             {
-                $type = $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $codeColumn, $y )->getDataType();
+                $type = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->getDataType();
                 if( $type === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA )
                 {
-                    $code = (string)$spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $codeColumn, $y )->getCalculatedValue();
+                    $code = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->getCalculatedValue();
                 }
                 else
                 {
-                    $code = (string)$spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $codeColumn, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+                    $code = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
                 }
             }
             if( $cod2Column !== 0 )
             {
-                $type = $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $cod2Column, $y )->getDataType();
+                $type = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->getDataType();
                 if( $type === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA )
                 {
-                    $cod2 = (string)$spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $cod2Column, $y )->getCalculatedValue();
+                    $cod2 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->getCalculatedValue();
                 }
                 else
                 {
-                    $cod2 = (string)$spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $cod2Column, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+                    $cod2 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
                 }
             }
             if( $cod3Column !== 0 )
             {
-                $type = $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $cod3Column, $y )->getDataType();
+                $type = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->getDataType();
                 if( $type === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA )
                 {
-                    $cod3 = (string)$spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $cod3Column, $y )->getCalculatedValue();
+                    $cod3 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->getCalculatedValue();
                 }
                 else
                 {
-                    $cod3 = (string)$spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $cod3Column, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+                    $cod3 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
                 }
             }
-            $prce = $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $prceColumn, $y )->getCalculatedValue();
-            $dscr = $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $dscrColumn, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc2 = $dsc2Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $dsc2Column, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc3 = $dsc3Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $dsc3Column, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc4 = $dsc4Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $dsc4Column, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc5 = $dsc5Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $dsc5Column, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $date = $dateColumn === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCellByColumnAndRow( $dateColumn, $y )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $prce = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $prceColumn, $y ] )->getCalculatedValue();
+            $dscr = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dscrColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $dsc2 = $dsc2Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc2Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $dsc3 = $dsc3Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc3Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $dsc4 = $dsc4Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc4Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $dsc5 = $dsc5Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc5Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $date = $dateColumn === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dateColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
 
             $code = StringReplace( "$code $cod2 $cod3", "\r", "\n" );
             $code = StringReplace( $code, "\n", " " );
