@@ -414,7 +414,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     else
     {
         $ok = false;
-        $message = trim( $response[ 'codice' ] ?? '' ) . ': ' . trim( $response[ 'messaggio' ] ?? '' );
+        $message = trim( $response['errore']['messaggio'] ?? '' );
     }
 
     $error = '';
