@@ -50,15 +50,15 @@ define( 'WORKER_INTERVAL_REBUILD_BPC',      507 );   // Rebuild brands per categ
 define( 'WORKER_INTERVAL_USERS_ONLINE',      25 );   // Populate users online count table
 define( 'WORKER_INTERVAL_XLS',                6 );   // Load XLS price lists
 define( 'WORKER_INTERVAL_TRANSCODE',          7 );   // Transcode products codes to match with the codes on the PDFs
-define( 'WORKER_INTERVAL_UPDATES_MAILING',  501);   // Send updates emails to mailing list
+define( 'WORKER_INTERVAL_UPDATES_MAILING',  501 );   // Send updates emails to mailing list
 define( 'WORKER_INTERVAL_STATS',            502 );   // Build statistics
 define( 'WORKER_INTERVAL_QRTABLE',          503 );   // Update QR Code Count Table in Blog Pages (It + En)
 define( 'WORKER_INTERVAL_CHECK_PHP_FPM',    504 );   // Check if PHP-FPM need a restart due to Wordpress issues
-define( 'WORKER_INTERVAL_SUBSCRIPTIONS',    301 );   // Cash in expired subscriptions
+define( 'WORKER_INTERVAL_SUBSCRIPTIONS',     30 );   // Cash in expired subscriptions
 define( 'WORKER_INTERVAL_TRIALS',           302 );   // Suspend users in expired trials
-define( 'WORKER_INTERVAL_CHECK_CERT',   3600*24 );   // Check cert every day
-define( 'WORKER_INTERVAL_AUTO_EXPIRE',  3600*24 );   // Check autoexpire every day
-define( 'WORKER_INTERVAL_AUTO_UNCACHE', 3600*24 );   // Check remove from cache every day
+define( 'WORKER_INTERVAL_CHECK_CERT',     86400 );   // 24h - Check cert every day
+define( 'WORKER_INTERVAL_AUTO_EXPIRE',     1801 );   // Check autoexpire
+define( 'WORKER_INTERVAL_AUTO_UNCACHE',    1802 );   // Check remove from cache
 
 define( 'WORKER_SIGNALS',                  true );   // Use signals (must be supported by PHP)
 define( 'WORKER_SLEEP',                       5 );   // Worker sleep time
@@ -71,9 +71,12 @@ define( 'WORKER_MEMORY_LIMIT_MB',          1024 );   // If exceeded then the wor
 define( 'WORKER_CACHE_PAGE_LOTS',           100 );   // How many pages to render at each iteration; set to 0 to render every page
 define( 'WORKER_CACHE_PAUSE',       '1:30-8:00' );   // Pause cache generation around backups
 define( 'WORKER_CACHE_MAKES_COLORS',      false );   // Are pagescolor built during cache generation
+define( 'WORKER_CASHIN_START_AT',			 10 );	 // Subscription automatic cash-in daily inretval (hour from-to)
+define( 'WORKER_CASHIN_END_AT',			     20 );	 // Create a directory named CASHIN/ at ROOT to force immediate cashin
 define( 'WORKER_AUTOEXPIRE_YEARS_OLD',        5 );   // After this amount of years from release date a document is considered old
-define( 'WORKER_AUTOEXPIRE_YEARS_IGN',        3 );   // If a document in the past X years hass never been read and is old must expire
+define( 'WORKER_AUTOEXPIRE_YEARS_IGN',        3 );   // If a document in the past X years has never been read and is old must expire
 define( 'WORKER_AUTOEXPIRE_YEARS_ADD',        2 );   // How many years add to the release date to set the expire date
+define( 'WORKER_AUTOEXPIRE_YEARS_UPL',        2 );   // The old document is set to expired only if has been uploaeded more than Y yrs ago
 define( 'WORKER_DONT_CACHE_YEARS_OLD',        3 );   // After this amount of years from expiring a document is considered old
 define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this OLD document has never been read: do not cache it
 
@@ -81,24 +84,24 @@ define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this
 // EMAIL CONFIGURATION
 //
 
-/*  define( 'WORKER_EMAIL_TO',      '***' );
-    define( 'WORKER_EMAIL_FROM',    '***' );
-    define( 'WORKER_EMAIL_NAME',    '***' );
-    define( 'WORKER_EMAIL_HOST',    '***' );
-    define( 'WORKER_EMAIL_AUTH',    '***' );
-    define( 'WORKER_EMAIL_USER',    '***' );
-    define( 'WORKER_EMAIL_PASS',    '***' );
-    define( 'WORKER_EMAIL_PORT',    '***' );
-    define( 'WORKER_EMAIL_SCRE',    '***' ); */
+/*  define( 'WORKER_EMAIL_TO',      '***SECRET***' );
+    define( 'WORKER_EMAIL_FROM',    '***SECRET***' );
+    define( 'WORKER_EMAIL_NAME',    '***SECRET***' );
+    define( 'WORKER_EMAIL_HOST',    '***SECRET***' );
+    define( 'WORKER_EMAIL_AUTH',    '***SECRET***' );
+    define( 'WORKER_EMAIL_USER',    '***SECRET***' );
+    define( 'WORKER_EMAIL_PASS',    '***SECRET***' );
+    define( 'WORKER_EMAIL_PORT',    '***SECRET***' );
+    define( 'WORKER_EMAIL_SCRE',    '***SECRET***' ); */
 
 //
 // DATABASE CONFIGURATION
 //
 
-/*  define( 'DB_HOST',                  '***' );
-    define( 'DB_USER',                  '***' );
-    define( 'DB_PASS',                  '***' );
-    define( 'DB_NAME',                  '***' ); */
+/*  define( 'DB_HOST',              '***SECRET***' );
+    define( 'DB_USER',              '***SECRET***' );
+    define( 'DB_PASS',              '***SECRET***' );
+    define( 'DB_NAME',              '***SECRET***' ); */
 
 //
 // DATABASE BACKUP CONFIGURATION
