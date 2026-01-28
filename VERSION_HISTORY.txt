@@ -1,5 +1,15 @@
 3.7.3
 
+NEXI message is collected when payment fails
+
+
+3.7.4
+
+Modified configuration intervals
+
+
+3.7.3
+
 Ported to PhpSpreeadsheet 5.4
 
 

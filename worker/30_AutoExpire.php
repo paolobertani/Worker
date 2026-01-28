@@ -15,14 +15,17 @@ function AutoExpire()
     // Select the date
 
     $now = date('Y-m');
-    $old_release = AutoExpireAddYearsToDate( $now, -WORKER_AUTOEXPIRE_YEARS_OLD );
-    $ignored_from= AutoExpireAddYearsToDate( $now, -WORKER_AUTOEXPIRE_YEARS_IGN );
+    $old_release	 = AutoExpireAddYearsToDate( $now, -WORKER_AUTOEXPIRE_YEARS_OLD );
+    $ignored_from	 = AutoExpireAddYearsToDate( $now, -WORKER_AUTOEXPIRE_YEARS_IGN );
+	
+	$now = date('Y-m-d h:i:s');
+    $uploaded_before = AutoExpireAddYearsToDate( $now, -WORKER_AUTOEXPIRE_YEARS_UPL );
 
 
     // Select the docs
 
     $error = '';
-    $result = QueryExecute( 'A8_documents_to_autoexpire.sql', $error, [ 'old_release' => $old_release, 'ignored_from' => $ignored_from ] );
+    $result = QueryExecute( 'A8_documents_to_autoexpire.sql', $error, [ 'old_release' => $old_release, 'ignored_from' => $ignored_from, 'uploaded_before' => $uploaded_before ] );
 
     if( $result === false )
     {

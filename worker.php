@@ -27,7 +27,7 @@ ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
-define( 'WORKER_VERSION',           '3.7.3' );  // Worker version number
+define( 'WORKER_VERSION',           '3.7.5' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to macOS tools
 define( 'PATH_TO_CONFIG',           '/Users/administrator/www/www.pinaxo.com/Config/config.json' ); // Path to webapp config file
@@ -303,7 +303,11 @@ if( ! RESTARTED )
     echo "started: " . date( 'd/m/Y H:i:s' ) . "\n";
     echo "machine: " . WORKER_MACHINE . "\n";
     echo "pid: " . getmypid() . "\n";
-    echo "NEXI: id=" . substr( NEXI_ALIAS_RECURR, -8, 8 ) . " - " . "key=*" . substr( NEXI_KEY_RECURR, -4, 4 ) . "\n";
+	if( ! HEAVY_DUTY )
+	{
+    	echo "NEXI: id=" . substr( NEXI_ALIAS_RECURR, -8, 8 ) . " - " . "key=*" . substr( NEXI_KEY_RECURR, -4, 4 );
+		echo "  activity hrs: [" . WORKER_CASHIN_START_AT . "-" . WORKER_CASHIN_END_AT . "]" . "\n";
+	}
 }
 else
 {

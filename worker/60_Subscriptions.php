@@ -209,7 +209,7 @@ function SubscriptionsIssuePaymentMaybe()
     $total = round( $duration * $amount * ( 1 + $vat / 100 ), 2 );
 
     $mail_error = '';
-    $success = SubscriptionsCashIn( $subscription, $mail_error ); // payments record is created
+    $success = SubscriptionsCashIn( $subscription, $mail_error ); // payments record is created here
 
     if( $success )
     {
@@ -227,8 +227,9 @@ function SubscriptionsIssuePaymentMaybe()
         $last_payment_did_fail = 1;
         $is_active = 0;
         $payment_is_auto = 0;
-        $payment_request = "RC"; // Switch to 'Rinnovo carta' as it is assumed that the card will be changed
-
+		/* NO! what if the problem is due to inefficient funds? *
+		$payment_request = "RC"; // Switch to 'Rinnovo carta' as it is assumed that the card will be changed
+		********/ $payment_request = "PP";
         $message = "FAILED payment `$description` $total euro: $milliseconds ms";
 
         $subscription_id = $id;
@@ -408,12 +409,12 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
             WorkerQuitNow();
             /*--- QUIT POINT ---*/
         }
+		$message = '';
     }
     else
     {
         $ok = false;
-        $message = $response['errore']['messaggio'];
-        /** ** ** **/ file_put_contents( "/Users/administrator/Desktop/nexi_error_response.txt", var_export( $response, true ) . "\n\n---\n\n", FILE_APPEND );
+        $message = trim( $response[ 'codice' ] ?? '' ) . ': ' . trim( $response[ 'messaggio' ] ?? '' );
     }
 
     $error = '';
@@ -430,7 +431,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         'to' => $to,
         'pan' => $pan,
         'nexi_id' => $nexi_id,
-        'nexi_key' => $nexi_key
+        'nexi_key' => $nexi_key,
+		'nexi_message' => $message
     ] );
 
     if( $result === false )

@@ -256,6 +256,35 @@ function WorkerRun()
 
 
             //
+            // Cash-in expired subscriptions
+            //
+
+            // Email activity may occur here
+
+            if( is_dir( ROOT . "/CASHIN" ) || ( time() - $lastSubscriptions > WORKER_INTERVAL_SUBSCRIPTIONS && intval(date('G')) >= WORKER_CASHIN_START_AT && intval(date('G')) <= WORKER_CASHIN_END_AT ) )
+            {
+				if( is_dir( ROOT . "/CASHIN" ) ) { exec( "mv " . ROOT . "/CASHIN" . " " . ROOT . "/CASHIN-EXECUTED" ); }
+                Subscriptions();
+                $lastSubscriptions = time();
+                WorkerAlive();
+            }
+
+
+
+            //
+            // Suspend users in expired trials
+            //
+
+            if( time() - $lastTrials > WORKER_INTERVAL_TRIALS )
+            {
+                Trials();
+                $lastTrials = time();
+                WorkerAlive();
+            }
+
+
+
+            //
             // Delete bot generated records from events table
             //
 
@@ -427,40 +456,12 @@ function WorkerRun()
             // Send email notification for notes on expired documents
             //
 
-            // Email activity
+            // Email activity may occur here
 
             if( intval(date('G')) >= 7 && intval(date('G')) <= 9 && date( 'Y/m/d' ) !== $lastExpiredNotes )
             {
                 $lastExpiredNotes = date( 'Y/m/d' );
                 ExpiredNotes();
-            }
-
-
-
-            //
-            // Cash-in expired subscriptions
-            //
-
-            // Email activity
-
-            if( time() - $lastSubscriptions > WORKER_INTERVAL_SUBSCRIPTIONS && intval(date('G')) >= 10 && intval(date('G')) <= 16 )
-            {
-                Subscriptions();
-                $lastSubscriptions = time();
-                WorkerAlive();
-            }
-
-
-
-            //
-            // Suspend users in expired trials
-            //
-
-            if( time() - $lastTrials > WORKER_INTERVAL_TRIALS )
-            {
-                Trials();
-                $lastTrials = time();
-                WorkerAlive();
             }
 
 

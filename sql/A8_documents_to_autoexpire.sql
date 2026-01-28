@@ -7,6 +7,7 @@ FROM `documents`
 
 WHERE
     `release` <= {{old_release}}
+	AND `pdf_uploaded` <= {{uploaded_before}}
     AND `expire` = "UNDEFINED"
     AND `status` = ""
     AND `lock` = ""
