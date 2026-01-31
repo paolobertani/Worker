@@ -306,7 +306,7 @@ if( ! RESTARTED )
 	if( ! HEAVY_DUTY )
 	{
     	echo "NEXI: id=" . substr( NEXI_ALIAS_RECURR, -8, 8 ) . " - " . "key=*" . substr( NEXI_KEY_RECURR, -4, 4 );
-		echo "  activity hrs: [" . WORKER_CASHIN_START_AT . "-" . WORKER_CASHIN_END_AT . "]" . "\n";
+		echo " - activity hrs: [" . WORKER_CASHIN_START_AT . "-" . WORKER_CASHIN_END_AT . "]" . "\n";
 	}
 }
 else

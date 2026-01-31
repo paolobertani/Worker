@@ -424,7 +424,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         'amount' => $amount,
         'vat' => $vat,
         'when' => $when,
-        'success' => ( $ok ? 1 : 0 ),
+        'status' => ( $ok ? 1 : 0 ),
         'amount_nexi' => $amount_nexi,
         'codTrans' => $codTrans,
         'from' => $from,
