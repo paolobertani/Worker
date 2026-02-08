@@ -8,7 +8,7 @@ SELECT
         `amount`,
         `duration`,
         `vat`,
-        `num_contratto`,
+        `agreement_id`,
         `pan`,
         `pan_expire`,
         `user_id`,

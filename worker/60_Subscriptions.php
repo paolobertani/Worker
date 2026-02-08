@@ -296,7 +296,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         $payment_id = "?";
     }
 
-    $num_contratto =    $subscription[ 'num_contratto' ];
+    $agreement_id =     $subscription[ 'agreement_id' ];
     $subscription_id =  $subscription[ 'id' ];
     $pan_expire =       $subscription[ 'pan_expire' ];
     $amount =           $subscription[ 'amount' ];
@@ -319,9 +319,9 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $requestUrl =       NEXI_URL_RECURR;
     $alias =            NEXI_ALIAS_RECURR;
     $secret =           NEXI_KEY_RECURR;
-    $numContratto =     $num_contratto;
+    $numContratto =     $agreement_id;
     $when =             date( 'Y-m-d H:i:s', time() );
-    $codTrans =         "PINAXO SUBS {$subscription_id} TRNS {$payment_id}";
+    $transaction_id =   "PINAXO SUBS {$subscription_id} TRNS {$payment_id}";
     $importo =          intval( round( $amount_nexi * 100 ) );
     $divisa =           '978'; // EUR
     $timeStamp =        time() * 1000;
@@ -329,7 +329,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $mac = sha1(
         'apiKey=' . $alias .
         'numeroContratto=' . $numContratto .
-        'codiceTransazione=' . $codTrans .
+        'codiceTransazione=' . $transaction_id .
         'importo=' . $importo .
         "divisa=" . $divisa .
         "scadenza=" . $scadenza .
@@ -340,7 +340,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $requestParams = [
         'apiKey' =>             $alias,
         'numeroContratto' =>    $numContratto,
-        'codiceTransazione' =>  $codTrans,
+        'codiceTransazione' =>  $transaction_id,
         'importo' =>            "$importo",
         'divisa' =>             "$divisa",
         'timeStamp' =>          "$timeStamp",
@@ -426,7 +426,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         'when' => $when,
         'status' => ( $ok ? 1 : 0 ),
         'amount_nexi' => $amount_nexi,
-        'codTrans' => $codTrans,
+        'transaction_id' => $transaction_id,
         'from' => $from,
         'to' => $to,
         'pan' => $pan,
@@ -494,13 +494,13 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $body .= "<br>\n<br>\n<hr><br>\n<br>\n";
     $body .= "<b>Subscription:</b>&nbsp;$subscription_description<br>\n<br>\n";
     $body .= "<b>Subs. Id:</b>&nbsp;$subscription_id<br>\n<br>\n";
-    $body .= "<b>num_contratto:</b>&nbsp;$numContratto<br>\n<br>\n";
+    $body .= "<b>Agreement Id:</b>&nbsp;$numContratto<br>\n<br>\n";
     $body .= "<b>User:</b>&nbsp;$firstname $surname [$username]<br>\n<br>\n";
     $body .= "<b>Email:</b>&nbsp;$email<br>\n<br>\n";
     $body .= "<b>Group:</b>&nbsp;$group<br>\n<br>\n";
     $body .= "<b>Valid until:</b>&nbsp;$valid_until<br>\n<br>\n";
     $body .= "<hr><br>\n<br>\n";
-    $body .= "<b>Transaction:</b>&nbsp;$codTrans<br>\n<br>\n";
+    $body .= "<b>Transaction Id:</b>&nbsp;$transaction_id<br>\n<br>\n";
     $body .= "<b>Issued:</b>&nbsp;automatically<br>\n<br>\n";
     $body .= "<b>Duration:</b>&nbsp;$duration month" . ( $duration > 1 ? "s" : "" ) . "<br>\n<br>\n";
     $body .= "<b>Amount:</b>&nbsp;$amount euro<br>\n<br>\n";
