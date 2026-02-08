@@ -199,6 +199,7 @@ function SubscriptionsIssuePaymentMaybe()
     $subscription =    $result[0];
 
     $id =              $subscription[ 'id' ];
+    $agreement_id =    $subscription[ 'agreement_id' ];
     $description =     $subscription[ 'description' ];
     $valid_until =     $subscription[ 'valid_until' ];
     $valid_until_day = $subscription[ 'valid_until_day' ];
@@ -217,23 +218,44 @@ function SubscriptionsIssuePaymentMaybe()
         $last_payment_did_fail = 0;
         $is_active = 1;
         $payment_is_auto = 1;
-        $payment_request = "PP"; // Payment request remains 'Primo pagamento'
+        $payment_request = "PP";  // payment_request MUST stay `PP`
 
         $message = "Issued payment `$description` $total euro: $milliseconds ms";
     }
     else
     {
-        // $valid_until not changed
+        // `valid_until` is not changed
         $last_payment_did_fail = 1;
         $is_active = 0;
         $payment_is_auto = 0;
-		/* NO! what if the problem is due to inefficient funds? *
-		$payment_request = "RC"; // Switch to 'Rinnovo carta' as it is assumed that the card will be changed
-		********/ $payment_request = "PP";
+		$payment_request = "PP";  // payment_request MUST stay `PP`
         $message = "FAILED payment `$description` $total euro: $milliseconds ms";
 
         $subscription_id = $id;
         SubscriptionSetGroup( $subscription_id, NEXI_EMPTY_GROUP_ID );
+
+        // When cash-in fails `agreement_id` must be updated
+
+        if( substr( $agreement_id, 0, 5 ) === 'SUBSC' ) // legacy IDs
+        {
+            $agreement_id = "PINAXO SUBS {$subscription_id}.2";
+        }
+        else // new IDs
+        {
+            if( strpos( $agreement_id, '.' ) !== false )
+            {
+                // get and increment counter
+
+                $parts = explode( '.', $agreement_id );
+                $counter = intval( $parts[ 1 ] );
+                $counter++;
+                $agreement_id = "PINAXO SUBS {$subscription_id}.{$counter}";
+            }
+            else
+            {
+                $agreement_id = "PINAXO SUBS {$subscription_id}.2";
+            }
+        }
     }
 
     $error = '';
@@ -243,7 +265,8 @@ function SubscriptionsIssuePaymentMaybe()
         'last_payment_did_fail' => $last_payment_did_fail,
         'is_active' => $is_active,
         'payment_is_auto' => $payment_is_auto,
-        'payment_request' => $payment_request
+        'payment_request' => $payment_request,
+        'agreement_id' => $agreement_id
     ] );
 
     if( $result === false )
@@ -321,7 +344,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $secret =           NEXI_KEY_RECURR;
     $numContratto =     $agreement_id;
     $when =             date( 'Y-m-d H:i:s', time() );
-    $transaction_id =   "PINAXO SUBS {$subscription_id} TRNS {$payment_id}";
+    $transaction_id =   "{$agreement_id} TRNS {$payment_id}";
     $importo =          intval( round( $amount_nexi * 100 ) );
     $divisa =           '978'; // EUR
     $timeStamp =        time() * 1000;

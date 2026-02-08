@@ -1,5 +1,11 @@
+
+3.7.7
+agreement_id is updated when cash-in fails
+
+
 3.7.6
 num_contratto >> agreement_id; cod_trans >> transaction_id
+
 
 3.7.5
 

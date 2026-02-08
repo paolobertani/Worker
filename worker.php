@@ -27,7 +27,7 @@ ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
-define( 'WORKER_VERSION',           '3.7.6' );  // Worker version number
+define( 'WORKER_VERSION',           '3.7.7' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to macOS tools
 define( 'PATH_TO_CONFIG',           '/Users/administrator/www/www.pinaxo.com/Config/config.json' ); // Path to webapp config file
