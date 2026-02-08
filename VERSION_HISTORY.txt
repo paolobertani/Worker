@@ -1,3 +1,6 @@
+3.7.6
+num_contratto >> agreement_id; cod_trans >> transaction_id
+
 3.7.5
 
 NEXI message is collected when payment fails
