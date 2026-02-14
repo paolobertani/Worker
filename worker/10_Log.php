@@ -142,6 +142,7 @@ function WorkerLogEmail( $type, $message, $document_id )
     $machine = WORKER_MACHINE;
     $text = "$preamble\n\n" . str_replace( ' - ', "\n", $message ) . "\n\n" . ( $document_id ? "document id: $document_id\n\n" : "" ) . "$timestamp\n\n$machine";
     $html = "<span style='font-family: \"Helvetica Neue\"; font-size: 16px;'><strong>$preamble</strong></span><br><br><span style='font-family: \"Monaco\"; font-size: 14px;'>" . str_replace( ' - ', "<br>", $message ) . "</span><br><br>\n\n" . ( $document_id ? "<span style='font-family: \"Helvetica Neue\"; font-size: 14px;'>Document id: $document_id</span><br><br>\n\n" : "" ) . "<span style='font-family: \"Helvetica Neue\"; font-size: 14px;'>When: $timestamp</span><br><br>\n\n<span style='font-family: \"Helvetica Neue\"; font-size: 14px;'>Machine: $machine</span>";
+    $html = WorkerEmailThemeApply( $html );
 
     $mailer = new PHPMailer\PHPMailer\PHPMailer( true );
 
@@ -202,6 +203,108 @@ function WorkerLogEmail( $type, $message, $document_id )
     return $error;
 }
 
+
+
+function WorkerEmailThemeApply( $body )
+{
+    if( ! is_string( $body ) || trim( $body ) === '' )
+    {
+        return $body;
+        /*--- EXIT POINT ---*/
+    }
+
+    $body = WorkerEmailThemeNormalizeText( $body );
+    $body = WorkerEmailThemeNormalizeRed( $body );
+    $body = WorkerEmailThemeNormalizeLinks( $body );
+
+    $wrapperOpen = "<table width='100%' cellpadding='0' cellspacing='0' role='presentation' style='background-color:#000000;'><tr><td align='center' style='padding:24px;'><table width='100%' cellpadding='0' cellspacing='0' role='presentation' style='max-width:600px;'><tr><td style='color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:1.6;text-align:left;-webkit-text-size-adjust:100%;'>";
+    $wrapperClose = "</td></tr></table></td></tr></table>";
+
+    if( stripos( $body, '<body' ) !== false )
+    {
+        $body = preg_replace_callback( '/<body\b([^>]*)>/i', function( $matches )
+        {
+            $attrs = $matches[1];
+            $style = '';
+
+            if( preg_match( '/\sstyle\s*=\s*([\'"])(.*?)\1/i', $attrs, $styleMatch ) )
+            {
+                $style = trim( $styleMatch[2] );
+                $attrs = preg_replace( '/\sstyle\s*=\s*([\'"]).*?\1/i', '', $attrs, 1 );
+            }
+
+            $attrs = preg_replace( '/\sbgcolor\s*=\s*([\'"]).*?\1/i', '', $attrs, 1 );
+
+            $style = trim( trim( $style, " ;\t\n\r\0\x0B" ) . '; margin:0; padding:0; background-color:#000000; color:#ffffff;' );
+
+            return "<body{$attrs} bgcolor='#000000' style='{$style}'>";
+        }, $body, 1 );
+
+        $body = preg_replace( '/<body\b[^>]*>/i', '$0' . $wrapperOpen, $body, 1 );
+
+        if( preg_match( '/<\/body>/i', $body ) )
+        {
+            $body = preg_replace( '/<\/body>/i', $wrapperClose . '</body>', $body, 1 );
+        }
+        else
+        {
+            $body .= $wrapperClose;
+        }
+
+        return $body;
+        /*--- EXIT POINT ---*/
+    }
+
+    return "<body bgcolor='#000000' style='margin:0;padding:0;background-color:#000000;color:#ffffff;'>{$wrapperOpen}{$body}{$wrapperClose}</body>";
+}
+
+
+function WorkerEmailThemeNormalizeLinks( $body )
+{
+    return preg_replace_callback( '/<a\b([^>]*)>/i', function( $matches )
+    {
+        $attrs = $matches[1];
+
+        if( preg_match( '/\sstyle\s*=\s*([\'"])(.*?)\1/i', $attrs, $styleMatch ) )
+        {
+            $quote = $styleMatch[1];
+            $style = trim( $styleMatch[2] );
+
+            if( preg_match( '/(^|;)\s*color\s*:/i', $style ) )
+            {
+                $style = preg_replace( '/(^|;)\s*color\s*:\s*[^;]+/i', '$1 color: #85b6ff', $style );
+            }
+            else
+            {
+                $style .= ( $style === '' ? '' : '; ' ) . 'color: #85b6ff';
+            }
+
+            $attrs = preg_replace( '/\sstyle\s*=\s*([\'"]).*?\1/i', '', $attrs, 1 );
+
+            return "<a{$attrs} style={$quote}{$style}{$quote}>";
+        }
+
+        return "<a{$attrs} style='color: #85b6ff;'>";
+    }, $body );
+}
+
+
+function WorkerEmailThemeNormalizeRed( $body )
+{
+    $body = preg_replace( '/color\s*:\s*(?:red|#f00|#ff0000|#b00|#bb0000)\b/i', 'color: #f84242', $body );
+    $body = preg_replace( '/(<font\b[^>]*\bcolor\s*=\s*[\'"])\s*(?:red|#f00|#ff0000|#b00|#bb0000)\s*([\'"])/i', '$1#f84242$2', $body );
+
+    return $body;
+}
+
+
+function WorkerEmailThemeNormalizeText( $body )
+{
+    $body = preg_replace( '/color\s*:\s*(?:black|#000|#000000|#111|#111111|#222|#222222|#333|#333333|#444|#444444|#555|#555555|#666|#666666|#777|#777777|#888|#888888|#999|#999999)\b/i', 'color: #ffffff', $body );
+    $body = preg_replace( '/(<font\b[^>]*\bcolor\s*=\s*[\'"])\s*(?:black|#000|#000000|#111|#111111|#222|#222222|#333|#333333|#444|#444444|#555|#555555|#666|#666666|#777|#777777|#888|#888888|#999|#999999)\s*([\'"])/i', '$1#ffffff$2', $body );
+
+    return $body;
+}
 
 
 function WorkerLogDB( $type, $message, $document_id )

@@ -1,4 +1,8 @@
 
+3.7.8
+Subscriptions: payment outcome email to customer localized in 7 locales (it, en, de, es, fr, ru, zh)
+
+
 3.7.7
 agreement_id is updated when cash-in fails
 
@@ -607,6 +611,5 @@ EnoughtDiskSpace: check if the repository is available
 2.0.0
 
 Initial release, ported from worker.py version 1.5.6
-
 
 

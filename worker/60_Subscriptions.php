@@ -560,6 +560,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $mailer->WordWrap   = 80;                                        // Set word wrap to 80 characters
     $mailer->IsHTML( true );                                         // Set email format to HTML
 
+    $body = WorkerEmailThemeApply( $body );
+
     $mailer->Subject    = $subject;
     $mailer->Body       = $body;
     $mailer->AltBody    = $altBody;
@@ -586,98 +588,54 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
 
     // mail to customer
 
+    $locale = SubscriptionsPaymentEmailLocale( $lang );
+
     if( $ok )
     {
-        if( $lang === 'it' )
-        {
-            $subject = "Pinaxo | Pagamento ricevuto";
-            $body = "<br>\n<br>\n<b>Pagamento ricevuto</b>";
-        }
-        else
-        {
-            $subject = "Pinaxo | Payment received";
-            $body = "<br>\n<br>\n<b>Payment received</b>";
-        }
+        $subject = $locale[ 'subject_received' ];
+        $body = "<br>\n<br>\n<b>{$locale['title_received']}</b>";
     }
     else
     {
-        if( $lang === 'it' )
-        {
-            $subject = "Pinaxo | Pagamento respinto";
-            $body = "<br>\n<br>\n<span style='color: #b00;'><b>Pagamento respinto</b></span>";
-        }
-        else
-        {
-            $subject = "Pinaxo | Payment failed";
-            $body = "<br>\n<br>\n<span style='color: #b00;'><b>Payment failed</b></span>";
-        }
+        $subject = $locale[ 'subject_failed' ];
+        $body = "<br>\n<br>\n<span style='color: #b00;'><b>{$locale['title_failed']}</b></span>";
     }
 
     $altBody = $subject;
 
     if( ! NEXI_PRODUCTION ) $subject .= " | TESTING";
 
-    if( $lang === 'it' )
-    {
-        $plural = $duration > 1 ? "i" : "e";
-        $body .= "<br>\n<br>\n<hr><br>\n<br>\n";
-        $body .= "<b>Utente riferimento:</b>&nbsp;$firstname $surname [$username]<br>\n<br>\n";
-        $body .= "<b>Email:</b>&nbsp;$email<br>\n<br>\n";
-        $body .= "<b>Abbonamento valido fino al:</b>&nbsp;$valid_until<br>\n<br>\n";
-        $body .= "<hr><br>\n<br>\n";
-        $body .= "<b>Durata:</b>&nbsp;$duration mes$plural<br>\n<br>\n";
-        $body .= "<b>Imponibile:</b>&nbsp;$amount euro x $duration mes$plural = " . ( $duration * $amount ) . " euro<br>\n<br>\n";
-        $body .= "<b>IVA:</b>&nbsp;$vat<br>\n<br>\n";
-        $body .= "<b>Totale:</b>&nbsp;$amount_nexi<br>\n<br>\n";
-        $body .= "<b>Data e ora:</b>&nbsp;$when<br>\n<br>\n";
-    }
-    else
-    {
-        $plural = $duration > 1 ? "s" : "";
-        $body .= "<br>\n<br>\n<hr><br>\n<br>\n";
-        $body .= "<b>Subscribed user:</b>&nbsp;$firstname $surname [$username]<br>\n<br>\n";
-        $body .= "<b>Email:</b>&nbsp;$email<br>\n<br>\n";
-        $body .= "<b>Subscription valid until:</b>&nbsp;$valid_until<br>\n<br>\n";
-        $body .= "<hr><br>\n<br>\n";
-        $body .= "<b>Duration:</b>&nbsp;$duration month$plural<br>\n<br>\n";
-        $body .= "<b>Amount:</b>&nbsp;$amount euro x $duration month$plural = " . ( $duration * $amount ) . " euro<br>\n<br>\n";
-        $body .= "<b>VAT/TAX:</b>&nbsp;$vat<br>\n<br>\n";
-        $body .= "<b>Amount due:</b>&nbsp;$amount_nexi<br>\n<br>\n";
-        $body .= "<b>Date and time:</b>&nbsp;$when<br>\n<br>\n";
-    }
+    $month_word = $duration > 1 ? $locale[ 'month_plural' ] : $locale[ 'month_singular' ];
+    $amount_text = str_replace(
+        [ '{amount}', '{duration}', '{month_word}', '{subtotal}' ],
+        [ $amount, $duration, $month_word, $duration * $amount ],
+        $locale[ 'amount_formula' ]
+    );
+
+    $body .= "<br>\n<br>\n<hr><br>\n<br>\n";
+    $body .= "<b>{$locale['label_user']}:</b>&nbsp;$firstname $surname [$username]<br>\n<br>\n";
+    $body .= "<b>{$locale['label_email']}:</b>&nbsp;$email<br>\n<br>\n";
+    $body .= "<b>{$locale['label_valid_until']}:</b>&nbsp;$valid_until<br>\n<br>\n";
+    $body .= "<hr><br>\n<br>\n";
+    $body .= "<b>{$locale['label_duration']}:</b>&nbsp;$duration $month_word<br>\n<br>\n";
+    $body .= "<b>{$locale['label_amount']}:</b>&nbsp;$amount_text<br>\n<br>\n";
+    $body .= "<b>{$locale['label_vat']}:</b>&nbsp;$vat<br>\n<br>\n";
+    $body .= "<b>{$locale['label_total']}:</b>&nbsp;$amount_nexi<br>\n<br>\n";
+    $body .= "<b>{$locale['label_datetime']}:</b>&nbsp;$when<br>\n<br>\n";
 
     if( ! $ok )
     {
-        if( $lang === 'it' )
+        $body .= "<hr><br>\n<br>\n";
+        foreach( $locale[ 'failure_lines' ] as $line )
         {
-            $body .= "<hr><br>\n<br>\n";
-            $body .= "Entra nell'area riservata di <b>Pinaxo</b><br>\n";
-            $body .= "e accedi ad <b>Abbonamento</b> dal menu in alto a sinistra.<br>\n";
-            $body .= "Successivamente ritenta il pagamento manualmente.<br>\n<br>\n";
-            $body .= "Per ricevere assistenza scrivi a <b>support@pinaxo.com</b><br>\n<br>\n";
+            $body .= "$line<br>\n";
         }
-        else
-        {
-            $body .= "<hr><br>\n<br>\n";
-            $body .= "Please, enter <b>Pinaxo</b> reserved area with your username and password<br>\n";
-            $body .= "and select <b>Subscription</b> from the top-left menu.<br>\n";
-            $body .= "Then retry the payment manually. Maybe you card is expired.<br>\n<br>\n";
-            $body .= "To receive assistance write us to <b>support@pinaxo.com</b><br>\n<br>\n";
-        }
+        $body .= "<br>\n";
     }
 
-    if( $lang === 'it' )
-    {
-        $body .= "<hr><br>\n<br>\n";
-        $body .= "Grazie!<br>\n<br>\n";
-        $body .= "<hr><br>\n<br>\n&nbsp;";
-    }
-    else
-    {
-        $body .= "<hr><br>\n<br>\n";
-        $body .= "Thank you!<br>\n<br>\n";
-        $body .= "<hr><br>\n<br>\n&nbsp;";
-    }
+    $body .= "<hr><br>\n<br>\n";
+    $body .= "{$locale['thanks']}<br>\n<br>\n";
+    $body .= "<hr><br>\n<br>\n&nbsp;";
 
     $mailer = new PHPMailer\PHPMailer\PHPMailer( false );
 
@@ -706,6 +664,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $mailer->CharSet    = 'utf-8';                                   // Set the email character set
     $mailer->WordWrap   = 80;                                        // Set word wrap to 80 characters
     $mailer->IsHTML( true );                                         // Set email format to HTML
+
+    $body = WorkerEmailThemeApply( $body );
 
     $mailer->Subject    = $subject;
     $mailer->Body       = $body;
@@ -737,6 +697,195 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     }
 
     return $ok;
+}
+
+
+
+function SubscriptionsPaymentEmailLocale( $lang )
+{
+    $lang = strtolower( trim( (string)$lang ) );
+
+    if( strpos( $lang, '-' ) !== false ) { $lang = explode( '-', $lang )[ 0 ]; }
+    if( strpos( $lang, '_' ) !== false ) { $lang = explode( '_', $lang )[ 0 ]; }
+    if( strlen( $lang ) > 2 ) { $lang = substr( $lang, 0, 2 ); }
+
+    $locales = [
+        'it' => [
+            'subject_received' => 'Pinaxo | Pagamento ricevuto',
+            'subject_failed' => 'Pinaxo | Pagamento respinto',
+            'title_received' => 'Pagamento ricevuto',
+            'title_failed' => 'Pagamento respinto',
+            'label_user' => 'Utente riferimento',
+            'label_email' => 'Email',
+            'label_valid_until' => 'Abbonamento valido fino al',
+            'label_duration' => 'Durata',
+            'label_amount' => 'Imponibile',
+            'label_vat' => 'IVA',
+            'label_total' => 'Totale',
+            'label_datetime' => 'Data e ora',
+            'month_singular' => 'mese',
+            'month_plural' => 'mesi',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                "Entra nell'area riservata di <b>Pinaxo</b> con username e password.",
+                "Seleziona <b>Abbonamento</b> dal menu in alto a sinistra.",
+                "Successivamente ritenta il pagamento manualmente.",
+                'Per ricevere assistenza scrivi a <b>support@pinaxo.com</b>.'
+            ],
+            'thanks' => 'Grazie!'
+        ],
+        'en' => [
+            'subject_received' => 'Pinaxo | Payment received',
+            'subject_failed' => 'Pinaxo | Payment failed',
+            'title_received' => 'Payment received',
+            'title_failed' => 'Payment failed',
+            'label_user' => 'Subscribed user',
+            'label_email' => 'Email',
+            'label_valid_until' => 'Subscription valid until',
+            'label_duration' => 'Duration',
+            'label_amount' => 'Amount',
+            'label_vat' => 'VAT/TAX',
+            'label_total' => 'Amount due',
+            'label_datetime' => 'Date and time',
+            'month_singular' => 'month',
+            'month_plural' => 'months',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                'Please, enter <b>Pinaxo</b> reserved area with your username and password.',
+                'Then select <b>Subscription</b> from the top-left menu.',
+                'After that, retry the payment manually.',
+                'To receive assistance write us to <b>support@pinaxo.com</b>.'
+            ],
+            'thanks' => 'Thank you!'
+        ],
+        'de' => [
+            'subject_received' => 'Pinaxo | Zahlung erhalten',
+            'subject_failed' => 'Pinaxo | Zahlung fehlgeschlagen',
+            'title_received' => 'Zahlung erhalten',
+            'title_failed' => 'Zahlung fehlgeschlagen',
+            'label_user' => 'Benutzer',
+            'label_email' => 'E-Mail',
+            'label_valid_until' => 'Abo g&uuml;ltig bis',
+            'label_duration' => 'Dauer',
+            'label_amount' => 'Betrag',
+            'label_vat' => 'MwSt.',
+            'label_total' => 'Gesamtbetrag',
+            'label_datetime' => 'Datum und Uhrzeit',
+            'month_singular' => 'Monat',
+            'month_plural' => 'Monate',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                'Bitte melde dich im gesch&uuml;tzten Bereich von <b>Pinaxo</b> mit Benutzername und Passwort an.',
+                'W&auml;hle danach im Men&uuml; oben links <b>Abo</b>.',
+                'Versuche anschlie&szlig;end die Zahlung erneut.',
+                'Bei Bedarf schreibe an <b>support@pinaxo.com</b>.'
+            ],
+            'thanks' => 'Danke!'
+        ],
+        'es' => [
+            'subject_received' => 'Pinaxo | Pago recibido',
+            'subject_failed' => 'Pinaxo | Pago rechazado',
+            'title_received' => 'Pago recibido',
+            'title_failed' => 'Pago rechazado',
+            'label_user' => 'Usuario suscrito',
+            'label_email' => 'Correo electr&oacute;nico',
+            'label_valid_until' => 'Suscripci&oacute;n v&aacute;lida hasta',
+            'label_duration' => 'Duraci&oacute;n',
+            'label_amount' => 'Importe',
+            'label_vat' => 'IVA/Impuestos',
+            'label_total' => 'Importe total',
+            'label_datetime' => 'Fecha y hora',
+            'month_singular' => 'mes',
+            'month_plural' => 'meses',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                'Entra en el &aacute;rea reservada de <b>Pinaxo</b> con tu usuario y contrase&ntilde;a.',
+                'Luego selecciona <b>Suscripci&oacute;n</b> en el men&uacute; superior izquierdo.',
+                'Despu&eacute;s vuelve a intentar el pago manualmente.',
+                'Si necesitas ayuda escribe a <b>support@pinaxo.com</b>.'
+            ],
+            'thanks' => 'Gracias!'
+        ],
+        'fr' => [
+            'subject_received' => 'Pinaxo | Paiement reçu',
+            'subject_failed' => 'Pinaxo | Paiement refusé',
+            'title_received' => 'Paiement reçu',
+            'title_failed' => 'Paiement refusé',
+            'label_user' => 'Utilisateur abonn&eacute;',
+            'label_email' => 'E-mail',
+            'label_valid_until' => 'Abonnement valable jusqu&#39;au',
+            'label_duration' => 'Dur&eacute;e',
+            'label_amount' => 'Montant',
+            'label_vat' => 'TVA/Taxe',
+            'label_total' => 'Montant total',
+            'label_datetime' => 'Date et heure',
+            'month_singular' => 'mois',
+            'month_plural' => 'mois',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                'Veuillez acc&eacute;der &agrave; l&#39;espace r&eacute;serv&eacute; de <b>Pinaxo</b> avec votre identifiant et votre mot de passe.',
+                'Ensuite, s&eacute;lectionnez <b>Abonnement</b> dans le menu en haut &agrave; gauche.',
+                'Puis r&eacute;essayez le paiement manuellement.',
+                'Pour toute assistance, &eacute;crivez &agrave; <b>support@pinaxo.com</b>.'
+            ],
+            'thanks' => 'Merci!'
+        ],
+        'ru' => [
+            'subject_received' => 'Pinaxo | Оплата получена',
+            'subject_failed' => 'Pinaxo | Ошибка оплаты',
+            'title_received' => 'Оплата получена',
+            'title_failed' => 'Ошибка оплаты',
+            'label_user' => 'Пользователь подписки',
+            'label_email' => 'Эл. почта',
+            'label_valid_until' => 'Подписка действует до',
+            'label_duration' => 'Срок',
+            'label_amount' => 'Сумма',
+            'label_vat' => 'НДС/Налог',
+            'label_total' => 'Итого к оплате',
+            'label_datetime' => 'Дата и время',
+            'month_singular' => 'месяц',
+            'month_plural' => 'месяцев',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                'Войдите в закрытую зону <b>Pinaxo</b> с вашим логином и паролем.',
+                'Затем выберите <b>Subscription</b> в меню слева сверху.',
+                'После этого повторите оплату вручную.',
+                'Если нужна помощь, напишите на <b>support@pinaxo.com</b>.'
+            ],
+            'thanks' => 'Спасибо!'
+        ],
+        'zh' => [
+            'subject_received' => 'Pinaxo | 付款成功',
+            'subject_failed' => 'Pinaxo | 付款失败',
+            'title_received' => '付款成功',
+            'title_failed' => '付款失败',
+            'label_user' => '订阅用户',
+            'label_email' => '电子邮箱',
+            'label_valid_until' => '订阅有效期至',
+            'label_duration' => '时长',
+            'label_amount' => '金额',
+            'label_vat' => '增值税/税费',
+            'label_total' => '应付总额',
+            'label_datetime' => '日期和时间',
+            'month_singular' => '个月',
+            'month_plural' => '个月',
+            'amount_formula' => '{amount} euro x {duration} {month_word} = {subtotal} euro',
+            'failure_lines' => [
+                '请使用你的用户名和密码进入 <b>Pinaxo</b> 受限区域。',
+                '然后在左上角菜单中选择 <b>Subscription</b>。',
+                '之后请手动重新尝试付款。',
+                '如需帮助，请联系 <b>support@pinaxo.com</b>。'
+            ],
+            'thanks' => '谢谢！'
+        ]
+    ];
+
+    if( ! isset( $locales[ $lang ] ) )
+    {
+        $lang = 'en';
+    }
+
+    return $locales[ $lang ];
 }
 
 

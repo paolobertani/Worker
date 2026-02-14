@@ -40,6 +40,7 @@ function ExpiredNotes()
         $to = "{$r['fullname']} <{$r['email']}>";
         $subject = "Pinaxo | Note su listino scaduto di {$r['brand']}";
         $body = ExpiredNotesMakeBody( $r, $altBody );
+        $body = WorkerEmailThemeApply( $body );
         $from = "Pinaxo Server <server@pinaxo.com>";
 
         $success = MailerSend( $config, $subject, $body, $altBody, $from, $to );

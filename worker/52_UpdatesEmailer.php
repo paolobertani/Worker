@@ -60,6 +60,7 @@ function UpdatesNotify()
     $to = "paolo.bertani@me.com";
     $subject = "Pinaxo | Updates mailing notice";
     $from = "Pinaxo Server <server@pinaxo.com>";
+    $html = WorkerEmailThemeApply( $html );
 
     $when_sent = date( 'Y-m-d H:i:s' );
 
@@ -169,6 +170,7 @@ function UpdatesSend()
     $to = "paolo.bertani@me.com";
     $subject = "Pinaxo | Sent updates email to mailing list [$action]";
     $from = "Pinaxo Server <server@pinaxo.com>";
+    $html = WorkerEmailThemeApply( $html );
 
     $success = MailerSend( $config, $subject, $html, $text, $from, $to );
 
@@ -182,5 +184,4 @@ function UpdatesSend()
     WorkerLog( WORKER_INFO, "Sent updates emails [$action] to mailing list: $milliseconds ms", 0, true, false, 1 );
     sleep(3);
 }
-
 
