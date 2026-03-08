@@ -20,7 +20,7 @@ function CheckPhpFpm()
     $restart = false;
 
     $status = CheckPhpFpmCurl( 'https://www.pinaxo.com/blog/it/', /*timeout=*/40 );
-    if( $status !== 200 && $status !== 301 )
+    if( $status !== 200 && $status !== 301 && $status !== 404 )
     {
         $restart = true;
         WorkerLog( WORKER_WARNING, "PHP-FPM: https://www.pinaxo.com/blog/it/ is not responding, restarting php-fpm; status=$status", 0, true, true, true );
@@ -29,7 +29,7 @@ function CheckPhpFpm()
     if( ! $restart )
     {
         $status = CheckPhpFpmCurl( 'https://www.pinaxo.com/blog/en/', /*timeout=*/40 );
-	    if( $status !== 200 && $status !== 301 )
+	    if( $status !== 200 && $status !== 301 && $status !== 404 )
         {
             $restart = true;
             WorkerLog( WORKER_WARNING, "PHP-FPM: https://www.pinaxo.com/blog/en/ is not responding, restarting php-fpm; status=$status", 0, true, true, true );

@@ -212,6 +212,8 @@ function SubscriptionsIssuePaymentMaybe()
     $mail_error = '';
     $success = SubscriptionsCashIn( $subscription, $mail_error ); // payments record is created here
 
+    // The outcome of the cash in ( success VS fail (error or transaction denied) )
+
     if( $success )
     {
         $valid_until = SubscriptionsGetValidUntil( $valid_until_day, $valid_until, $duration );
@@ -224,7 +226,11 @@ function SubscriptionsIssuePaymentMaybe()
     }
     else
     {
+        //  FAIL:
         // `valid_until` is not changed
+        // agreement id is regenerated
+        // group_id of subscribed user is set to INACTIVE_GROUP
+
         $last_payment_did_fail = 1;
         $is_active = 0;
         $payment_is_auto = 0;
@@ -257,6 +263,8 @@ function SubscriptionsIssuePaymentMaybe()
             }
         }
     }
+
+    // Subscriprion is update accordingly to the cash in outcome
 
     $error = '';
     $result = QueryExecute( 'A4_subscriptions_update.sql', $error, [
@@ -300,6 +308,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
 {
     $subscription_id = $subscription[ 'id' ];
 
+    // Get the payments count to compute new payment `id`
+
     $error = '';
     $result = QueryExecute( 'A5_get_payments_count.sql', $error, [ 'subscription_id' => $subscription_id ] );
 
@@ -319,6 +329,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         $payment_id = "?";
     }
 
+    // Get subscription data from the received arguement
+
     $agreement_id =     $subscription[ 'agreement_id' ];
     $subscription_id =  $subscription[ 'id' ];
     $pan_expire =       $subscription[ 'pan_expire' ];
@@ -331,11 +343,16 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $valid_until_day =  $subscription[ 'valid_until_day' ];
     $valid_until =      $subscription[ 'valid_until' ];
 
+    // This payment covers period from today to this month + duration on the specified day of month
+
     $from =             date( "Y-m-d" );
     $to =               SubscriptionsGetValidUntil( $valid_until_day, $valid_until, $duration );
-    $pan =              $subscription[ 'pan' ];
-    $nexi_id =          NEXI_ALIAS_RECURR;
-    $nexi_key =         '*' . substr( NEXI_KEY_RECURR, -4, 4 );
+
+    //
+
+    $pan =              $subscription[ 'pan' ];                     // we assume the PAN is the same of the one saved on the last manual payment
+    $nexi_id =          NEXI_ALIAS_RECURR;                          // our NEXI id
+    $nexi_key =         '*' . substr( NEXI_KEY_RECURR, -4, 4 );     // we save the last 4 digits of the KEY
 
     $amount_nexi =      round( $duration * $amount * ( 1 + $vat / 100 ), 2 );
 
@@ -371,6 +388,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     ];
 
     $json = json_encode( $requestParams );
+
+    // Make the curl call to cash in
 
     $connection = curl_init();
     if( ! $connection )
@@ -423,6 +442,9 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $ok = true;
     $message = '';
 
+    // Payment successfully cashed in (ok=true) VS payment failed (ok=false)
+    // $ok is returned back at the end
+
     if( $response['esito'] === "OK" )
     {
         $macCalculated = sha1( 'esito=' . $response['esito'] . 'idOperazione=' . $response['idOperazione'] . 'timeStamp=' . $response['timeStamp'] . $secret );
@@ -440,7 +462,9 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         $message = trim( $response['errore']['messaggio'] ?? '' );
     }
 
-    $error = '';
+    // Payment is inserted with proper status
+
+	$error = '';
     $result = QueryExecute( 'A5_subscriptions_insert_payment.sql', $error, [
         'subscription_id' => $subscription_id,
         'duration' => $duration,
@@ -452,7 +476,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         'transaction_id' => $transaction_id,
         'from' => $from,
         'to' => $to,
-        'pan' => $pan,
+        'pan' => $pan ?? '?',
         'nexi_id' => $nexi_id,
         'nexi_key' => $nexi_key,
 		'nexi_message' => $message
@@ -464,6 +488,10 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    // From now on we just send emails
+
+    // Get user with some of its info (to later send email)
 
     $error = '';
     $result = QueryExecute( 'A6_get_user.sql', $error, [ 'user_id' => $user_id ] );
@@ -480,6 +508,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $surname =      $result[ 0 ][ 'surname' ];
     $email =        $result[ 0 ][ 'email' ];
     $lang =         $result[ 0 ][ 'lang' ];
+
+    // Get group
 
     $error = '';
     $result = QueryExecute( 'A7_get_group.sql', $error, [ 'group_id' => $group_id ] );
