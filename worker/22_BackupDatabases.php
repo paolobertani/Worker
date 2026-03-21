@@ -163,7 +163,7 @@ function BackupDatabasesDump()
 
             // toolcall & main options
 
-            $toolcall = [ '/usr/local/mysql/bin/mysqldump --opt --single-transaction' ];
+            $toolcall = [ PATH_TO_MYSQLDUMP_BIN . ' --opt --single-transaction' ];
             $toolcall[] = '--user=' . DB_USER;
             $toolcall[] = '--password=' . DB_PASS;
             $toolcall[] = '--host=' . DB_HOST;
@@ -404,6 +404,5 @@ function BackupDatabasesSyncStorageVolumes()
         /*--- QUIT POINT ---*/
     }
 }
-
 
 

@@ -301,7 +301,7 @@ function WorkerRun()
             // Backup databases
             //
 
-            if( time() - $lastBackupDatabasesTime > WORKER_INTERVAL_DATABASES )
+            if( BACKUP_DATABASES && time() - $lastBackupDatabasesTime > WORKER_INTERVAL_DATABASES )
             {
                 BackupDatabases();
                 $lastBackupDatabasesTime = time();
@@ -632,5 +632,4 @@ function Restart()
     ExecRestart( ROOT . "/worker.php", [ '-restart' ] );
     /*--- QUIT (RESTART) POINT ---*/
 }
-
 

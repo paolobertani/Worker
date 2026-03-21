@@ -29,7 +29,11 @@ define( 'ROOT',                     __DIR__ );  // Path to script's directory wi
 
 define( 'WORKER_VERSION',           '3.7.8' );  // Worker version number
 
-define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to macOS tools
+define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
+define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root
+define( 'PATH_TO_PHP_BIN',          PATH_TO_MACSTACK . '/php/bin/php' );                             // Path to MacStack PHP CLI
+define( 'PATH_TO_MYSQLDUMP_BIN',    PATH_TO_MACSTACK . '/mysql/bin/mysqldump' );                    // Path to MacStack mysqldump
+define( 'PATH_TO_NGINX_LOG_DIR',    PATH_TO_MACSTACK . '/nginx/log' );                              // Path to MacStack nginx logs
 define( 'PATH_TO_CONFIG',           '/Users/administrator/www/www.pinaxo.com/Config/config.json' ); // Path to webapp config file
 define( 'PATH_TO_STATUS',           '/Users/administrator/www/www.pinaxo.com/Config/status.json' ); // Path to webapp status file
 define( 'PATH_TO_MISC',             '/Users/administrator/www/www.pinaxo.com/misc/' );              // Path to `misc` directory
@@ -174,7 +178,7 @@ define( 'IDR_PAUSE',        '0:00-6:59' );                                      
 // LOG ROTATION CONFIGURATION
 //
 
-define( 'LOG_DIRECTORIES',  [ '/usr/local/nginx/log' ] );                                       // Path to log directories without trailing slash
+define( 'LOG_DIRECTORIES',  [ PATH_TO_NGINX_LOG_DIR ] );                                       // Path to log directories without trailing slash
 define( 'LOG_SIZE',         1024 * 1024 * 2 );                                                  // Max size of log file
 
 //
@@ -257,6 +261,7 @@ if( $configuration === null ) { echo "failed parsing config file\n"; exit(0); }
 //
 
 define( 'WORKER_MACHINE',           $configuration['MACHINE'] );                    // Machine name the worker is running on
+define( 'BACKUP_DATABASES',         array_key_exists( 'BACKUP_DATABASES', $configuration ) ? (bool) $configuration['BACKUP_DATABASES'] : true );
 
 define( 'MASTER_STORAGE_DIR',       $configuration['MASTER_STORAGE_DIR' ] );        // Path to storage directory
 define( 'SLAVE_STORAGE_DIR',        $configuration['SLAVE_STORAGE_DIR' ] );         // Path to storage directory in slave volume (empty string or equal to master if not present)
@@ -303,6 +308,7 @@ if( ! RESTARTED )
     echo "started: " . date( 'd/m/Y H:i:s' ) . "\n";
     echo "machine: " . WORKER_MACHINE . "\n";
     echo "pid: " . getmypid() . "\n";
+    echo "db backups: " . ( BACKUP_DATABASES ? "enabled\n" : "disabled\n" );
 	if( ! HEAVY_DUTY )
 	{
     	echo "NEXI: id=" . substr( NEXI_ALIAS_RECURR, -8, 8 ) . " - " . "key=*" . substr( NEXI_KEY_RECURR, -4, 4 );
@@ -333,5 +339,3 @@ WorkerRun();
 //
 //
 //
-
-

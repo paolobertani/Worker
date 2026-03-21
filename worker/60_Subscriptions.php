@@ -210,7 +210,7 @@ function SubscriptionsIssuePaymentMaybe()
     $total = round( $duration * $amount * ( 1 + $vat / 100 ), 2 );
 
     $mail_error = '';
-    $success = SubscriptionsCashIn( $subscription, $mail_error ); // payments record is created here
+    $success = SubscriptionsCashIn( $subscription, $mail_error ); // payments record is created here - mails are sent here
 
     // The outcome of the cash in ( success VS fail (error or transaction denied) )
 

@@ -30,7 +30,7 @@ function UpdatesNotify()
     $milliseconds = Milliseconds();
     WorkerLog( WORKER_INFO, "Sending updates notice...", 0, false, false, 1 );
 
-    $output = FSExecute( [ '/usr/local/bin/php', '/Users/administrator/Scripts/Php/Newsletter/updates.php', '--list', $from ], $status );
+    $output = FSExecute( [ PATH_TO_PHP_BIN, '/Users/administrator/Scripts/Php/Newsletter/updates.php', '--list', $from ], $status );
 
     if( $status != 0 )
     {
@@ -123,7 +123,7 @@ function UpdatesSend()
     $milliseconds = Milliseconds();
     WorkerLog( WORKER_INFO, "Sending updates emails [$action] to mailing list...", 0, false, false, 1 );
 
-    $output = FSExecute( [ '/usr/local/bin/php', '/Users/administrator/Scripts/Php/Newsletter/updates.php', "--$list_action", $from ], $status );
+    $output = FSExecute( [ PATH_TO_PHP_BIN, '/Users/administrator/Scripts/Php/Newsletter/updates.php', "--$list_action", $from ], $status );
 
     if( $status != 0 )
     {
@@ -136,7 +136,7 @@ function UpdatesSend()
 
     $when_sent = date( 'Y-m-d H:i:s' );
 
-    $output = FSExecute( [ '/usr/local/bin/php', '/Users/administrator/Scripts/Php/Newsletter/updates.php', "--$action", $from ], $status );
+    $output = FSExecute( [ PATH_TO_PHP_BIN, '/Users/administrator/Scripts/Php/Newsletter/updates.php', "--$action", $from ], $status );
 
     if( $status != 0 )
     {
@@ -184,4 +184,3 @@ function UpdatesSend()
     WorkerLog( WORKER_INFO, "Sent updates emails [$action] to mailing list: $milliseconds ms", 0, true, false, 1 );
     sleep(3);
 }
-
