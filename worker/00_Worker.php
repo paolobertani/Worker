@@ -64,6 +64,7 @@ function WorkerRun()
     $lastEventsSmall = 0;
     $lastPurgeSentDocuments = 0;
     $lastExpiredSessionsDelete = 0;
+    $lastExpiredCookiesDelete = 0;
     $lastRebuildBrandsPerCategory = 0;
     $lastUsersOnline = 0;
     $lastXlsLoad = 0;
@@ -389,6 +390,19 @@ function WorkerRun()
 
 
             //
+            // Delete cookies older than 12 months
+            //
+
+            if( time() - $lastExpiredCookiesDelete > WORKER_INTERVAL_DEL_COOKIES )
+            {
+                ExpiredCookiesDelete();
+                $lastExpiredCookiesDelete = time();
+                WorkerAlive();
+            }
+
+
+
+            //
             // Rebuild brands per category
             //
 
@@ -632,4 +646,3 @@ function Restart()
     ExecRestart( ROOT . "/worker.php", [ '-restart' ] );
     /*--- QUIT (RESTART) POINT ---*/
 }
-

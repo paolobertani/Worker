@@ -37,6 +37,7 @@ LiveAction();           // Purge live action table
 EventsSmall();          // Purge events small table	
 PurgeSentDocuments();   // Purge Sent Documents table
 ExpiredSessionsDelete();// Delete expired sessions
+ExpiredCookiesDelete();// Delete cookies older than 12 months
 BrandsPerCategoryRebuild();// Rebuild brands per category
 UsersOnline();          // Populate users online count table             
 ManagePricelist();      // Load Excel price list        
@@ -48,7 +49,6 @@ CheckPhpFpm();          // Check PHP-FPM Pinaxo Blog is not blocked
 CheckCert();            // Check www.pinaxo.com cert is not expiring soon
 AutoExpire();           // Set EXPIRE date of documents with very old RELEASE date and not read
 AutoUncache();          // Set documents to not to be cached when they are very old and not read
-
 
 
 

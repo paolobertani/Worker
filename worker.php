@@ -50,6 +50,7 @@ define( 'WORKER_INTERVAL_LIVEACTION',        60 );   // Live Action management i
 define( 'WORKER_INTERVAL_EVENTSSMALL',       40 );   // Cut events_small and recalcs 30days user usage
 define( 'WORKER_INTERVAL_PURGESDOCS',       505 );   // Purge Sent Documents table from spurious records
 define( 'WORKER_INTERVAL_DEL_EXPS',         506 );   // Delete expired sessions
+define( 'WORKER_INTERVAL_DEL_COOKIES',    46800 );   // Delete cookies older than 12 months every 13 hours
 define( 'WORKER_INTERVAL_REBUILD_BPC',      507 );   // Rebuild brands per category
 define( 'WORKER_INTERVAL_USERS_ONLINE',      25 );   // Populate users online count table
 define( 'WORKER_INTERVAL_XLS',                6 );   // Load XLS price lists
