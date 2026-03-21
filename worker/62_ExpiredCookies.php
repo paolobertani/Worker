@@ -11,10 +11,11 @@ function ExpiredCookiesDelete()
     $milliseconds = Milliseconds();
     $error = '';
     $query = '62_delete_expired_cookies.sql';
+    $when = date( 'Y-m-d H:i:s', strtotime( "-12 months", time() ) );
 
     WorkerLog( WORKER_INFO, "Delete expired cookies...", 0, false, false, 1 );
 
-    $result = QueryExecute( $query, $error, [] );
+    $result = QueryExecute( $query, $error, [ 'when' => $when ] );
 
     if( $result === false )
     {
