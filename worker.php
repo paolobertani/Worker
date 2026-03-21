@@ -27,7 +27,7 @@ ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
-define( 'WORKER_VERSION',           '3.7.8' );  // Worker version number
+define( 'WORKER_VERSION',           '3.7.9' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
 define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root
@@ -51,6 +51,10 @@ define( 'WORKER_INTERVAL_EVENTSSMALL',       40 );   // Cut events_small and rec
 define( 'WORKER_INTERVAL_PURGESDOCS',       505 );   // Purge Sent Documents table from spurious records
 define( 'WORKER_INTERVAL_DEL_EXPS',         506 );   // Delete expired sessions
 define( 'WORKER_INTERVAL_DEL_COOKIES',    46800 );   // Delete cookies older than 12 months every 13 hours
+define( 'WORKER_INTERVAL_TRIM_USAGE',     50400 );   // Trim usage table every 14 hours
+define( 'WORKER_INTERVAL_TRIM_USAGE_PD',  54000 );   // Trim usage_per_document table every 15 hours
+define( 'WORKER_INTERVAL_TRIM_USAGE_PU',  57600 );   // Trim usage_per_user table every 16 hours
+define( 'WORKER_INTERVAL_TRIM_SEARCHES',  61200 );   // Trim searches_per_brand table every 17 hours
 define( 'WORKER_INTERVAL_REBUILD_BPC',      507 );   // Rebuild brands per category
 define( 'WORKER_INTERVAL_USERS_ONLINE',      25 );   // Populate users online count table
 define( 'WORKER_INTERVAL_XLS',                6 );   // Load XLS price lists

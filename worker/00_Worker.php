@@ -65,6 +65,10 @@ function WorkerRun()
     $lastPurgeSentDocuments = 0;
     $lastExpiredSessionsDelete = 0;
     $lastExpiredCookiesDelete = 0;
+    $lastTrimUsage = 0;
+    $lastTrimUsagePerDocument = 0;
+    $lastTrimUsagePerUser = 0;
+    $lastTrimSearchesPerBrand = 0;
     $lastRebuildBrandsPerCategory = 0;
     $lastUsersOnline = 0;
     $lastXlsLoad = 0;
@@ -397,6 +401,58 @@ function WorkerRun()
             {
                 ExpiredCookiesDelete();
                 $lastExpiredCookiesDelete = time();
+                WorkerAlive();
+            }
+
+
+
+            //
+            // Trim usage table
+            //
+
+            if( time() - $lastTrimUsage > WORKER_INTERVAL_TRIM_USAGE )
+            {
+                TrimUsage();
+                $lastTrimUsage = time();
+                WorkerAlive();
+            }
+
+
+
+            //
+            // Trim usage_per_document table
+            //
+
+            if( time() - $lastTrimUsagePerDocument > WORKER_INTERVAL_TRIM_USAGE_PD )
+            {
+                TrimUsagePerDocument();
+                $lastTrimUsagePerDocument = time();
+                WorkerAlive();
+            }
+
+
+
+            //
+            // Trim usage_per_user table
+            //
+
+            if( time() - $lastTrimUsagePerUser > WORKER_INTERVAL_TRIM_USAGE_PU )
+            {
+                TrimUsagePerUser();
+                $lastTrimUsagePerUser = time();
+                WorkerAlive();
+            }
+
+
+
+            //
+            // Trim searches_per_brand table
+            //
+
+            if( time() - $lastTrimSearchesPerBrand > WORKER_INTERVAL_TRIM_SEARCHES )
+            {
+                TrimSearchesPerBrand();
+                $lastTrimSearchesPerBrand = time();
                 WorkerAlive();
             }
 

@@ -1,4 +1,8 @@
 
+3.7.9
+Added cleanup tasks for cookies, usage, usage_per_document, usage_per_user and searches_per_brand
+
+
 3.7.8
 Subscriptions: payment outcome email to customer localized in 7 locales (it, en, de, es, fr, ru, zh)
 
@@ -611,5 +615,4 @@ EnoughtDiskSpace: check if the repository is available
 2.0.0
 
 Initial release, ported from worker.py version 1.5.6
-
 

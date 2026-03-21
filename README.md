@@ -38,6 +38,10 @@ EventsSmall();          // Purge events small table
 PurgeSentDocuments();   // Purge Sent Documents table
 ExpiredSessionsDelete();// Delete expired sessions
 ExpiredCookiesDelete();// Delete cookies older than 12 months
+TrimUsage();           // Trim usage table keeping current year and 1 past year
+TrimUsagePerDocument();// Trim usage_per_document table keeping current year and 3 past years
+TrimUsagePerUser();    // Trim usage_per_user table keeping current year and 2 past years
+TrimSearchesPerBrand();// Trim searches_per_brand table keeping current year and 3 past years
 BrandsPerCategoryRebuild();// Rebuild brands per category
 UsersOnline();          // Populate users online count table             
 ManagePricelist();      // Load Excel price list        
@@ -49,7 +53,6 @@ CheckPhpFpm();          // Check PHP-FPM Pinaxo Blog is not blocked
 CheckCert();            // Check www.pinaxo.com cert is not expiring soon
 AutoExpire();           // Set EXPIRE date of documents with very old RELEASE date and not read
 AutoUncache();          // Set documents to not to be cached when they are very old and not read
-
 
 
 
