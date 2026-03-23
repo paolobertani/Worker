@@ -27,7 +27,7 @@ ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
-define( 'WORKER_VERSION',           '3.7.11' );  // Worker version number
+define( 'WORKER_VERSION',           '3.7.12' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
 define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root
@@ -39,6 +39,7 @@ define( 'PATH_TO_STATUS',           '/Users/administrator/www/www.pinaxo.com/Con
 define( 'PATH_TO_MISC',             '/Users/administrator/www/www.pinaxo.com/misc/' );              // Path to `misc` directory
 define( 'PATH_TO_PRIVATE',          '/Users/administrator/www/www.pinaxo.com/html/private/' );      // Path to `private` directory
 define( 'PATH_TO_BAD_XLS',          '/Users/administrator/www/www.pinaxo.com/html/badxls/' );       // Path to bad
+define( 'PATH_TO_RENEW_CERTS',      dirname( ROOT ) . '/RenewCerts/RenewCerts.php' );               // Path to RenewCerts script
 
 define( 'WORKER_INTERVAL_CACHE',             11 );   // Cache operations time interval
 define( 'WORKER_INTERVAL_TOUCH',             90 );   // Touch time interval to keep drives spinning
@@ -66,6 +67,7 @@ define( 'WORKER_INTERVAL_CHECK_PHP_FPM',    504 );   // Check if PHP-FPM need a 
 define( 'WORKER_INTERVAL_SUBSCRIPTIONS',     30 );   // Cash in expired subscriptions
 define( 'WORKER_INTERVAL_TRIALS',           302 );   // Suspend users in expired trials
 define( 'WORKER_INTERVAL_CHECK_CERT',     86400 );   // 24h - Check cert every day
+define( 'WORKER_INTERVAL_RENEW_CERTS',   604800 );   // 7d - Launch RenewCerts weekly
 define( 'WORKER_INTERVAL_AUTO_EXPIRE',     1801 );   // Check autoexpire
 define( 'WORKER_INTERVAL_AUTO_UNCACHE',    1802 );   // Check remove from cache
 

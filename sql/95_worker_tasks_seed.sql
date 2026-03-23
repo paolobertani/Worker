@@ -24,6 +24,7 @@ VALUES
     ('light.manage_transcode', 0),
     ('light.purge_sent_documents', 0),
     ('light.rebuild_brands_per_category', 0),
+    ('light.renew_certs', 0),
     ('light.subscriptions', 0),
     ('light.trim_searches_per_brand', 0),
     ('light.trim_usage', 0),

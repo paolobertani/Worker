@@ -179,6 +179,12 @@ function WorkerTaskSpecs()
             'enabled_if' => 'WorkerTaskIsLightDuty',
             'run'        => 'WorkerTaskRunCheckCert',
         ],
+        'light.renew_certs' => [
+            'label'      => 'light.renew_certs',
+            'interval'   => WORKER_INTERVAL_RENEW_CERTS,
+            'enabled_if' => 'WorkerTaskIsLightDuty',
+            'run'        => 'WorkerTaskRunRenewCerts',
+        ],
         'light.auto_expire' => [
             'label'      => 'light.auto_expire',
             'interval'   => WORKER_INTERVAL_AUTO_EXPIRE,
@@ -547,6 +553,13 @@ function WorkerTaskRunCheckPhpFpm()
 function WorkerTaskRunCheckCert()
 {
     CheckCert();
+}
+
+
+
+function WorkerTaskRunRenewCerts()
+{
+    RenewCertsLaunch();
 }
 
 

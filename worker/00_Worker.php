@@ -413,6 +413,13 @@ function WorkerRun()
 
 
             //
+            // Launch RenewCerts in background
+            //
+
+            WorkerTaskRun( 'light.renew_certs' );
+
+
+            //
             // Set EXPIRE date of documents with very old RELEASE date and not read
             //
 

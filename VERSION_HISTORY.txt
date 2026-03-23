@@ -1,3 +1,8 @@
+3.7.12
+
+Added weekly background RenewCerts task in non-heavy-duty worker
+
+
 3.7.11
 
 Persist interval tasks last run in `worker_tasks` across worker restarts
