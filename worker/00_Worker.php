@@ -54,35 +54,8 @@ function WorkerRun()
     // Time each operation did execute the last time
     //
 
-    $lastTouchTime = 0;
     $lastCacheTime = 0;
-    $lastDeleteBotsTime = 0;
-    $lastBackupDatabasesTime = 0;
-    $lastLogRotationTime = 0;
-    $lastIdrolabStats = 0;
-    $lastLiveAction = 0;
-    $lastEventsSmall = 0;
-    $lastPurgeSentDocuments = 0;
-    $lastExpiredSessionsDelete = 0;
-    $lastExpiredCookiesDelete = 0;
-    $lastTrimUsage = 0;
-    $lastTrimUsagePerDocument = 0;
-    $lastTrimUsagePerUser = 0;
-    $lastTrimSearchesPerBrand = 0;
-    $lastRebuildBrandsPerCategory = 0;
-    $lastUsersOnline = 0;
-    $lastXlsLoad = 0;
-    $lastTranscode = 0;
     $lastExpiredNotes = '';
-    $lastUpdatesMailing = 0;
-    $lastStats = 0;
-    $lastQRTable = 0;
-    $lastCheckPhpFpm = 0;
-    $lastSubscriptions = 0;
-    $lastTrials = 0;
-    $lastCertCheck = 0;
-    $lastAutoExpire = 0;
-    $lastAutoUncache = 0;
 
 
 
@@ -92,6 +65,13 @@ function WorkerRun()
 
     $idlec = [ "-", "\\", "|", "/" ];
     $idlen = 0;
+
+
+    //
+    // Load persisted scheduling state
+    //
+
+    WorkerTasksStateLoad();
 
 
 
@@ -207,11 +187,7 @@ function WorkerRun()
         // Updates mailing
         //
 
-        if( HEAVY_DUTY && time() - $lastUpdatesMailing > WORKER_INTERVAL_UPDATES_MAILING )
-        {
-            UpdatesNotify();
-            UpdatesSend();
-        }
+        WorkerTaskRun( 'hd.updates_mailing' );
 
 
 
@@ -219,10 +195,7 @@ function WorkerRun()
         // Statistics
         //
 
-        if( HEAVY_DUTY && time() - $lastStats > WORKER_INTERVAL_STATS && intval(date('G')) >= 20 )
-        {
-            StatsSearchesBuild();
-        }
+        WorkerTaskRun( 'hd.stats_searches' );
 
 
 
@@ -230,10 +203,7 @@ function WorkerRun()
         // QR Code Blog Page Table
         //
 
-        if( HEAVY_DUTY && time() - $lastQRTable > WORKER_INTERVAL_QRTABLE )
-        {
-            UpdateQrCountTablePage();
-        }
+        WorkerTaskRun( 'hd.qr_table' );
 
 
 
@@ -252,11 +222,7 @@ function WorkerRun()
             // Keep drives spinning
             //
 
-            if( time() - $lastTouchTime > WORKER_INTERVAL_TOUCH )
-            {
-                KeepDrivesSpinning();
-                $lastTouchTime = time();
-            }
+            WorkerTaskRun( 'light.keep_drives_spinning' );
 
 
 
@@ -266,13 +232,7 @@ function WorkerRun()
 
             // Email activity may occur here
 
-            if( is_dir( ROOT . "/CASHIN" ) || ( time() - $lastSubscriptions > WORKER_INTERVAL_SUBSCRIPTIONS && intval(date('G')) >= WORKER_CASHIN_START_AT && intval(date('G')) <= WORKER_CASHIN_END_AT ) )
-            {
-				if( is_dir( ROOT . "/CASHIN" ) ) { exec( "mv " . ROOT . "/CASHIN" . " " . ROOT . "/CASHIN-EXECUTED" ); }
-                Subscriptions();
-                $lastSubscriptions = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.subscriptions' );
 
 
 
@@ -280,12 +240,7 @@ function WorkerRun()
             // Suspend users in expired trials
             //
 
-            if( time() - $lastTrials > WORKER_INTERVAL_TRIALS )
-            {
-                Trials();
-                $lastTrials = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.trials' );
 
 
 
@@ -293,12 +248,7 @@ function WorkerRun()
             // Delete bot generated records from events table
             //
 
-            if( time() - $lastDeleteBotsTime > WORKER_INTERVAL_DELETEBOTS )
-            {
-                DeleteBotEvents();
-                $lastDeleteBotsTime = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.delete_bot_events' );
 
 
 
@@ -306,12 +256,7 @@ function WorkerRun()
             // Backup databases
             //
 
-            if( BACKUP_DATABASES && time() - $lastBackupDatabasesTime > WORKER_INTERVAL_DATABASES )
-            {
-                BackupDatabases();
-                $lastBackupDatabasesTime = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.backup_databases' );
 
 
 
@@ -319,12 +264,7 @@ function WorkerRun()
             // Rotate log
             //
 
-            if( time() - $lastLogRotationTime > WORKER_INTERVAL_LOGROTATE )
-            {
-                LogRotate();
-                $lastLogRotationTime = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.log_rotate' );
 
 
 
@@ -332,12 +272,7 @@ function WorkerRun()
             // Generate Idrolab Stats
             //
 
-            if( time() - $lastIdrolabStats > WORKER_INTERVAL_IDROLABSTATS )
-            {
-                IdrolabDoStats();
-                $lastIdrolabStats = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.idrolab_stats' );
 
 
 
@@ -345,12 +280,7 @@ function WorkerRun()
             // Live Action
             //
 
-            if( time() - $lastLiveAction > WORKER_INTERVAL_LIVEACTION )
-            {
-                LiveAction();
-                $lastLiveAction = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.live_action' );
 
 
 
@@ -358,12 +288,7 @@ function WorkerRun()
             // Events Small
             //
 
-            if( time() - $lastEventsSmall > WORKER_INTERVAL_EVENTSSMALL )
-            {
-                EventsSmall();
-                $lastEventsSmall = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.events_small' );
 
 
 
@@ -371,12 +296,7 @@ function WorkerRun()
             // Purge Sent Documents table
             //
 
-            if( time() - $lastPurgeSentDocuments > WORKER_INTERVAL_PURGESDOCS )
-            {
-                PurgeSentDocuments();
-                $lastPurgeSentDocuments = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.purge_sent_documents' );
 
 
 
@@ -384,12 +304,7 @@ function WorkerRun()
             // Delete expired sessions
             //
 
-            if( time() - $lastExpiredSessionsDelete > WORKER_INTERVAL_DEL_EXPS )
-            {
-                ExpiredSessionsDelete();
-                $lastExpiredSessionsDelete = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.expired_sessions_delete' );
 
 
 
@@ -397,12 +312,7 @@ function WorkerRun()
             // Delete cookies older than 12 months
             //
 
-            if( time() - $lastExpiredCookiesDelete > WORKER_INTERVAL_DEL_COOKIES )
-            {
-                ExpiredCookiesDelete();
-                $lastExpiredCookiesDelete = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.expired_cookies_delete' );
 
 
 
@@ -410,12 +320,7 @@ function WorkerRun()
             // Trim usage table
             //
 
-            if( time() - $lastTrimUsage > WORKER_INTERVAL_TRIM_USAGE )
-            {
-                TrimUsage();
-                $lastTrimUsage = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.trim_usage' );
 
 
 
@@ -423,12 +328,7 @@ function WorkerRun()
             // Trim usage_per_document table
             //
 
-            if( time() - $lastTrimUsagePerDocument > WORKER_INTERVAL_TRIM_USAGE_PD )
-            {
-                TrimUsagePerDocument();
-                $lastTrimUsagePerDocument = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.trim_usage_per_document' );
 
 
 
@@ -436,12 +336,7 @@ function WorkerRun()
             // Trim usage_per_user table
             //
 
-            if( time() - $lastTrimUsagePerUser > WORKER_INTERVAL_TRIM_USAGE_PU )
-            {
-                TrimUsagePerUser();
-                $lastTrimUsagePerUser = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.trim_usage_per_user' );
 
 
 
@@ -449,12 +344,7 @@ function WorkerRun()
             // Trim searches_per_brand table
             //
 
-            if( time() - $lastTrimSearchesPerBrand > WORKER_INTERVAL_TRIM_SEARCHES )
-            {
-                TrimSearchesPerBrand();
-                $lastTrimSearchesPerBrand = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.trim_searches_per_brand' );
 
 
 
@@ -462,12 +352,7 @@ function WorkerRun()
             // Rebuild brands per category
             //
 
-            if( time() - $lastRebuildBrandsPerCategory > WORKER_INTERVAL_REBUILD_BPC )
-            {
-                BrandsPerCategoryRebuild();
-                $lastRebuildBrandsPerCategory = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.rebuild_brands_per_category' );
 
 
 
@@ -475,12 +360,7 @@ function WorkerRun()
             // Populate users online count table
             //
 
-            if( time() - $lastUsersOnline > WORKER_INTERVAL_USERS_ONLINE )
-            {
-                UsersOnline();
-                $lastUsersOnline = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.users_online' );
 
 
 
@@ -490,16 +370,7 @@ function WorkerRun()
 
             // Activity on brands
 
-            if( time() - $lastXlsLoad > WORKER_INTERVAL_XLS )
-            {
-                $brand_op = ManagePricelist();
-                if( $brand_op !== false )
-                {
-                    SlaveSyncBrands( [ $brand_op ] );
-                }
-                $lastXlsLoad = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.manage_pricelist' );
 
 
 
@@ -509,16 +380,7 @@ function WorkerRun()
 
             // Activity on brands
 
-            if( time() - $lastTranscode > WORKER_INTERVAL_TRANSCODE )
-            {
-                $brand_op = ManageTranscode();
-                if( $brand_op !== false )
-                {
-                    SlaveSyncBrands( [ $brand_op ] );
-                }
-                $lastTranscode = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.manage_transcode' );
 
 
 
@@ -540,48 +402,28 @@ function WorkerRun()
             // Check PHP-FPM Pinaxo Blog is not blocked
             //
 
-            if( time() - $lastCheckPhpFpm > WORKER_INTERVAL_CHECK_PHP_FPM )
-            {
-                CheckPhpFpm();
-                $lastCheckPhpFpm = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.check_php_fpm' );
 
 
             //
             // Check www.pinaxo.com cert is not expiring soon
             //
 
-            if( time() - $lastCertCheck > WORKER_INTERVAL_CHECK_CERT )
-            {
-                CheckCert();
-                $lastCertCheck = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.check_cert' );
 
 
             //
             // Set EXPIRE date of documents with very old RELEASE date and not read
             //
 
-            if( time() - $lastAutoExpire > WORKER_INTERVAL_AUTO_EXPIRE )
-            {
-                AutoExpire();
-                $lastAutoExpire = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.auto_expire' );
 
 
             //
             // Set documents to not to be cached when they are very old and not read
             //
 
-            if( time() - $lastAutoUncache > WORKER_INTERVAL_AUTO_UNCACHE )
-            {
-                AutoUncache();
-                $lastAutoUncache = time();
-                WorkerAlive();
-            }
+            WorkerTaskRun( 'light.auto_uncache' );
 
 
         }

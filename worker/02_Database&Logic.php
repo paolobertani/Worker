@@ -38,6 +38,39 @@ function DbDocumentQuery( $query, $params = null )
 }
 
 
+
+//
+// Worker tasks scheduling state
+//
+
+function DbWorkerTasksAll()
+{
+    $error = '';
+    $result = QueryExecute( '92_worker_tasks_all.sql', $error, [] );
+
+    if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - 92_worker_tasks_all.sql: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
+
+    return $result;
+}
+
+
+
+function DbWorkerTaskUpdate( $label, $last_run_unixtime )
+{
+    $error = '';
+    $params = [
+        'label'             => $label,
+        'last_run_unixtime' => $last_run_unixtime,
+    ];
+
+    $result = QueryExecute( '93_worker_tasks_update.sql', $error, $params );
+
+    if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - 93_worker_tasks_update.sql: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
+
+    return $result;
+}
+
+
 //
 // Document PDF is removed after 1 month the document was marked as deleted
 // `deleted` < (NOW -1M)

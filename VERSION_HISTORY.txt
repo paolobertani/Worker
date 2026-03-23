@@ -1,17 +1,30 @@
+3.7.11
+
+Persist interval tasks last run in `worker_tasks` across worker restarts
+
+
+3.7.10 
+
+Disabled php-fpm (wordpress) check
+
 
 3.7.9
+
 Added cleanup tasks for cookies, usage, usage_per_document, usage_per_user and searches_per_brand
 
 
 3.7.8
+
 Subscriptions: payment outcome email to customer localized in 7 locales (it, en, de, es, fr, ru, zh)
 
 
 3.7.7
+
 agreement_id is updated when cash-in fails
 
 
 3.7.6
+
 num_contratto >> agreement_id; cod_trans >> transaction_id
 
 
@@ -615,4 +628,3 @@ EnoughtDiskSpace: check if the repository is available
 2.0.0
 
 Initial release, ported from worker.py version 1.5.6
-

@@ -8,6 +8,8 @@
 
 function CheckPhpFpm()
 {
+	return; /***** DISABLED *****/
+	
     if( is_dir( '/Users/administrator/www/www.pinaxo.com/DEPLOYMENT-IN-PROGRESS' ) )
     {
         return;
