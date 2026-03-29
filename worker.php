@@ -27,7 +27,7 @@ ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
-define( 'WORKER_VERSION',           '3.7.12' );  // Worker version number
+define( 'WORKER_VERSION',           '3.7.14' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
 define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root
@@ -113,6 +113,16 @@ define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this
     define( 'DB_USER',              '***SECRET***' );
     define( 'DB_PASS',              '***SECRET***' );
     define( 'DB_NAME',              '***SECRET***' ); */
+
+//
+// REDIS CACHE CONFIGURATION
+//
+
+define( 'WORKER_REDIS_HOST',               '127.0.0.1'   );
+define( 'WORKER_REDIS_PORT',               6379          );
+define( 'WORKER_REDIS_CACHE_DB',           2             );
+define( 'WORKER_REDIS_CACHE_NAMESPACE',    'px:dbcache:' );
+define( 'WORKER_REDIS_TIMEOUT',            0.010         ); // seconds
 
 //
 // DATABASE BACKUP CONFIGURATION
@@ -235,6 +245,7 @@ require_once ROOT . '/include/fs.php';
 require_once ROOT . '/include/mailer.php';
 require_once ROOT . '/include/exec.php';
 require_once ROOT . '/include/curl.php';
+require_once ROOT . '/include/mtime.php';
 
 
 

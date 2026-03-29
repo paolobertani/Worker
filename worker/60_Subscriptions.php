@@ -61,6 +61,8 @@ function SubscriptionsCCSuspendExpired()
             /*--- QUIT POINT ---*/
         }
 
+        InvalidateCache( 'subscriptions' );
+
         WorkerLog( WORKER_INFO, "Deactivated expired subscription: $description", 0, true, true, 1 );
         sleep(1);
 
@@ -120,6 +122,8 @@ function SubscriptionsBTSuspendExpired()
             /*--- QUIT POINT ---*/
         }
 
+        InvalidateCache( 'subscriptions' );
+
         WorkerLog( WORKER_INFO, "Deactivated expired subscription: $description", 0, true, true, 1 );
         sleep(1);
 
@@ -159,6 +163,8 @@ function SubscriptionSetGroup( $subscription_id, $group_id )
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'users' );
 }
 
 
@@ -283,6 +289,8 @@ function SubscriptionsIssuePaymentMaybe()
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'subscriptions' );
 
     if( $mail_error !== '' )
     {
@@ -488,6 +496,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'payments' );
 
     // From now on we just send emails
 

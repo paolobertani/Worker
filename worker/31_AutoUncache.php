@@ -56,6 +56,11 @@ function AutoUncache()
         }
     }
 
+    if( $n > 0 )
+    {
+        InvalidateCache( 'documents' );
+    }
+
 
     // Done
 
@@ -65,7 +70,6 @@ function AutoUncache()
     sleep(3);
 
 }
-
 
 
 

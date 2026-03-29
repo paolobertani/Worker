@@ -72,6 +72,8 @@ function PurgeSentDocuments()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'sent_documents' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Deleted $count sent documents: $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

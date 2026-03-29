@@ -24,6 +24,8 @@ function TrimUsagePerDocument()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'usage_per_document' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Trim usage_per_document table: $result deleted in $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

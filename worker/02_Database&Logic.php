@@ -67,6 +67,8 @@ function DbWorkerTaskUpdate( $label, $last_run_unixtime )
 
     if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - 93_worker_tasks_update.sql: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
 
+    InvalidateCache( 'worker_tasks' );
+
     return $result;
 }
 
@@ -198,7 +200,11 @@ function DbBrandWithNoIdrolabProductList( $brand_id )
 {
     $params = [ 'brand_id' => $brand_id ];
 
-    return DbDocumentQuery( '41_brand_without_idrolab_pl.sql', $params );
+    $result = DbDocumentQuery( '41_brand_without_idrolab_pl.sql', $params );
+
+    InvalidateCache( 'brands' );
+
+    return $result;
 }
 
 
@@ -215,7 +221,11 @@ function DbDocumentLock( $document_id )
 {
     $params = [ 'id' => $document_id ];
 
-    return DbDocumentQuery( '08_document_lock.sql', $params );
+    $result = DbDocumentQuery( '08_document_lock.sql', $params );
+
+    InvalidateCache( 'documents' );
+
+    return $result;
 }
 
 
@@ -232,14 +242,22 @@ function DbDocumentUpdateAndUnlock( $document )
 
     // Perform query
 
-    return DbDocumentQuery( '09_document_update&unlock.sql', $document );
+    $result = DbDocumentQuery( '09_document_update&unlock.sql', $document );
+
+    InvalidateCache( 'documents' );
+
+    return $result;
 }
 
 
 
 function DbSentDocumentUpdate( $sent_document )
 {
-    return DbDocumentQuery( '16_sent_document_update.sql', $sent_document );
+    $result = DbDocumentQuery( '16_sent_document_update.sql', $sent_document );
+
+    InvalidateCache( 'sent_documents' );
+
+    return $result;
 }
 
 
@@ -251,7 +269,11 @@ function DbDocumentUpdateMD5AndUnlock( $document )
         'md5' => $document['md5']
     ];
 
-    return DbDocumentQuery( '09_document_update_md5&unlock.sql', $params );
+    $result = DbDocumentQuery( '09_document_update_md5&unlock.sql', $params );
+
+    InvalidateCache( 'documents' );
+
+    return $result;
 }
 
 

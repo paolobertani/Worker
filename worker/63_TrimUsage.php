@@ -24,6 +24,8 @@ function TrimUsage()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'usage' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Trim usage table: $result deleted in $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

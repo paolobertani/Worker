@@ -44,6 +44,13 @@ function ManageTranscode()
     {
         WorkerLog( WORKER_WARNING, "Brand $brand ($brand_id) is missing price list, cannot transcode", 0, true, true, true );
         $result = QueryExecute( '77_brand_to_transcode_update.sql', $error, [ 'brand_id' => $brand_id ] );
+        if( $result === false )
+        {
+            WorkerLog( WORKER_ERROR, "FATAL - 77_brand_to_transcode_update.sql: query failed - Error: $error", 0, true, true, true );
+            WorkerQuitNow();
+            /*--- QUIT POINT ---*/
+        }
+        InvalidateCache( 'brands' );
         return false;
         /*--- EXIT POINT ---*/
     }
@@ -87,6 +94,13 @@ function ManageTranscode()
     {
         WorkerLog( WORKER_WARNING, "Brand $brand ($brand_id) is missing data on `transcode.info.json`", 0, true, true, true );
         $result = QueryExecute( '77_brand_to_transcode_update.sql', $error, [ 'brand_id' => $brand_id ] );
+        if( $result === false )
+        {
+            WorkerLog( WORKER_ERROR, "FATAL - 77_brand_to_transcode_update.sql: query failed - Error: $error", 0, true, true, true );
+            WorkerQuitNow();
+            /*--- QUIT POINT ---*/
+        }
+        InvalidateCache( 'brands' );
         return false;
         /*--- EXIT POINT ---*/
     }
@@ -227,6 +241,8 @@ function ManageTranscode()
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'brands' );
 
 
     // Log again

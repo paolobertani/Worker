@@ -63,6 +63,8 @@ function WorkerExecuteCmd( $cmd, $id )
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'documents' );
 }
 
 
@@ -123,5 +125,4 @@ function WorkerExecuteSync( $id )
 
     SlaveSync( $id );
 }
-
 

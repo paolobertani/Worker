@@ -64,6 +64,8 @@ function ExpiredNotes()
 
     if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - $query: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
 
+    InvalidateCache( 'notes_per_document_per_group' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Sent notifications for $n expired notes: $milliseconds ms", 0, false, false, 1 );
     sleep(3);

@@ -21,6 +21,8 @@ function ExpiredSessionsDelete()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'sessions' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Delete expired sessions: $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

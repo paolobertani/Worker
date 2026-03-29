@@ -108,6 +108,7 @@ function StatsSearchesBuild()
             $query = 'UPDATE `brands` SET `has_trends` = 0';
             $result = QueryExecute( $query, $error );
             if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - $query: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
+            InvalidateCache( 'brands' );
 
 
             $brand_ids = [];
@@ -121,6 +122,7 @@ function StatsSearchesBuild()
             $query = "UPDATE `brands` SET `has_trends` = 1 WHERE `id` IN ($brand_ids)";
             $result = QueryExecute( $query, $error );
             if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - $query: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
+            InvalidateCache( 'brands' );
         }
     }
 

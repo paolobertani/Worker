@@ -23,6 +23,8 @@ function LiveAction()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'live_action' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Purge Live Action: $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();
@@ -256,6 +258,8 @@ function LiveActionParseUserAgent( $ua )
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'user_agents' );
+
     return $info;
 }
 
@@ -271,4 +275,6 @@ function LiveActionWriteUserAgentInfo( $id, $browser, $os )
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'live_action' );
 }

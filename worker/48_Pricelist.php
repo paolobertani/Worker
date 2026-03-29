@@ -283,6 +283,7 @@ function ManagePricelist()
             WorkerQuitNow();
             /*--- QUIT POINT ---*/
         }
+        InvalidateCache( 'brands' );
         $issues = "Missing products";
         $result = QueryExecute( '75_pricelists_per_brand.sql', $error, [ 'brand_id' => $brand_id, 'pricelist' => $description, 'issues' => $issues, 'uploaded' => str_replace( '.', ':', $uploaded ), 'user_id' => $user_id ] );
         if( $result === false )
@@ -291,6 +292,7 @@ function ManagePricelist()
             WorkerQuitNow();
             /*--- QUIT POINT ---*/
         }
+        InvalidateCache( 'pricelists_per_brand' );
         return false;
     }
 
@@ -409,6 +411,8 @@ function ManagePricelist()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'brands' );
+
 
     // Log again
 
@@ -425,6 +429,8 @@ function ManagePricelist()
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    InvalidateCache( 'pricelists_per_brand' );
 
 
     // Rest

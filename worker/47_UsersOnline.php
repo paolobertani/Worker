@@ -79,6 +79,8 @@ function UsersOnline()
         }
     }
 
+    InvalidateCache( 'users_online' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Update count of users online: $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

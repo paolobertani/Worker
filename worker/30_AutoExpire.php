@@ -65,6 +65,11 @@ function AutoExpire()
         }
     }
 
+    if( $n > 0 )
+    {
+        InvalidateCache( 'documents' );
+    }
+
 
     // Done
 
@@ -82,7 +87,6 @@ function AutoExpireAddYearsToDate( $date, $years )
     $date = implode( "-", $date );
     return $date;
 }
-
 
 
 

@@ -24,6 +24,8 @@ function ExpiredCookiesDelete()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'cookies' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Delete expired cookies: $result deleted in $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

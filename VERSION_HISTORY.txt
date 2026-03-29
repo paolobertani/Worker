@@ -1,3 +1,13 @@
+3.7.14
+
+Invalidate F3 dbcache in Redis on Worker DB writes
+
+
+3.7.13
+
+Renamed `timestamp` fields to `when` in Pinaxo, Worker and DB views
+
+
 3.7.12
 
 Added weekly background RenewCerts task in non-heavy-duty worker

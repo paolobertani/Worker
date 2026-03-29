@@ -81,6 +81,8 @@ function UpdatesNotify()
 
     if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - $query: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
 
+    InvalidateCache( 'updates_sent' );
+
     WorkerLog( WORKER_INFO, "Sent updates notice: $milliseconds ms", 0, false, false, 1 );
     sleep(3);
 }
@@ -152,6 +154,8 @@ function UpdatesSend()
     $result = QueryExecute( $query, $error, [ 'id' => $id, 'when_sent' => $when_sent, 'recipients_count' => $recipients_count, 'elapsed_time' => $elapsed_time ] );
 
     if( $result === false ) { WorkerLog( WORKER_ERROR, "FATAL - $query: query failed - Error: $error", 0, true, true, true ); WorkerQuitNow(); /* QUIT */ }
+
+    InvalidateCache( 'updates_sent' );
 
     $text = $output;
     $html = StringReplace( $output, "\n", "<br>\n" );

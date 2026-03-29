@@ -24,6 +24,8 @@ function TrimSearchesPerBrand()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'searches_per_brand' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Trim searches_per_brand table: $result deleted in $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

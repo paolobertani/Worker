@@ -24,6 +24,8 @@ function EventsSmall()
         /*--- QUIT POINT ---*/
     }
 
+    InvalidateCache( 'events_small' );
+
     $error = '';
     $users = QueryExecute( '50_es_get_users.sql', $error, [] );
 
@@ -77,6 +79,11 @@ function EventsSmall()
             WorkerQuitNow();
             /*--- QUIT POINT ---*/
         }
+    }
+
+    if( count( $users ) > 0 )
+    {
+        InvalidateCache( 'users' );
     }
 
     $milliseconds = Milliseconds( $milliseconds );

@@ -30,6 +30,8 @@ function BrandsPerCategoryRebuild()
         }
     }
 
+    InvalidateCache( 'brands_per_category' );
+
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Rebuild brands_per_category: $milliseconds ms", 0, false, false, 1 );
     WorkerAlive();

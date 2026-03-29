@@ -81,11 +81,15 @@ function TrialsExpired()
         }
     }
 
+    if( $count > 0 )
+    {
+        InvalidateCache( 'users' );
+    }
+
     $logdb = $count > 0 ? true : false;
     $milliseconds = Milliseconds( $milliseconds );
     WorkerLog( WORKER_INFO, "Suspended $count user(s) with Trial expired: $milliseconds ms", 0, $logdb, false, 1 );
     WorkerAlive();
     sleep(3);
 }
-
 
