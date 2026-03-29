@@ -1,7 +1,7 @@
 UPDATE
     worker_tasks
 SET
-    last_run_unixtime = {{last_run_unixtime}}
+    last_run = {{last_run}}
 WHERE
     label = {{label}}
 LIMIT

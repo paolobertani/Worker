@@ -55,12 +55,12 @@ function DbWorkerTasksAll()
 
 
 
-function DbWorkerTaskUpdate( $label, $last_run_unixtime )
+function DbWorkerTaskUpdate( $label, $last_run )
 {
     $error = '';
     $params = [
-        'label'             => $label,
-        'last_run_unixtime' => $last_run_unixtime,
+        'label'     => $label,
+        'last_run'  => $last_run,
     ];
 
     $result = QueryExecute( '93_worker_tasks_update.sql', $error, $params );

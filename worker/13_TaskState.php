@@ -10,6 +10,30 @@ $gWorkerTaskState = [];
 
 
 
+function WorkerTaskLastRunToUnixtime( $value )
+{
+    $value = trim( (string) $value );
+
+    if( $value === 'NEVER' )
+    {
+        return 0;
+    }
+
+    try
+    {
+        return intdiv( mdate_to_mtime( $value ), 1000 );
+    }
+    catch( \Throwable $e )
+    {
+        WorkerLog( WORKER_ERROR, "Invalid worker_tasks.last_run value [$value], expected NEVER or mdate", 0, true, true, true );
+        WorkerQuitNow();
+        /*--- QUIT POINT ---*/
+        return 0;
+    }
+}
+
+
+
 //
 // Task specs
 //
@@ -217,7 +241,7 @@ function WorkerTasksStateLoad()
 
     foreach( $rows as $row )
     {
-        $gWorkerTaskState[ $row['label'] ] = intval( $row['last_run_unixtime'] );
+        $gWorkerTaskState[ $row['label'] ] = WorkerTaskLastRunToUnixtime( $row['last_run'] ?? 'NEVER' );
     }
 
     $missing = [];
@@ -265,7 +289,21 @@ function WorkerTaskSetLastRun( $label, $when = null )
         $when = time();
     }
 
-    DbWorkerTaskUpdate( $label, $when );
+    if( is_int( $when ) )
+    {
+        $lastRun = mdate( $when * 1000 );
+    }
+    else
+    {
+        $lastRun = trim( (string) $when );
+        if( $lastRun === '' )
+        {
+            $lastRun = 'NEVER';
+        }
+        $when = WorkerTaskLastRunToUnixtime( $lastRun );
+    }
+
+    DbWorkerTaskUpdate( $label, $lastRun );
     $gWorkerTaskState[ $label ] = intval( $when );
 }
 
