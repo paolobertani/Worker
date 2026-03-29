@@ -286,10 +286,10 @@ function WorkerTaskSetLastRun( $label, $when = null )
 
     if( $when === null )
     {
-        $when = time();
+        $lastRun = mdate();
+        $when = intdiv( mdate_to_mtime( $lastRun ), 1000 );
     }
-
-    if( is_int( $when ) )
+    else if( is_int( $when ) )
     {
         $lastRun = mdate( $when * 1000 );
     }
