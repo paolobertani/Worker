@@ -129,7 +129,7 @@ function ManagePricelist()
             for( $x = 1; $x <= 52; $x++ )
             {
                 $value = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $x, $header_y ] )->getValue();
-                $value = strtolower( trim( $value ) );
+                $value = strtolower( trim( (string)$value ) );
 
                 if( $value == 'codice'       && $codeColumn === 0 ) { $codeColumn = $x; }
                 if( $value == 'descrizione'  && $dscrColumn === 0 ) { $dscrColumn = $x; }
