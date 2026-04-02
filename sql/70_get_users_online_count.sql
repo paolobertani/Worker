@@ -1,1 +1,0 @@
-SELECT count(*) as `users_online_count` FROM `live_action` WHERE `unixtime` > ( UNIX_TIMESTAMP() - 300 )

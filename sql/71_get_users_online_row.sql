@@ -1,1 +1,0 @@
-SELECT * FROM `users_online` WHERE `when` = {{when}}

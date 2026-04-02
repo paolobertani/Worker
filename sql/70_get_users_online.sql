@@ -1,1 +1,0 @@
-SELECT * FROM `view_live_action` WHERE `unixtime` > ( UNIX_TIMESTAMP() - 300 )

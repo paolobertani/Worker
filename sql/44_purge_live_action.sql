@@ -1,1 +1,0 @@
-DELETE FROM `live_action` WHERE `unixtime` < {{time_limit}}

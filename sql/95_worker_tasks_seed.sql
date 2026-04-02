@@ -15,10 +15,8 @@ VALUES
     ('light.delete_bot_events', 'NEVER'),
     ('light.events_small', 'NEVER'),
     ('light.expired_cookies_delete', 'NEVER'),
-    ('light.expired_sessions_delete', 'NEVER'),
     ('light.idrolab_stats', 'NEVER'),
     ('light.keep_drives_spinning', 'NEVER'),
-    ('light.live_action', 'NEVER'),
     ('light.log_rotate', 'NEVER'),
     ('light.manage_pricelist', 'NEVER'),
     ('light.manage_transcode', 'NEVER'),
@@ -30,5 +28,4 @@ VALUES
     ('light.trim_usage', 'NEVER'),
     ('light.trim_usage_per_document', 'NEVER'),
     ('light.trim_usage_per_user', 'NEVER'),
-    ('light.trials', 'NEVER'),
-    ('light.users_online', 'NEVER');
+    ('light.trials', 'NEVER');

@@ -47,17 +47,14 @@ define( 'WORKER_INTERVAL_DELETEBOTS',     10000 );   // Bot generated records re
 define( 'WORKER_INTERVAL_DATABASES',       1700 );   // Database backup time interval
 define( 'WORKER_INTERVAL_LOGROTATE',        509 );   // Log rotation time interval
 define( 'WORKER_INTERVAL_IDROLABSTATS',    1508 );   // Idrolab stats generation interval
-define( 'WORKER_INTERVAL_LIVEACTION',       900 );   // Shorten Live Action
 define( 'WORKER_INTERVAL_EVENTSSMALL',     2100 );   // Cut events_small and recalcs 30days user usage
 define( 'WORKER_INTERVAL_PURGESDOCS',      2000 );   // Purge Sent Documents table from spurious records
-define( 'WORKER_INTERVAL_DEL_EXPS',        1900 );   // Delete expired sessions
 define( 'WORKER_INTERVAL_DEL_COOKIES',    46800 );   // Delete cookies older than 12 months every 13 hours
 define( 'WORKER_INTERVAL_TRIM_USAGE',     50400 );   // Trim usage table every 14 hours
 define( 'WORKER_INTERVAL_TRIM_USAGE_PD',  54000 );   // Trim usage_per_document table every 15 hours
 define( 'WORKER_INTERVAL_TRIM_USAGE_PU',  57600 );   // Trim usage_per_user table every 16 hours
 define( 'WORKER_INTERVAL_TRIM_SEARCHES',  61200 );   // Trim searches_per_brand table every 17 hours
 define( 'WORKER_INTERVAL_REBUILD_BPC',     1820 );   // Rebuild brands per category
-define( 'WORKER_INTERVAL_USERS_ONLINE',      25 );   // Populate users online count table
 define( 'WORKER_INTERVAL_XLS',                6 );   // Load XLS price lists
 define( 'WORKER_INTERVAL_TRANSCODE',          7 );   // Transcode products codes to match with the codes on the PDFs
 define( 'WORKER_INTERVAL_UPDATES_MAILING',  501 );   // Send updates emails to mailing list
@@ -122,6 +119,8 @@ define( 'WORKER_REDIS_HOST',               '127.0.0.1'   );
 define( 'WORKER_REDIS_PORT',               6379          );
 define( 'WORKER_REDIS_CACHE_DB',           2             );
 define( 'WORKER_REDIS_CACHE_NAMESPACE',    'px:dbcache:' );
+define( 'WORKER_REDIS_STORE_DB',           3             );
+define( 'WORKER_REDIS_STORE_NAMESPACE',    'px:store:'   );
 define( 'WORKER_REDIS_TIMEOUT',            0.010         ); // seconds
 
 //

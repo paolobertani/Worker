@@ -277,14 +277,6 @@ function WorkerRun()
 
 
             //
-            // Live Action
-            //
-
-            WorkerTaskRun( 'light.live_action' );
-
-
-
-            //
             // Events Small
             //
 
@@ -297,14 +289,6 @@ function WorkerRun()
             //
 
             WorkerTaskRun( 'light.purge_sent_documents' );
-
-
-
-            //
-            // Delete expired sessions
-            //
-
-            WorkerTaskRun( 'light.expired_sessions_delete' );
 
 
 
@@ -353,14 +337,6 @@ function WorkerRun()
             //
 
             WorkerTaskRun( 'light.rebuild_brands_per_category' );
-
-
-
-            //
-            // Populate users online count table
-            //
-
-            WorkerTaskRun( 'light.users_online' );
 
 
 
@@ -448,9 +424,8 @@ function WorkerRun()
 		$usersOnlineCount = "";
 		if( ! HEAVY_DUTY )
 		{
-		    $error = '';
-		    $result = QueryExecute( '70_get_users_online_count.sql', $error, [] );
-			$usersOnlineCount = $result === false ? "?" : $result[ 0 ][ 'users_online_count' ];
+			$usersOnlineCount = WorkerStoreLiveActionGetOnlineUsersCount();
+			$usersOnlineCount = $usersOnlineCount === false ? "?" : $usersOnlineCount;
 			$usersOnlineCount .= " users online";
 		}
 

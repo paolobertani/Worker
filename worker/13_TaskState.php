@@ -113,12 +113,6 @@ function WorkerTaskSpecs()
             'enabled_if' => 'WorkerTaskIsLightDuty',
             'run'        => 'WorkerTaskRunIdrolabStats',
         ],
-        'light.live_action' => [
-            'label'      => 'light.live_action',
-            'interval'   => WORKER_INTERVAL_LIVEACTION,
-            'enabled_if' => 'WorkerTaskIsLightDuty',
-            'run'        => 'WorkerTaskRunLiveAction',
-        ],
         'light.events_small' => [
             'label'      => 'light.events_small',
             'interval'   => WORKER_INTERVAL_EVENTSSMALL,
@@ -130,12 +124,6 @@ function WorkerTaskSpecs()
             'interval'   => WORKER_INTERVAL_PURGESDOCS,
             'enabled_if' => 'WorkerTaskIsLightDuty',
             'run'        => 'WorkerTaskRunPurgeSentDocuments',
-        ],
-        'light.expired_sessions_delete' => [
-            'label'      => 'light.expired_sessions_delete',
-            'interval'   => WORKER_INTERVAL_DEL_EXPS,
-            'enabled_if' => 'WorkerTaskIsLightDuty',
-            'run'        => 'WorkerTaskRunExpiredSessionsDelete',
         ],
         'light.expired_cookies_delete' => [
             'label'      => 'light.expired_cookies_delete',
@@ -172,12 +160,6 @@ function WorkerTaskSpecs()
             'interval'   => WORKER_INTERVAL_REBUILD_BPC,
             'enabled_if' => 'WorkerTaskIsLightDuty',
             'run'        => 'WorkerTaskRunRebuildBrandsPerCategory',
-        ],
-        'light.users_online' => [
-            'label'      => 'light.users_online',
-            'interval'   => WORKER_INTERVAL_USERS_ONLINE,
-            'enabled_if' => 'WorkerTaskIsLightDuty',
-            'run'        => 'WorkerTaskRunUsersOnline',
         ],
         'light.manage_pricelist' => [
             'label'      => 'light.manage_pricelist',
@@ -482,13 +464,6 @@ function WorkerTaskRunIdrolabStats()
 
 
 
-function WorkerTaskRunLiveAction()
-{
-    LiveAction();
-}
-
-
-
 function WorkerTaskRunEventsSmall()
 {
     EventsSmall();
@@ -499,13 +474,6 @@ function WorkerTaskRunEventsSmall()
 function WorkerTaskRunPurgeSentDocuments()
 {
     PurgeSentDocuments();
-}
-
-
-
-function WorkerTaskRunExpiredSessionsDelete()
-{
-    ExpiredSessionsDelete();
 }
 
 
@@ -548,13 +516,6 @@ function WorkerTaskRunTrimSearchesPerBrand()
 function WorkerTaskRunRebuildBrandsPerCategory()
 {
     BrandsPerCategoryRebuild();
-}
-
-
-
-function WorkerTaskRunUsersOnline()
-{
-    UsersOnline();
 }
 
 
