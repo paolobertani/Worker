@@ -591,6 +591,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $mailer->Password   = WORKER_EMAIL_PASS;                        //  SMTP password
     $mailer->SMTPSecure = WORKER_EMAIL_SCRE;                        //  Enable encryption, ( '' || 'tls' || 'ssl' )
     $mailer->Port       = WORKER_EMAIL_PORT;                        //  Port
+    $mailer->Timeout    = 15;
+    $mailer->getSMTPInstance()->Timelimit = 15;
 
     $mailer->From       = WORKER_EMAIL_FROM;
     $mailer->FromName   = WORKER_EMAIL_NAME;
@@ -695,6 +697,8 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     $mailer->Password   = WORKER_EMAIL_PASS;                        //  SMTP password
     $mailer->SMTPSecure = WORKER_EMAIL_SCRE;                        //  Enable encryption, ( '' || 'tls' || 'ssl' )
     $mailer->Port       = WORKER_EMAIL_PORT;                        //  Port
+    $mailer->Timeout    = 15;
+    $mailer->getSMTPInstance()->Timelimit = 15;
 
     $mailer->From       = WORKER_EMAIL_FROM;
     $mailer->FromName   = "Pinaxo Server";
