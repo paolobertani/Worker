@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// TaskState
-//
-//
+/*
+ *
+ *
+ *  TaskState
+ *
+ *
+ */
 
 $gWorkerTaskState = [];
 
@@ -34,9 +36,11 @@ function WorkerTaskLastRunToUnixtime( $value )
 
 
 
-//
-// Task specs
-//
+/*
+ *
+ *  Task specs
+ *
+ */
 
 function WorkerTaskSpecs()
 {
@@ -210,9 +214,11 @@ function WorkerTaskSpecs()
 
 
 
-//
-// State load / access
-//
+/*
+ *
+ *  State load / access
+ *
+ */
 
 function WorkerTasksStateLoad()
 {
@@ -291,9 +297,11 @@ function WorkerTaskSetLastRun( $label, $when = null )
 
 
 
-//
-// Scheduler
-//
+/*
+ *
+ *  Scheduler
+ *
+ */
 
 function WorkerTaskRun( $label )
 {
@@ -337,9 +345,11 @@ function WorkerTaskRun( $label )
 
 
 
-//
-// Conditions
-//
+/*
+ *
+ *  Conditions
+ *
+ */
 
 function WorkerTaskIsHeavyDuty()
 {
@@ -384,9 +394,11 @@ function WorkerTaskShouldForceSubscriptions()
 
 
 
-//
-// Task wrappers
-//
+/*
+ *
+ *  Task wrappers
+ *
+ */
 
 function WorkerTaskRunUpdatesMailing()
 {

@@ -1,15 +1,19 @@
 <?php
 
-//
-//
-// Document info retrieved inspecting the Repository
-//
-//
+/*
+ *
+ *
+ *  Document info retrieved inspecting the Repository
+ *
+ *
+ */
 
 
-//
-// Returns the 'pdf' value: 1 = the pdf exists, 0 = the pdf is not present, -1 the file is not a pdf.
-//
+/*
+ *
+ *  Returns the 'pdf' value: 1 = the pdf exists, 0 = the pdf is not present, -1 the file is not a pdf.
+ *
+ */
 
 function DocumentPdf( $document_id )
 {
@@ -32,9 +36,11 @@ function DocumentPdf( $document_id )
 
 
 
-//
-// Returns the MD5 given the document_id; empty string if the file is missing
-//
+/*
+ *
+ *  Returns the MD5 given the document_id; empty string if the file is missing
+ *
+ */
 
 function DocumentMd5( $document_id )
 {
@@ -56,9 +62,11 @@ function DocumentMd5( $document_id )
 
 
 
-//
-// Returns the 'pdf_size' value
-//
+/*
+ *
+ *  Returns the 'pdf_size' value
+ *
+ */
 
 function DocumentPdfSize( $document_id )
 {
@@ -74,9 +82,11 @@ function DocumentPdfSize( $document_id )
 
 
 
-//
-// Returns the 'pdfff_size' value
-//
+/*
+ *
+ *  Returns the 'pdfff_size' value
+ *
+ */
 
 function DocumentPdfffSize( $document_id )
 {
@@ -92,9 +102,11 @@ function DocumentPdfffSize( $document_id )
 
 
 
-//
-// Returns the 'pdfidx_size' value
-//
+/*
+ *
+ *  Returns the 'pdfidx_size' value
+ *
+ */
 
 function DocumentPdfidxSize( $document_id )
 {
@@ -110,9 +122,11 @@ function DocumentPdfidxSize( $document_id )
 
 
 
-//
-// Returns the 'cache_size' value
-//
+/*
+ *
+ *  Returns the 'cache_size' value
+ *
+ */
 
 function DocumentCacheSize( $document_id )
 {
@@ -133,9 +147,11 @@ function DocumentCacheSize( $document_id )
 
 
 
-//
-// Returns the width and height of the cover at 72 dpi ( NOT the bytes size )
-//
+/*
+ *
+ *  Returns the width and height of the cover at 72 dpi ( NOT the bytes size )
+ *
+ */
 
 function DocumentCoverMeasure( $document_id )
 {

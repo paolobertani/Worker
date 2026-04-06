@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Slave
-//
-//
+/*
+ *
+ *
+ *  Slave
+ *
+ *
+ */
 
 
 
-//
-// Returns true if the slave is present
-//
+/*
+ *
+ *  Returns true if the slave is present
+ *
+ */
 
 function SlaveIsPresent()
 {
@@ -100,9 +104,11 @@ function SlaveSync( $document_id )
 
 
 
-//
-// SlaveSyncBrands
-//
+/*
+ *
+ *  SlaveSyncBrands
+ *
+ */
 
 function SlaveSyncBrands( $brands )
 {

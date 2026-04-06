@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Backup databases
-//
-//
+/*
+ *
+ *
+ *  Backup databases
+ *
+ *
+ */
 
 
 function BackupDatabases()
@@ -35,9 +37,11 @@ function BackupDatabases()
 
 
 
-//
-// Archive the last databases dump
-//
+/*
+ *
+ *  Archive the last databases dump
+ *
+ */
 
 function BackupDatabasesArchiveLast()
 {
@@ -122,9 +126,11 @@ function BackupDatabasesArchiveLast()
 
 
 
-//
-// Dump all the listed databases
-//
+/*
+ *
+ *  Dump all the listed databases
+ *
+ */
 
 function BackupDatabasesDump()
 {
@@ -215,34 +221,38 @@ function BackupDatabasesDump()
 
 
 
-//
-// Rotate the archive
-//
+/*
+ *
+ *  Rotate the archive
+ *
+ */
 
-// For each interval, all the backups
-// that fall into the timespan are
-// deleted except the oldest.
-//
-// Backups into the interval older
-// than interval beginning + timespan
-// are ignored.
-//
-// The interval's timespan is to be
-// intended as the -minimum- timespan
-// between backups into the interval.
-//
-// It is advisable to avoid backups
-// at a timespan slighly smaller than
-// the interval's timespan they enter
-// to let the timespan between backups
-// better match the interval's timespan
-//
-// Backups are scheduled every 1800 secs
-// but actually they take place at a
-// slightly slower pace due to delays;
-// For this reason they properly enter
-// the "every 30 min. in the first 4 hrs."
-// main interval.
+/*
+ *  For each interval, all the backups
+ *  that fall into the timespan are
+ *  deleted except the oldest.
+ *
+ *  Backups into the interval older
+ *  than interval beginning + timespan
+ *  are ignored.
+ *
+ *  The interval's timespan is to be
+ *  intended as the -minimum- timespan
+ *  between backups into the interval.
+ *
+ *  It is advisable to avoid backups
+ *  at a timespan slighly smaller than
+ *  the interval's timespan they enter
+ *  to let the timespan between backups
+ *  better match the interval's timespan
+ *
+ *  Backups are scheduled every 1800 secs
+ *  but actually they take place at a
+ *  slightly slower pace due to delays;
+ *  For this reason they properly enter
+ *  the "every 30 min. in the first 4 hrs."
+ *  main interval.
+ */
 
 function BackupDatabasesRotate()
 {
@@ -364,11 +374,13 @@ function BackupDatabasesRotate()
 
 
 
-//
-// Return true if at present time
-// the database dumps should be paused
-// (normally during main backup)
-//
+/*
+ *
+ *  Return true if at present time
+ *  the database dumps should be paused
+ *  (normally during main backup)
+ *
+ */
 
 function BackupDatabasesShouldPause()
 {
@@ -377,9 +389,11 @@ function BackupDatabasesShouldPause()
 
 
 
-//
-// Align the backups in the master and slave volumes
-//
+/*
+ *
+ *  Align the backups in the master and slave volumes
+ *
+ */
 
 function BackupDatabasesSyncStorageVolumes()
 {

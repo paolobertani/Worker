@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Subscriptions
-//
-//
+/*
+ *
+ *
+ *  Subscriptions
+ *
+ *
+ */
 
 function Subscriptions()
 {
@@ -17,9 +19,11 @@ function Subscriptions()
 
 
 
-//
-// SubscriptionsCCSuspendExpired
-//
+/*
+ *
+ *  SubscriptionsCCSuspendExpired
+ *
+ */
 
 function SubscriptionsCCSuspendExpired()
 {
@@ -78,9 +82,11 @@ function SubscriptionsCCSuspendExpired()
 
 
 
-//
-// SubscriptionsBTSuspendExpired
-//
+/*
+ *
+ *  SubscriptionsBTSuspendExpired
+ *
+ */
 
 function SubscriptionsBTSuspendExpired()
 {
@@ -141,9 +147,11 @@ function SubscriptionsBTSuspendExpired()
 
 
 
-//
-// SubscriptionSetGroup
-//
+/*
+ *
+ *  SubscriptionSetGroup
+ *
+ */
 
 function SubscriptionSetGroup( $subscription_id, $group_id )
 {
@@ -169,9 +177,11 @@ function SubscriptionSetGroup( $subscription_id, $group_id )
 
 
 
-//
-// SubscriptionsIssuePaymentMaybe
-//
+/*
+ *
+ *  SubscriptionsIssuePaymentMaybe
+ *
+ */
 
 function SubscriptionsIssuePaymentMaybe()
 {
@@ -232,10 +242,12 @@ function SubscriptionsIssuePaymentMaybe()
     }
     else
     {
-        //  FAIL:
-        // `valid_until` is not changed
-        // agreement id is regenerated
-        // group_id of subscribed user is set to INACTIVE_GROUP
+        /*
+         *  FAIL:
+         *  `valid_until` is not changed
+         *  agreement id is regenerated
+         *  group_id of subscribed user is set to INACTIVE_GROUP
+         */
 
         $last_payment_did_fail = 1;
         $is_active = 0;
@@ -308,9 +320,11 @@ function SubscriptionsIssuePaymentMaybe()
 
 
 
-//
-// SubscriptionsCashIn
-//
+/*
+ *
+ *  SubscriptionsCashIn
+ *
+ */
 
 function SubscriptionsCashIn( $subscription, &$mail_error )
 {
@@ -934,9 +948,11 @@ function SubscriptionsPaymentEmailLocale( $lang )
 
 
 
-//
-// One month later on the specified day [from controllers/subscriptions.php]
-//
+/*
+ *
+ *  One month later on the specified day [from controllers/subscriptions.php]
+ *
+ */
 
 function SubscriptionsGetValidUntil( $valid_until_day, $valid_until, $duration )
 {
@@ -975,9 +991,11 @@ function SubscriptionsGetValidUntil( $valid_until_day, $valid_until, $duration )
 
 
 
-//
-// Send email to main admins as a `bt` subscription is expired so an incoming bank transfer is expected
-//
+/*
+ *
+ *  Send email to main admins as a `bt` subscription is expired so an incoming bank transfer is expected
+ *
+ */
 
 function SubscriptionSendMailAsBankTransferIsExpected( $subscription )
 {

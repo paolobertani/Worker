@@ -1,26 +1,32 @@
 <?php
 
-//
-//
-// Signal
-//
-//
+/*
+ *
+ *
+ *  Signal
+ *
+ *
+ */
 
 
 
-//
-// Global
-//
+/*
+ *
+ *  Global
+ *
+ */
 
 $gShutdown = false;
 
 
 
-//
-// Listen for quit (from ActivityMonitor)
-// kill -s 15 <pid> from terminal
-// or CTRL-C from terminal
-//
+/*
+ *
+ *  Listen for quit (from ActivityMonitor)
+ *  kill -s 15 <pid> from terminal
+ *  or CTRL-C from terminal
+ *
+ */
 
 function SignalInstall()
 {
@@ -43,9 +49,11 @@ function SignalInstall()
 
 
 
-//
-// A "quit" signal has been received
-//
+/*
+ *
+ *  A "quit" signal has been received
+ *
+ */
 
 function SignalQuitReceived()
 {
@@ -55,9 +63,11 @@ function SignalQuitReceived()
 
 
 
-//
-// PRIVATE
-//
+/*
+ *
+ *  PRIVATE
+ *
+ */
 
 function SignalHandlerPrivate( $signo, $siginfo )
 {

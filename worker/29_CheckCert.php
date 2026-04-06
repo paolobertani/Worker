@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Check PINAXO certificate expiry date
-//
-//
+/*
+ *
+ *
+ *  Check PINAXO certificate expiry date
+ *
+ *
+ */
 
 
 

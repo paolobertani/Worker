@@ -1,21 +1,25 @@
 <?php
 
-//
-//
-//
-// Updates Dates Generator
-//
-//
-//
+/*
+ *
+ *
+ *
+ *  Updates Dates Generator
+ *
+ *
+ *
+ */
 
 
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
 
-//
-// INCLUDE
-//
+/*
+ *
+ *  INCLUDE
+ *
+ */
 
 // require_once ROOT . '/include/strings.php';
 // require_once ROOT . '/include/milliseconds.php';

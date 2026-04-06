@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Trim usage_per_document table
-//
-//
+/*
+ *
+ *
+ *  Trim usage_per_document table
+ *
+ *
+ */
 
 function TrimUsagePerDocument()
 {

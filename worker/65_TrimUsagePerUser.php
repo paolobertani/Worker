@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Trim usage_per_user table
-//
-//
+/*
+ *
+ *
+ *  Trim usage_per_user table
+ *
+ *
+ */
 
 function TrimUsagePerUser()
 {

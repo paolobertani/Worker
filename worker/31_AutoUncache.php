@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Set documents to not to be cached when they are expired long ago
-//
-//
+/*
+ *
+ *
+ *  Set documents to not to be cached when they are expired long ago
+ *
+ *
+ */
 
 function AutoUncache()
 {

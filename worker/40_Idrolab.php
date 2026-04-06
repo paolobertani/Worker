@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Idrolab pdfff tagging
-//
-//
+/*
+ *
+ *
+ *  Idrolab pdfff tagging
+ *
+ *
+ */
 
 
 
-//
-//  Documents' Idrolab status
-//
+/*
+ *
+ *  Documents' Idrolab status
+ *
+ */
 
 define( 'IDROLAB_NOT_TAGGED',    0 );
 define( 'IDROLAB_TAGGED',        1 );
@@ -131,9 +135,11 @@ function IdrolabTagPdfff( $document_id, $productlist )
 
 
 
-// Tags is a regular array; every index corresponds to a page number
-// every item is an array with all the links on that page
-// in case there are no links on a given page the corresponding item is an empty array
+/*
+ *  Tags is a regular array; every index corresponds to a page number
+ *  every item is an array with all the links on that page
+ *  in case there are no links on a given page the corresponding item is an empty array
+ */
 
 function IdrolabGetTags( $document_id, $productlist, $pagesCount )
 {

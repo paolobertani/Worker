@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Immediate execution
-//
-//
+/*
+ *
+ *
+ *  Immediate execution
+ *
+ *
+ */
 
 
 
-//
-// Set a worker_cmd command
-//
+/*
+ *
+ *  Set a worker_cmd command
+ *
+ */
 
 function WorkerExecuteCmd( $cmd, $id )
 {
@@ -69,9 +73,11 @@ function WorkerExecuteCmd( $cmd, $id )
 
 
 
-//
-// Sync document directory on slave VOLUME
-//
+/*
+ *
+ *  Sync document directory on slave VOLUME
+ *
+ */
 
 function WorkerExecuteSync( $id )
 {

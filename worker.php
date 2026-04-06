@@ -1,12 +1,14 @@
 <?php
 
-//
-//
-//
-// Pinaxo Worker
-//
-//
-//
+/*
+ *
+ *
+ *
+ *  Pinaxo Worker
+ *
+ *
+ *
+ */
 
 
 
@@ -14,16 +16,20 @@
 
 
 
-//
-// ENVIRONMENT INITIALIZATION
-//
+/*
+ *
+ *  ENVIRONMENT INITIALIZATION
+ *
+ */
 
 ini_set( 'serialize_precision', 6 );    // 6 decimal digits for float exported into JSON
 ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
 
-//
-// CONFIGURATION
-//
+/*
+ *
+ *  CONFIGURATION
+ *
+ */
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
 
@@ -88,9 +94,11 @@ define( 'WORKER_AUTOEXPIRE_YEARS_UPL',        2 );   // The old document is set 
 define( 'WORKER_DONT_CACHE_YEARS_OLD',        3 );   // After this amount of years from expiring a document is considered old
 define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this OLD document has never been read: do not cache it
 
-//
-// EMAIL CONFIGURATION
-//
+/*
+ *
+ *  EMAIL CONFIGURATION
+ *
+ */
 
 /*  define( 'WORKER_EMAIL_TO',      '***SECRET***' );
     define( 'WORKER_EMAIL_FROM',    '***SECRET***' );
@@ -102,18 +110,22 @@ define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this
     define( 'WORKER_EMAIL_PORT',    '***SECRET***' );
     define( 'WORKER_EMAIL_SCRE',    '***SECRET***' ); */
 
-//
-// DATABASE CONFIGURATION
-//
+/*
+ *
+ *  DATABASE CONFIGURATION
+ *
+ */
 
 /*  define( 'DB_HOST',              '***SECRET***' );
     define( 'DB_USER',              '***SECRET***' );
     define( 'DB_PASS',              '***SECRET***' );
     define( 'DB_NAME',              '***SECRET***' ); */
 
-//
-// REDIS CACHE CONFIGURATION
-//
+/*
+ *
+ *  REDIS CACHE CONFIGURATION
+ *
+ */
 
 define( 'WORKER_REDIS_HOST',               '127.0.0.1'   );
 define( 'WORKER_REDIS_PORT',               6379          );
@@ -123,18 +135,22 @@ define( 'WORKER_REDIS_STORE_DB',           3             );
 define( 'WORKER_REDIS_STORE_NAMESPACE',    'px:store:'   );
 define( 'WORKER_REDIS_TIMEOUT',            0.010         ); // seconds
 
-//
-// DATABASE BACKUP CONFIGURATION
-//
+/*
+ *
+ *  DATABASE BACKUP CONFIGURATION
+ *
+ */
 
 define( 'BDB_PATH',         '/Users/administrator/Backup/mysql' );                              // Path to databases backup directory without trailing slash
 define( 'BDB_PATH_SLAVE',   '/Volumes/Backup23HD/Users/administrator/Backup/mysql' );           // Path to databases backup directory without trailing slash in slave volume
 define( 'BDB_EXCLUDES',     'mysql,information_schema,performance_schema,sys,kalei::events,kalei::geoip,kalei::system_log' ); // Tables and databases to exclude from backup
 define( 'BDB_PAUSE',        '1:50-2:59' );                                                      // Pause db backups during system backup
 
-//
-// Credit Card Keys
-//
+/*
+ *
+ *  Credit Card Keys
+ *
+ */
 
 /*define( 'NEXI_PRODUCTION', *** );
 
@@ -184,50 +200,64 @@ else // testing
 
 
 
-//
-// IDROLAB
-//
+/*
+ *
+ *  IDROLAB
+ *
+ */
 
 define( 'IDR_PAUSE',        '0:00-6:59' );                                                      // When to pause idrolab tagging (during scheduled backups)
 
-//
-// LOG ROTATION CONFIGURATION
-//
+/*
+ *
+ *  LOG ROTATION CONFIGURATION
+ *
+ */
 
 define( 'LOG_DIRECTORIES',  [ PATH_TO_NGINX_LOG_DIR ] );                                       // Path to log directories without trailing slash
 define( 'LOG_SIZE',         1024 * 1024 * 2 );                                                  // Max size of log file
 
-//
-// What's my browser what's my browser.com
-//                   ^^^^^^^^^^^^^^^^^^^^^
+/*
+ *
+ *  What's my browser what's my browser.com
+ *  ^^^^^^^^^^^^^^^^^^^^^
+ */
 
 /*  define( 'WIMB_API_KEY', '***' );
     define( 'USST_API_KEY', '***' );
     define( 'BDCL_API_KEY', '***' );
     define( 'WIMB_SERVICE', '***' ); */
 
-//
-// STATS
-//
+/*
+ *
+ *  STATS
+ *
+ */
 
 define( 'STATS_FIRST_YEAR',             2022 );
 define( 'STATS_EXCLUDED_CATEGORIES',   '8,9,11,12' );
 
-//
-// CURL COOKIES
-//
+/*
+ *
+ *  CURL COOKIES
+ *
+ */
 
 define( 'CURL_COOKIES',   ROOT . "/tmp/worker_cookies.txt" );
 
-//
-// RESOLUTIONS, PACKING AND QUALITY: see Packing&Resolution
-//
+/*
+ *
+ *  RESOLUTIONS, PACKING AND QUALITY: see Packing&Resolution
+ *
+ */
 
 
 
-//
-// INCLUDE
-//
+/*
+ *
+ *  INCLUDE
+ *
+ */
 
 require_once ROOT . '/include/3rd-parts/phpmailer/PHPMailer.php';
 require_once ROOT . '/include/3rd-parts/phpmailer/SMTP.php';
@@ -248,9 +278,11 @@ require_once ROOT . '/include/mtime.php';
 
 
 
-//
-// INCLUDE WORKER
-//
+/*
+ *
+ *  INCLUDE WORKER
+ *
+ */
 
 $worker = scandir( ROOT . '/worker' );
 foreach( $worker as $w )
@@ -263,9 +295,11 @@ foreach( $worker as $w )
 
 
 
-//
-// PARSE CONFIG FILE
-//
+/*
+ *
+ *  PARSE CONFIG FILE
+ *
+ */
 
 if( ! FileExists( PATH_TO_CONFIG ) ) { echo "config file missing\n"; exit(0); }
 $configuration = json_decode( file_get_contents( PATH_TO_CONFIG ), true );
@@ -273,9 +307,11 @@ if( $configuration === null ) { echo "failed parsing config file\n"; exit(0); }
 
 
 
-//
-// CONFIG DEPENDENT CONSTANTS
-//
+/*
+ *
+ *  CONFIG DEPENDENT CONSTANTS
+ *
+ */
 
 define( 'WORKER_MACHINE',           $configuration['MACHINE'] );                    // Machine name the worker is running on
 define( 'BACKUP_DATABASES',         array_key_exists( 'BACKUP_DATABASES', $configuration ) ? (bool) $configuration['BACKUP_DATABASES'] : true );
@@ -287,9 +323,11 @@ define( 'SLAVE_STORAGE_DIR',        $configuration['SLAVE_STORAGE_DIR' ] );     
 define( 'PATH_TO_INBOX',            '/Users/administrator/www/www.pinaxo.com/tmp/inbox/');  // Path to sent document inbox
 
 
-//
-// HEAVY DUTY & Process Name
-//
+/*
+ *
+ *  HEAVY DUTY & Process Name
+ *
+ */
 
 define( 'HEAVY_DUTY', ArgumentGet( 'hd', ARGUMENT_BOOLEAN ) );
 define( 'WORKER_PROCESS', HEAVY_DUTY ? "worker_heavy_duty" : "worker" );
@@ -297,9 +335,11 @@ define( 'RESTARTED', ArgumentGet( 'restart', ARGUMENT_BOOLEAN ) );
 
 
 
-//
-// MAIN
-//
+/*
+ *
+ *  MAIN
+ *
+ */
 
 
 
@@ -353,6 +393,8 @@ if(   RESTARTED ) WorkerLog( WORKER_INFO, 'Worker' . ( HEAVY_DUTY ? ' Heavy duty
 
 WorkerRun();
 
-//
-//
-//
+/*
+ *
+ *
+ *
+ */

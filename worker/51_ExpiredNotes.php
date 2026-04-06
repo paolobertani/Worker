@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Notify of notes on expired documents
-//
-//
+/*
+ *
+ *
+ *  Notify of notes on expired documents
+ *
+ *
+ */
 
 function ExpiredNotes()
 {

@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Delete bot events
-//
-//
+/*
+ *
+ *
+ *  Delete bot events
+ *
+ *
+ */
 
 function DeleteBotEvents()
 {

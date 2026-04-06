@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Prevent the hard drive to stop
-//
-//
+/*
+ *
+ *
+ *  Prevent the hard drive to stop
+ *
+ *
+ */
 
 function KeepDrivesSpinning()
 {

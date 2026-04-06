@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Convert price list from excel to js
-//
-//
+/*
+ *
+ *
+ *  Convert price list from excel to js
+ *
+ *
+ */
 
 function ManagePricelist()
 {

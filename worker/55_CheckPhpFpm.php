@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// CheckPhpFpm
-//
-//
+/*
+ *
+ *
+ *  CheckPhpFpm
+ *
+ *
+ */
 
 function CheckPhpFpm()
 {

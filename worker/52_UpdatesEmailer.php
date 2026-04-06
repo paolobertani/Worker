@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Notify the imminent mailing of price list updates
-//
-//
+/*
+ *
+ *
+ *  Notify the imminent mailing of price list updates
+ *
+ *
+ */
 
 function UpdatesNotify()
 {
@@ -89,11 +91,13 @@ function UpdatesNotify()
 
 
 
-//
-//
-// Send the price list updates to the mailing list
-//
-//
+/*
+ *
+ *
+ *  Send the price list updates to the mailing list
+ *
+ *
+ */
 
 function UpdatesSend()
 {

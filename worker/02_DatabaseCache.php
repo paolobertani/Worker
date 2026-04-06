@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Database Cache
-//
-//
+/*
+ *
+ *
+ *  Database Cache
+ *
+ *
+ */
 
 function InvalidateCacheNormalizeTable( $table )
 {

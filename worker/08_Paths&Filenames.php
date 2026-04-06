@@ -1,20 +1,26 @@
 <?php
 
-//
-//
-// Paths & filenames
-//
-//
+/*
+ *
+ *
+ *  Paths & filenames
+ *
+ *
+ */
 
 
 
-//
-// NOTE: images extension is ".jpg", short and lowercase.
-//
+/*
+ *
+ *  NOTE: images extension is ".jpg", short and lowercase.
+ *
+ */
 
-//
-// Path to the parent directory of the root directory of a document (the directory that contains up to 100 documents)
-//
+/*
+ *
+ *  Path to the parent directory of the root directory of a document (the directory that contains up to 100 documents)
+ *
+ */
 
 function PathToDocumentParentFolder( $document_id )
 {
@@ -23,9 +29,11 @@ function PathToDocumentParentFolder( $document_id )
 
 
 
-//
-// Path to the root folder of a document (contains the pdf, pdfff, cover(s), and cache directory
-//
+/*
+ *
+ *  Path to the root folder of a document (contains the pdf, pdfff, cover(s), and cache directory
+ *
+ */
 
 function PathToDocument( $document_id )
 {
@@ -34,9 +42,11 @@ function PathToDocument( $document_id )
 
 
 
-//
-// Path to the root folder of a document in slave/backup volume (contains the pdf, pdfff, cover(s), and cache directory
-//
+/*
+ *
+ *  Path to the root folder of a document in slave/backup volume (contains the pdf, pdfff, cover(s), and cache directory
+ *
+ */
 
 function PathToDocumentInSlave( $document_id )
 {
@@ -45,9 +55,11 @@ function PathToDocumentInSlave( $document_id )
 
 
 
-//
-// Path to the pdf
-//
+/*
+ *
+ *  Path to the pdf
+ *
+ */
 
 function PathToPdf( $document_id )
 {
@@ -56,9 +68,11 @@ function PathToPdf( $document_id )
 
 
 
-//
-// Path to the pdfff
-//
+/*
+ *
+ *  Path to the pdfff
+ *
+ */
 
 function PathToPdfff( $document_id )
 {
@@ -67,9 +81,11 @@ function PathToPdfff( $document_id )
 
 
 
-//
-// Path to the pdfidx
-//
+/*
+ *
+ *  Path to the pdfidx
+ *
+ */
 
 function PathToPdfidx( $document_id )
 {
@@ -78,9 +94,11 @@ function PathToPdfidx( $document_id )
 
 
 
-//
-// Path to the cover image (at a given and allowed resolution)
-//
+/*
+ *
+ *  Path to the cover image (at a given and allowed resolution)
+ *
+ */
 
 function PathToCover( $document_id, $dpi )
 {
@@ -110,9 +128,11 @@ function PathToCover( $document_id, $dpi )
 
 
 
-//
-// Path to the cache V1 directory
-//
+/*
+ *
+ *  Path to the cache V1 directory
+ *
+ */
 
 function PathToCacheV1( $document_id )
 {
@@ -121,9 +141,11 @@ function PathToCacheV1( $document_id )
 
 
 
-//
-// Path to the cachev2 directory
-//
+/*
+ *
+ *  Path to the cachev2 directory
+ *
+ */
 
 function PathToCacheV2( $document_id )
 {
@@ -132,9 +154,11 @@ function PathToCacheV2( $document_id )
 
 
 
-//
-// Path to the sub-cache v2 directory (inside the cache directory) that contains the images at a given and allowed dpi
-//
+/*
+ *
+ *  Path to the sub-cache v2 directory (inside the cache directory) that contains the images at a given and allowed dpi
+ *
+ */
 
 function PathToImagesV2( $document_id, $dpi )
 {
@@ -154,9 +178,11 @@ function PathToImagesV2( $document_id, $dpi )
 
 
 
-//
-// Path to image for a given and allowed resolution
-//
+/*
+ *
+ *  Path to image for a given and allowed resolution
+ *
+ */
 
 function PathToPageImageV2( $document_id, $dpi, $page )
 {
@@ -179,11 +205,13 @@ function PathToPageImageV2( $document_id, $dpi, $page )
 
 
 
-//
-// Returns true if the path is safe
-// A safe path points to a document directory
-// or to files or directories inside a document directory
-//
+/*
+ *
+ *  Returns true if the path is safe
+ *  A safe path points to a document directory
+ *  or to files or directories inside a document directory
+ *
+ */
 
 function PathIsSafe( $path, $document_id )
 {
@@ -211,9 +239,11 @@ function PathIsSafe( $path, $document_id )
 
 
 
-//
-// According to the above naming patterns if the specified filename is a cover, then the resolution is returned, zero otherwise
-//
+/*
+ *
+ *  According to the above naming patterns if the specified filename is a cover, then the resolution is returned, zero otherwise
+ *
+ */
 
 function CoverDpiFromFilename( $document_id, $filename )
 {
@@ -236,9 +266,11 @@ function CoverDpiFromFilename( $document_id, $filename )
 
 
 
-//
-// According to the above naming patterns if the specified full path points to a document directory, pdf, page image or cover returns the document_id, zero otherwise
-//
+/*
+ *
+ *  According to the above naming patterns if the specified full path points to a document directory, pdf, page image or cover returns the document_id, zero otherwise
+ *
+ */
 
 function DocumentIdFromPath( $path )
 {
@@ -260,9 +292,11 @@ function DocumentIdFromPath( $path )
 
 
 
-//
-// Path to brand directory, make it if missing
-//
+/*
+ *
+ *  Path to brand directory, make it if missing
+ *
+ */
 
 function PathToBrandDirectory( $brand_id )
 {
@@ -278,9 +312,11 @@ function PathToBrandDirectory( $brand_id )
 
 
 
-//
-// Path to brand directory in backup/slave, make it if missing
-//
+/*
+ *
+ *  Path to brand directory in backup/slave, make it if missing
+ *
+ */
 
 function PathToBrandDirectoryInSlave( $brand_id )
 {

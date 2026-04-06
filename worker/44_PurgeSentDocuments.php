@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Purge sent documents
-//
-//
+/*
+ *
+ *
+ *  Purge sent documents
+ *
+ *
+ */
 
 function PurgeSentDocuments()
 {

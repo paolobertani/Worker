@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Run
-//
-//
+/*
+ *
+ *
+ *  Run
+ *
+ *
+ */
 
 
 
-//
-// Autolocked: clear & rebuild everything
-//
+/*
+ *
+ *  Autolocked: clear & rebuild everything
+ *
+ */
 
 function RunDocumentAutolocked()
 {
@@ -39,9 +43,11 @@ function RunDocumentAutolocked()
 
 
 
-//
-// Document with command
-//
+/*
+ *
+ *  Document with command
+ *
+ */
 
 function RunDocumentWithCommand()
 {
@@ -141,9 +147,11 @@ function RunDocumentWithCommand()
 
 
 
-//
-// Document to cover
-//
+/*
+ *
+ *  Document to cover
+ *
+ */
 
 function RunDocumentToCover()
 {
@@ -189,9 +197,11 @@ function RunDocumentToCover()
 
 
 
-//
-// Document to cacheV2
-//
+/*
+ *
+ *  Document to cacheV2
+ *
+ */
 
 function RunDocumentToCacheV2()
 {
@@ -280,9 +290,11 @@ function RunDocumentToCacheV2()
 
 
 
-//
-// Document with page-colors to be produced
-//
+/*
+ *
+ *  Document with page-colors to be produced
+ *
+ */
 
 function RunDocumentToColor()
 {
@@ -322,9 +334,11 @@ function RunDocumentToColor()
 
 
 
-//
-// Document with QR codes links to be produced
-//
+/*
+ *
+ *  Document with QR codes links to be produced
+ *
+ */
 
 function RunDocumentToQR()
 {
@@ -365,9 +379,11 @@ function RunDocumentToQR()
 
 
 
-//
-// Document to discard cache v2
-//
+/*
+ *
+ *  Document to discard cache v2
+ *
+ */
 
 function RunDocumentToUncacheV2()
 {
@@ -399,9 +415,11 @@ function RunDocumentToUncacheV2()
 
 
 
-//
-// Document to delete
-//
+/*
+ *
+ *  Document to delete
+ *
+ */
 
 function RunDocumentToRemove()
 {
@@ -440,9 +458,11 @@ function RunDocumentToRemove()
 
 
 
-//
-// Document to generate `pdfff` and `pdfidx` in SentDocuments
-//
+/*
+ *
+ *  Document to generate `pdfff` and `pdfidx` in SentDocuments
+ *
+ */
 
 function RunSentDocumentToPdfff()
 {
@@ -489,9 +509,11 @@ function RunSentDocumentToPdfff()
 
 
 
-//
-// Document to apply/remove idrolab tags
-//
+/*
+ *
+ *  Document to apply/remove idrolab tags
+ *
+ */
 
 function RunDocumentToIdrolabTag( $tag )
 {
@@ -568,9 +590,11 @@ function RunDocumentToIdrolabTag( $tag )
 
 
 
-//
-// Document with metadata to be produced
-//
+/*
+ *
+ *  Document with metadata to be produced
+ *
+ */
 
 function RunDocumentToMeta()
 {
@@ -611,9 +635,11 @@ function RunDocumentToMeta()
 
 
 
-//
-// Document with missing `md5`
-//
+/*
+ *
+ *  Document with missing `md5`
+ *
+ */
 
 function RunDocumentToFixMD5()
 {

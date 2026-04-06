@@ -1,24 +1,30 @@
 <?php
 
-//
-//
-// MacOS Tools
-//
-//
+/*
+ *
+ *
+ *  MacOS Tools
+ *
+ *
+ */
 
 
 
-//
-// NOTE: Pdfff is the only function that fails gently without execution interruption
-//       a pdfff failure SHOULD be result of PDF file corruption.
-//       ENSURE pdfff failures are not due to wrong parameters or tool malfunction
-//
+/*
+ *
+ *  NOTE: Pdfff is the only function that fails gently without execution interruption
+ *  a pdfff failure SHOULD be result of PDF file corruption.
+ *  ENSURE pdfff failures are not due to wrong parameters or tool malfunction
+ *
+ */
 
 
 
-//
-// Check if the file is actually a PDF
-//
+/*
+ *
+ *  Check if the file is actually a PDF
+ *
+ */
 
 function IsPdf( $pdf )
 {
@@ -43,11 +49,13 @@ function IsPdf( $pdf )
 
 
 
-//
-// PdfJpg
-//
-// Returns false on error, milliseconds elapsed during rendering on success
-//
+/*
+ *
+ *  PdfJpg
+ *
+ *  Returns false on error, milliseconds elapsed during rendering on success
+ *
+ */
 
 function PdfJpg( $pdf, $dpi, $page, $out, $quality=0, $count=1, $left=0, $top=0, $width=0, $height=0 )
 {
@@ -92,11 +100,13 @@ function PdfJpg( $pdf, $dpi, $page, $out, $quality=0, $count=1, $left=0, $top=0,
 
 
 
-//
-// PdfJpgV2
-//
-// Returns false on error, true or avarage page color string on success
-//
+/*
+ *
+ *  PdfJpgV2
+ *
+ *  Returns false on error, true or avarage page color string on success
+ *
+ */
 
 function PdfJpgV2( $pdf, $dpi, $page, $out, $quality = 0, $count = 1, $color = false )
 {
@@ -169,11 +179,13 @@ function PdfJpgV2( $pdf, $dpi, $page, $out, $quality = 0, $count = 1, $color = f
 
 
 
-//
-// Pdfff
-//
-// Returns true on success, false on failure
-//
+/*
+ *
+ *  Pdfff
+ *
+ *  Returns true on success, false on failure
+ *
+ */
 
 function Pdfff( $pdf, $out )
 {
@@ -206,9 +218,11 @@ function Pdfff( $pdf, $out )
 
 
 
-//
-// Pdfidx
-//
+/*
+ *
+ *  Pdfidx
+ *
+ */
 
 function Pdfidx( $pdfff, $out )
 {
@@ -231,9 +245,11 @@ function Pdfidx( $pdfff, $out )
 
 
 
-//
-// Md5OfFile
-//
+/*
+ *
+ *  Md5OfFile
+ *
+ */
 
 function Md5OfFile( $f )
 {
@@ -254,9 +270,11 @@ function Md5OfFile( $f )
 
 
 
-//
-// Get the md5 from the pdfff file using pdfindfaster
-//
+/*
+ *
+ *  Get the md5 from the pdfff file using pdfindfaster
+ *
+ */
 
 function Md5FromPdfff( $f )
 {
@@ -277,13 +295,15 @@ function Md5FromPdfff( $f )
 
 
 
-//
-// PdfSize
-//
-// pass a .pdf or a .pdfff to infile, the type will be detected based on the extension
-// the result will be decoded into an associative array unless 'count' option is True (the page count is returned as int)
-// packdpi and packcount if passed must be strings of comma separated values
-//
+/*
+ *
+ *  PdfSize
+ *
+ *  pass a .pdf or a .pdfff to infile, the type will be detected based on the extension
+ *  the result will be decoded into an associative array unless 'count' option is True (the page count is returned as int)
+ *  packdpi and packcount if passed must be strings of comma separated values
+ *
+ */
 
 function PdfSize( $infile, $packdpi = '', $packcount = '', $page = false, $count = false )
 {
@@ -375,9 +395,11 @@ function PdfSize( $infile, $packdpi = '', $packcount = '', $page = false, $count
 
 
 
-//
-// Get the document links from the pdfff
-//
+/*
+ *
+ *  Get the document links from the pdfff
+ *
+ */
 
 function PdfffLinks( $f )
 {
@@ -398,9 +420,11 @@ function PdfffLinks( $f )
 
 
 
-//
-// Get the document QR codes links from the page image
-//
+/*
+ *
+ *  Get the document QR codes links from the page image
+ *
+ */
 
 function ImgQR( $f, $page )
 {
@@ -432,9 +456,11 @@ function ImgQR( $f, $page )
 
 
 
-//
-// Set the document links into the pdfff
-//
+/*
+ *
+ *  Set the document links into the pdfff
+ *
+ */
 
 function PdfffSetLinks( $f, $l )
 {
@@ -455,9 +481,11 @@ function PdfffSetLinks( $f, $l )
 
 
 
-//
-// Search text into a pdfidx file
-//
+/*
+ *
+ *  Search text into a pdfidx file
+ *
+ */
 
 function PdfidxFind( $f, $s )
 {
@@ -486,9 +514,11 @@ function PdfidxFind( $f, $s )
 
 
 
-//
-// Get text layout of pdf page
-//
+/*
+ *
+ *  Get text layout of pdf page
+ *
+ */
 
 function PdfffText( $f, $p )
 {
@@ -521,9 +551,11 @@ function PdfffText( $f, $p )
 
 
 
-//
-// Get info on Pdf
-//
+/*
+ *
+ *  Get info on Pdf
+ *
+ */
 
 function PdfInfo( $f )
 {
@@ -586,9 +618,11 @@ function PdfInfo( $f )
 
 
 
-//
-// Get pdf outlines from pdfff
-//
+/*
+ *
+ *  Get pdf outlines from pdfff
+ *
+ */
 
 function Pdfffoutlines( $f )
 {

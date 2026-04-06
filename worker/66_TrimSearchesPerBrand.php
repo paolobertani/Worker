@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Trim searches_per_brand table
-//
-//
+/*
+ *
+ *
+ *  Trim searches_per_brand table
+ *
+ *
+ */
 
 function TrimSearchesPerBrand()
 {

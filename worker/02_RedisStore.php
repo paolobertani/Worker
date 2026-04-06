@@ -1,14 +1,18 @@
 <?php
 
-//
-//
-// Redis Store
-//
-//
+/*
+ *
+ *
+ *  Redis Store
+ *
+ *
+ */
 
-//
-// Connect to the Redis DB that backs Pinaxo stores
-//
+/*
+ *
+ *  Connect to the Redis DB that backs Pinaxo stores
+ *
+ */
 
 function WorkerStoreRedisConnect()
 {
@@ -38,9 +42,11 @@ function WorkerStoreRedisConnect()
 
 
 
-//
-// Return the count of users online based on the Redis live_action index
-//
+/*
+ *
+ *  Return the count of users online based on the Redis live_action index
+ *
+ */
 
 function WorkerStoreLiveActionGetOnlineUsersCount()
 {

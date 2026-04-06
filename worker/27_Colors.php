@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Pages color string generation
-//
-//
+/*
+ *
+ *
+ *  Pages color string generation
+ *
+ *
+ */
 
 
 
-//
-// Generate metadata
-//
+/*
+ *
+ *  Generate metadata
+ *
+ */
 
 function PagesColorString( $document )
 {

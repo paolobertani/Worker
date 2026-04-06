@@ -1,19 +1,23 @@
 <?php
 
-//
-//
-// Database&Logic
-//
-//
+/*
+ *
+ *
+ *  Database&Logic
+ *
+ *
+ */
 
 
 
-//
-// Performs a query
-// Stops execution on fail
-// Returns false for no record or a single document data as associative array
-// Returns the number of affected rows for INSERT, UPDATE, DELETE
-//
+/*
+ *
+ *  Performs a query
+ *  Stops execution on fail
+ *  Returns false for no record or a single document data as associative array
+ *  Returns the number of affected rows for INSERT, UPDATE, DELETE
+ *
+ */
 
 function DbDocumentQuery( $query, $params = null )
 {
@@ -39,9 +43,11 @@ function DbDocumentQuery( $query, $params = null )
 
 
 
-//
-// Worker tasks scheduling state
-//
+/*
+ *
+ *  Worker tasks scheduling state
+ *
+ */
 
 function DbWorkerTasksAll()
 {
@@ -73,10 +79,12 @@ function DbWorkerTaskUpdate( $label, $last_run )
 }
 
 
-//
-// Document PDF is removed after 1 month the document was marked as deleted
-// `deleted` < (NOW -1M)
-//
+/*
+ *
+ *  Document PDF is removed after 1 month the document was marked as deleted
+ *  `deleted` < (NOW -1M)
+ *
+ */
 
 function DocumentPdfRemoveLimit()
 {
@@ -87,16 +95,20 @@ function DocumentPdfRemoveLimit()
 
 
 
-//
-//
-// The queries
-//
-//
+/*
+ *
+ *
+ *  The queries
+ *
+ *
+ */
 
-// NOTE: every query returns false (no document) or an associative array with the following single document data.
-// During operation values affected must be updated
-// Upon UNLOCK&UPDATE all the values are passed to the query in order to update the record
-//
+/*
+ *  NOTE: every query returns false (no document) or an associative array with the following single document data.
+ *  During operation values affected must be updated
+ *  Upon UNLOCK&UPDATE all the values are passed to the query in order to update the record
+ *
+ */
 
 
 
@@ -209,11 +221,13 @@ function DbBrandWithNoIdrolabProductList( $brand_id )
 
 
 
-//
-//
-// Lock / Unlock / Update
-//
-//
+/*
+ *
+ *
+ *  Lock / Unlock / Update
+ *
+ *
+ */
 
 
 
@@ -278,34 +292,36 @@ function DbDocumentUpdateMD5AndUnlock( $document )
 
 
 
-// ----------------------
-// the fields:
-// ----------------------
-//
-// RO   id
-//      worker_cmd
-//      cover_width
-//      cover_height
-// RO   hd
-//      pdf
-//      cache_size
-//      pdf_size
-//      pdfff_size
-// RO   status
-// RO   expire
-//      slow_pages
-//      slow_milliseconds
-//      has_slow_pages
-//      idrolab_status
-//      pdf_modified
-//      pdf_created
-//      has_outlines
-//      pages_count
-// RO   md5
-//      cachev2_md5
-//      cachev2_pages
-//      covers_md5
-//      pagescolor_md5
-//      qr_md5
-//      qr_count
-//      meta_md5
+/*
+ *  ----------------------
+ *  the fields:
+ *  ----------------------
+ *
+ *  RO   id
+ *  worker_cmd
+ *  cover_width
+ *  cover_height
+ *  RO   hd
+ *  pdf
+ *  cache_size
+ *  pdf_size
+ *  pdfff_size
+ *  RO   status
+ *  RO   expire
+ *  slow_pages
+ *  slow_milliseconds
+ *  has_slow_pages
+ *  idrolab_status
+ *  pdf_modified
+ *  pdf_created
+ *  has_outlines
+ *  pages_count
+ *  RO   md5
+ *  cachev2_md5
+ *  cachev2_pages
+ *  covers_md5
+ *  pagescolor_md5
+ *  qr_md5
+ *  qr_count
+ *  meta_md5
+ */

@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Worker
-//
-//
+/*
+ *
+ *
+ *  Worker
+ *
+ *
+ */
 
 
 
-//
-// Excute in immediate mode (maybe)
-//
+/*
+ *
+ *  Excute in immediate mode (maybe)
+ *
+ */
 
 function WorkerRunWithArgs()
 {
@@ -44,46 +48,58 @@ function WorkerRunWithArgs()
 
 
 
-//
-// Run tasks
-//
+/*
+ *
+ *  Run tasks
+ *
+ */
 
 function WorkerRun()
 {
-    //
-    // Time each operation did execute the last time
-    //
+    /*
+     *
+     *  Time each operation did execute the last time
+     *
+     */
 
     $lastCacheTime = 0;
     $lastExpiredNotes = '';
 
 
 
-    //
-    // Idle character
-    //
+    /*
+     *
+     *  Idle character
+     *
+     */
 
     $idlec = [ "-", "\\", "|", "/" ];
     $idlen = 0;
 
 
-    //
-    // Load persisted scheduling state
-    //
+    /*
+     *
+     *  Load persisted scheduling state
+     *
+     */
 
     WorkerTasksStateLoad();
 
 
 
-    //
-    // Main loop
-    //
+    /*
+     *
+     *  Main loop
+     *
+     */
 
     while( true )
     {
-        //
-        // Memory check
-        //
+        /*
+         *
+         *  Memory check
+         *
+         */
 
         $mb = intdiv( memory_get_usage(), 1000 * 1000 );
         if( $mb > WORKER_MEMORY_LIMIT_MB )
@@ -93,9 +109,11 @@ function WorkerRun()
             /*--- QUIT (RESTART) POINT ---*/
         }
 
-        //
-        // Library version check
-        //
+        /*
+         *
+         *  Library version check
+         *
+         */
 
         if( ExecShouldRestart( $vers ) )
         {
@@ -104,9 +122,11 @@ function WorkerRun()
             /*--- QUIT (RESTART) POINT ---*/
         }
 
-        //
-        // Cache operations - HEAVY DUTY
-        //
+        /*
+         *
+         *  Cache operations - HEAVY DUTY
+         *
+         */
 
         if( HEAVY_DUTY && time() - $lastCacheTime > WORKER_INTERVAL_CACHE )
         {
@@ -127,12 +147,14 @@ function WorkerRun()
 
             // Run Tasks:
 
-            //
-            // each "Run" task returns...
-            // `false`: no documents fall in that category
-            // `true`: found one document that falls in that category but no ops took place
-            // `document_id`: ops took place and affected the document with returned id
-            //
+            /*
+             *
+             *  each "Run" task returns...
+             *  `false`: no documents fall in that category
+             *  `true`: found one document that falls in that category but no ops took place
+             *  `document_id`: ops took place and affected the document with returned id
+             *
+             */
 
             $document_id[] = RunDocumentAutolocked();
             $document_id[] = RunDocumentWithCommand();
@@ -183,25 +205,31 @@ function WorkerRun()
 
 
 
-        //
-        // Updates mailing
-        //
+        /*
+         *
+         *  Updates mailing
+         *
+         */
 
         WorkerTaskRun( 'hd.updates_mailing' );
 
 
 
-        //
-        // Statistics
-        //
+        /*
+         *
+         *  Statistics
+         *
+         */
 
         WorkerTaskRun( 'hd.stats_searches' );
 
 
 
-        //
-        // QR Code Blog Page Table
-        //
+        /*
+         *
+         *  QR Code Blog Page Table
+         *
+         */
 
         WorkerTaskRun( 'hd.qr_table' );
 
@@ -218,17 +246,21 @@ function WorkerRun()
         if( ! HEAVY_DUTY )
         {
 
-            //
-            // Keep drives spinning
-            //
+            /*
+             *
+             *  Keep drives spinning
+             *
+             */
 
             WorkerTaskRun( 'light.keep_drives_spinning' );
 
 
 
-            //
-            // Cash-in expired subscriptions
-            //
+            /*
+             *
+             *  Cash-in expired subscriptions
+             *
+             */
 
             // Email activity may occur here
 
@@ -236,113 +268,141 @@ function WorkerRun()
 
 
 
-            //
-            // Suspend users in expired trials
-            //
+            /*
+             *
+             *  Suspend users in expired trials
+             *
+             */
 
             WorkerTaskRun( 'light.trials' );
 
 
 
-            //
-            // Delete bot generated records from events table
-            //
+            /*
+             *
+             *  Delete bot generated records from events table
+             *
+             */
 
             WorkerTaskRun( 'light.delete_bot_events' );
 
 
 
-            //
-            // Backup databases
-            //
+            /*
+             *
+             *  Backup databases
+             *
+             */
 
             WorkerTaskRun( 'light.backup_databases' );
 
 
 
-            //
-            // Rotate log
-            //
+            /*
+             *
+             *  Rotate log
+             *
+             */
 
             WorkerTaskRun( 'light.log_rotate' );
 
 
 
-            //
-            // Generate Idrolab Stats
-            //
+            /*
+             *
+             *  Generate Idrolab Stats
+             *
+             */
 
             WorkerTaskRun( 'light.idrolab_stats' );
 
 
 
-            //
-            // Events Small
-            //
+            /*
+             *
+             *  Events Small
+             *
+             */
 
             WorkerTaskRun( 'light.events_small' );
 
 
 
-            //
-            // Purge Sent Documents table
-            //
+            /*
+             *
+             *  Purge Sent Documents table
+             *
+             */
 
             WorkerTaskRun( 'light.purge_sent_documents' );
 
 
 
-            //
-            // Delete cookies older than 12 months
-            //
+            /*
+             *
+             *  Delete cookies older than 12 months
+             *
+             */
 
             WorkerTaskRun( 'light.expired_cookies_delete' );
 
 
 
-            //
-            // Trim usage table
-            //
+            /*
+             *
+             *  Trim usage table
+             *
+             */
 
             WorkerTaskRun( 'light.trim_usage' );
 
 
 
-            //
-            // Trim usage_per_document table
-            //
+            /*
+             *
+             *  Trim usage_per_document table
+             *
+             */
 
             WorkerTaskRun( 'light.trim_usage_per_document' );
 
 
 
-            //
-            // Trim usage_per_user table
-            //
+            /*
+             *
+             *  Trim usage_per_user table
+             *
+             */
 
             WorkerTaskRun( 'light.trim_usage_per_user' );
 
 
 
-            //
-            // Trim searches_per_brand table
-            //
+            /*
+             *
+             *  Trim searches_per_brand table
+             *
+             */
 
             WorkerTaskRun( 'light.trim_searches_per_brand' );
 
 
 
-            //
-            // Rebuild brands per category
-            //
+            /*
+             *
+             *  Rebuild brands per category
+             *
+             */
 
             WorkerTaskRun( 'light.rebuild_brands_per_category' );
 
 
 
-            //
-            // Load Excel price list
-            //
+            /*
+             *
+             *  Load Excel price list
+             *
+             */
 
             // Activity on brands
 
@@ -350,9 +410,11 @@ function WorkerRun()
 
 
 
-            //
-            // Transcode product codes to match with the codes on the PDFs
-            //
+            /*
+             *
+             *  Transcode product codes to match with the codes on the PDFs
+             *
+             */
 
             // Activity on brands
 
@@ -360,9 +422,11 @@ function WorkerRun()
 
 
 
-            //
-            // Send email notification for notes on expired documents
-            //
+            /*
+             *
+             *  Send email notification for notes on expired documents
+             *
+             */
 
             // Email activity may occur here
 
@@ -374,37 +438,47 @@ function WorkerRun()
 
 
 
-            //
-            // Check PHP-FPM Pinaxo Blog is not blocked
-            //
+            /*
+             *
+             *  Check PHP-FPM Pinaxo Blog is not blocked
+             *
+             */
 
             WorkerTaskRun( 'light.check_php_fpm' );
 
 
-            //
-            // Check www.pinaxo.com cert is not expiring soon
-            //
+            /*
+             *
+             *  Check www.pinaxo.com cert is not expiring soon
+             *
+             */
 
             WorkerTaskRun( 'light.check_cert' );
 
 
-            //
-            // Launch RenewCerts in background
-            //
+            /*
+             *
+             *  Launch RenewCerts in background
+             *
+             */
 
             WorkerTaskRun( 'light.renew_certs' );
 
 
-            //
-            // Set EXPIRE date of documents with very old RELEASE date and not read
-            //
+            /*
+             *
+             *  Set EXPIRE date of documents with very old RELEASE date and not read
+             *
+             */
 
             WorkerTaskRun( 'light.auto_expire' );
 
 
-            //
-            // Set documents to not to be cached when they are very old and not read
-            //
+            /*
+             *
+             *  Set documents to not to be cached when they are very old and not read
+             *
+             */
 
             WorkerTaskRun( 'light.auto_uncache' );
 
@@ -417,9 +491,11 @@ function WorkerRun()
 
 
 
-        //
-        // Stay idle
-        //
+        /*
+         *
+         *  Stay idle
+         *
+         */
 		
 		$usersOnlineCount = "";
 		if( ! HEAVY_DUTY )
@@ -440,17 +516,21 @@ function WorkerRun()
 
 
 
-        //
-        //
-        //
+        /*
+         *
+         *
+         *
+         */
     }
 }
 
 
 
-//
-// Check if should quit
-//
+/*
+ *
+ *  Check if should quit
+ *
+ */
 
 function WorkerQuitMaybe()
 {
@@ -480,9 +560,11 @@ function WorkerQuitMaybe()
 
 
 
-//
-// Stop execution immediatedly
-//
+/*
+ *
+ *  Stop execution immediatedly
+ *
+ */
 
 function WorkerQuitNow()
 {
@@ -491,10 +573,12 @@ function WorkerQuitNow()
 
 
 
-//
-// Return true if present time
-// falls into passed interval
-// in the form 'h:mm-h:mm'
+/*
+ *
+ *  Return true if present time
+ *  falls into passed interval
+ *  in the form 'h:mm-h:mm'
+ */
 
 function WorkerShouldPause( $when )
 {
@@ -517,9 +601,11 @@ function WorkerShouldPause( $when )
 
 
 
-//
-// Restart the worker
-//
+/*
+ *
+ *  Restart the worker
+ *
+ */
 
 function Restart()
 {

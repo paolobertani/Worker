@@ -1,21 +1,25 @@
 <?php
 
-//
-//
-// Filesystem
-//
-//
+/*
+ *
+ *
+ *  Filesystem
+ *
+ *
+ */
 
 
-//
-// Execute a command line tool
-// Accepts a string or array of strings
-// When an array is passed arguments are escaped except first
-//
-// Note: stderr is redirected into stdout;
-//       both are catched into `$output`
-//       none go directly on the terminal
-//
+/*
+ *
+ *  Execute a command line tool
+ *  Accepts a string or array of strings
+ *  When an array is passed arguments are escaped except first
+ *
+ *  Note: stderr is redirected into stdout;
+ *  both are catched into `$output`
+ *  none go directly on the terminal
+ *
+ */
 
 function Execute( $cmd, &$exitStatus )
 {
@@ -45,9 +49,11 @@ function Execute( $cmd, &$exitStatus )
 
 
 
-//
-// The given full path points to an existing file
-//
+/*
+ *
+ *  The given full path points to an existing file
+ *
+ */
 
 function FileExists( $f )
 {
@@ -56,9 +62,11 @@ function FileExists( $f )
 }
 
 
-//
-// The given full path points to an existing directory
-//
+/*
+ *
+ *  The given full path points to an existing directory
+ *
+ */
 
 function DirectoryExists( $d )
 {
@@ -68,10 +76,12 @@ function DirectoryExists( $d )
 
 
 
-//
-// Make all the directories to build up the full path provided
-// If fails return the error kind.
-//
+/*
+ *
+ *  Make all the directories to build up the full path provided
+ *  If fails return the error kind.
+ *
+ */
 
 function MakeDirectoryTree( $d )
 {
@@ -86,14 +96,16 @@ function MakeDirectoryTree( $d )
 }
 
 
-//
-// Given a full path return a list with the filenames (not full paths) of the files (not directories)
-// in that directory. The directory must exists otherwise an error is raised.
-//
-// NOTE:
-// Items that begins with dot `.` are excluded
-// Symbolic links are excluded
-//
+/*
+ *
+ *  Given a full path return a list with the filenames (not full paths) of the files (not directories)
+ *  in that directory. The directory must exists otherwise an error is raised.
+ *
+ *  NOTE:
+ *  Items that begins with dot `.` are excluded
+ *  Symbolic links are excluded
+ *
+ */
 
 function FilesInDirectory( $d )
 {
@@ -122,14 +134,16 @@ function FilesInDirectory( $d )
 }
 
 
-//
-// Given a full path return a list with the names (not full paths) of the directories
-// in that directory. The directory must exists otherwise an error is raised.
-//
-// NOTE:
-// Items that begins with dot `.` are excluded
-// Symbolic links are excluded
-//
+/*
+ *
+ *  Given a full path return a list with the names (not full paths) of the directories
+ *  in that directory. The directory must exists otherwise an error is raised.
+ *
+ *  NOTE:
+ *  Items that begins with dot `.` are excluded
+ *  Symbolic links are excluded
+ *
+ */
 
 function DirectoriesInDirectory( $d )
 {
@@ -159,10 +173,12 @@ function DirectoriesInDirectory( $d )
 
 
 
-//
-// Remove the file at the path provided
-// For safety checks related document id is passed
-//
+/*
+ *
+ *  Remove the file at the path provided
+ *  For safety checks related document id is passed
+ *
+ */
 
 function RemoveFile( $path, $document_id )
 {
@@ -192,10 +208,12 @@ function RemoveFile( $path, $document_id )
 
 
 
-//
-// Remove the directory at the path provided and everything it contains
-// For safety checks related document id is passed
-//
+/*
+ *
+ *  Remove the directory at the path provided and everything it contains
+ *  For safety checks related document id is passed
+ *
+ */
 
 function RemoveDirectory( $path, $document_id )
 {
@@ -225,9 +243,11 @@ function RemoveDirectory( $path, $document_id )
 
 
 
-//
-// Returns the size of a file
-//
+/*
+ *
+ *  Returns the size of a file
+ *
+ */
 
 function GetFileSize( $f )
 {
@@ -247,9 +267,11 @@ function GetFileSize( $f )
 
 
 
-//
-// Returns the size of the whole contents of a directory
-//
+/*
+ *
+ *  Returns the size of the whole contents of a directory
+ *
+ */
 
 function GetDirectorySize( $d )
 {
@@ -283,9 +305,11 @@ function GetDirectorySize( $d )
 
 
 
-//
-// Append a trailing slash to a path if missing
-//
+/*
+ *
+ *  Append a trailing slash to a path if missing
+ *
+ */
 
 function PathAppendSlash( &$path )
 {

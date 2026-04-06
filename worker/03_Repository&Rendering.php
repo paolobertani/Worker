@@ -1,20 +1,24 @@
 <?php
 
-//
-//
-// Repository management and rendering
-//
-//
+/*
+ *
+ *
+ *  Repository management and rendering
+ *
+ *
+ */
 
 
 
-//
-// Returns true if there is enought free disk space to operate
-// on both master volume and (if present) slave volume.
-// Parameters passed by reference are set to the available space
-// on respective volumes. `availableOnSlave` is always null
-// when slave volume is not present
-//
+/*
+ *
+ *  Returns true if there is enought free disk space to operate
+ *  on both master volume and (if present) slave volume.
+ *  Parameters passed by reference are set to the available space
+ *  on respective volumes. `availableOnSlave` is always null
+ *  when slave volume is not present
+ *
+ */
 
 function EnoughtDiskSpace( &$availableOnMaster, &$avaliableOnSlave )
 {
@@ -60,10 +64,12 @@ function EnoughtDiskSpace( &$availableOnMaster, &$avaliableOnSlave )
 
 
 
-//
-// Execute a rebuild (upon admin request);
-// returns true on success, false on failure
-//
+/*
+ *
+ *  Execute a rebuild (upon admin request);
+ *  returns true on success, false on failure
+ *
+ */
 
 function ExecuteCommand( $command, &$document )
 {
@@ -131,9 +137,11 @@ function ExecuteCommand( $command, &$document )
 
 
 
-//
-// Is the command supported?
-//
+/*
+ *
+ *  Is the command supported?
+ *
+ */
 
 function CommandSupported( $command )
 {
@@ -144,9 +152,11 @@ function CommandSupported( $command )
 
 
 
-//
-// Checks minimal requirements, breaks loud if not met.
-//
+/*
+ *
+ *  Checks minimal requirements, breaks loud if not met.
+ *
+ */
 
 function ConsistencyCheck( $document_id )
 {
@@ -198,9 +208,11 @@ function ConsistencyCheck( $document_id )
 
 
 
-//
-// Make path to cachev2 if not present
-//
+/*
+ *
+ *  Make path to cachev2 if not present
+ *
+ */
 
 function MakePathToCacheV2Maybe( $document_id )
 {
@@ -212,9 +224,11 @@ function MakePathToCacheV2Maybe( $document_id )
 
 
 
-//
-// Render the pages in the interval at each resolution (a packed group is rendered when is requested rendering of the first page)
-//
+/*
+ *
+ *  Render the pages in the interval at each resolution (a packed group is rendered when is requested rendering of the first page)
+ *
+ */
 
 function RenderPagesForEachResolutionV2( $document_id, $start, $end, $pagesCount )
 {
@@ -237,9 +251,11 @@ function RenderPagesForEachResolutionV2( $document_id, $start, $end, $pagesCount
 
 
 
-//
-// Render the cover at each resolution
-//
+/*
+ *
+ *  Render the cover at each resolution
+ *
+ */
 
 function RenderCoversForEachResolution( $document_id, $hd )
 {
@@ -264,9 +280,11 @@ function RenderCoversForEachResolution( $document_id, $hd )
 
 
 
-//
-// Remove all files matching cover naming pattern
-//
+/*
+ *
+ *  Remove all files matching cover naming pattern
+ *
+ */
 
 function RemoveCovers( $document_id )
 {
@@ -285,9 +303,11 @@ function RemoveCovers( $document_id )
 
 
 
-//
-// Remove all the cache v2 pages
-//
+/*
+ *
+ *  Remove all the cache v2 pages
+ *
+ */
 
 function RemoveCacheV2( $document_id )
 {
@@ -300,9 +320,11 @@ function RemoveCacheV2( $document_id )
 
 
 
-//
-// Render a cover at a given dpi
-//
+/*
+ *
+ *  Render a cover at a given dpi
+ *
+ */
 
 function RenderCover( $document_id, $dpi, $hd )
 {
@@ -334,9 +356,11 @@ function RenderCover( $document_id, $dpi, $hd )
 
 
 
-//
-// Render all the pages in the interval at a given dpi for cache v2
-//
+/*
+ *
+ *  Render all the pages in the interval at a given dpi for cache v2
+ *
+ */
 
 function RenderPagesAtResolutionV2( $document_id, $dpi, $start, $end, $pagesCount )
 {
@@ -392,9 +416,11 @@ function RenderPagesAtResolutionV2( $document_id, $dpi, $start, $end, $pagesCoun
 
 
 
-//
-// Build Pdfff and Pdfidx for a inbox sent document
-//
+/*
+ *
+ *  Build Pdfff and Pdfidx for a inbox sent document
+ *
+ */
 
 function SentDocumentPdfffPdfidx( $sent_document_id )
 {

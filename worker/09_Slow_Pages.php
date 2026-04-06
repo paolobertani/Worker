@@ -1,11 +1,13 @@
 <?php
 
 
-//
-//
-// Slow rendering pages management
-//
-//
+/*
+ *
+ *
+ *  Slow rendering pages management
+ *
+ *
+ */
 
 
 
@@ -16,9 +18,11 @@ $gSlowMilliseconds = [];
 
 
 
-//
-// Clear the slow pages array
-//
+/*
+ *
+ *  Clear the slow pages array
+ *
+ */
 
 function SlowPagesInit()
 {
@@ -31,9 +35,11 @@ function SlowPagesInit()
 
 
 
-//
-// Record slow page rendering
-//
+/*
+ *
+ *  Record slow page rendering
+ *
+ */
 
 function SlowPageRecordMaybe( $milliseconds, $pageNum )
 {
@@ -52,9 +58,11 @@ function SlowPageRecordMaybe( $milliseconds, $pageNum )
 
 
 
-//
-// How many pages that take long to render
-//
+/*
+ *
+ *  How many pages that take long to render
+ *
+ */
 
 function SlowPagesCount()
 {
@@ -65,9 +73,11 @@ function SlowPagesCount()
 
 
 
-//
-// Return the slow pages and how long they took to render, ordered from the slowest
-//
+/*
+ *
+ *  Return the slow pages and how long they took to render, ordered from the slowest
+ *
+ */
 
 function SlowPagesGet()
 {
@@ -107,9 +117,11 @@ function SlowPagesGet()
 
 
 
-//
-// Return the worst (longest) render time
-//
+/*
+ *
+ *  Return the worst (longest) render time
+ *
+ */
 
 function SlowPagesWorst()
 {
@@ -128,9 +140,11 @@ function SlowPagesWorst()
 
 
 
-//
-// Update document slow pages fields
-//
+/*
+ *
+ *  Update document slow pages fields
+ *
+ */
 
 function SlowPageUpdateDocument( &$document )
 {

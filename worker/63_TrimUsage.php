@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Trim usage table
-//
-//
+/*
+ *
+ *
+ *  Trim usage table
+ *
+ *
+ */
 
 function TrimUsage()
 {

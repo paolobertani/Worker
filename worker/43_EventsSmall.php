@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Manage Events Small
-//
-//
+/*
+ *
+ *
+ *  Manage Events Small
+ *
+ *
+ */
 
 function EventsSmall()
 {

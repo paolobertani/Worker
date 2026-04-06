@@ -1,24 +1,30 @@
 <?php
 
-//
-//
-// Log
-//
-//
+/*
+ *
+ *
+ *  Log
+ *
+ *
+ */
 
 
-//
-// GLOBALS
-//
+/*
+ *
+ *  GLOBALS
+ *
+ */
 
 $gCurrentDayNumber = '0';
 $gEmailCountToday = 0;
 
 
 
-//
-// CONSTANTS
-//
+/*
+ *
+ *  CONSTANTS
+ *
+ */
 
 define( 'WORKER_INFO',          1 );
 define( 'WORKER_NOTICE',        2 );
@@ -27,10 +33,12 @@ define( 'WORKER_ERROR',         4 );
 
 
 
-//
-// Log information, warning or error via db / email / terminal
-// If document id doesn't apply pass zero or NULL
-//
+/*
+ *
+ *  Log information, warning or error via db / email / terminal
+ *  If document id doesn't apply pass zero or NULL
+ *
+ */
 
 function WorkerLog( $type, $message, $document_id, $db = true, $email = true, $terminal = true )
 {

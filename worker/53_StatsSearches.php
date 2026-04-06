@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Produces statistics on searches per brand per category per year (Trends)
-//
-//
+/*
+ *
+ *
+ *  Produces statistics on searches per brand per category per year (Trends)
+ *
+ *
+ */
 
 function StatsSearchesBuild()
 {

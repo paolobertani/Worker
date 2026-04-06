@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Idrolab Statistics
-//
-//
+/*
+ *
+ *
+ *  Idrolab Statistics
+ *
+ *
+ */
 
 function IdrolabDoStats()
 {

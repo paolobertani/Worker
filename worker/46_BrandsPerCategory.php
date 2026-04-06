@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Rebuild Brands Per Category
-//
-//
+/*
+ *
+ *
+ *  Rebuild Brands Per Category
+ *
+ *
+ */
 
 function BrandsPerCategoryRebuild()
 {

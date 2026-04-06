@@ -1,16 +1,20 @@
 <?php
 
-//
-//
-// Metadata generation
-//
-//
+/*
+ *
+ *
+ *  Metadata generation
+ *
+ *
+ */
 
 
 
-//
-// Generate metadata
-//
+/*
+ *
+ *  Generate metadata
+ *
+ */
 
 function MetaDataProduce( $document_id, &$meta )
 {
@@ -223,9 +227,11 @@ function MetaDataProduce( $document_id, &$meta )
 
 
 
-//
-// Stats about outlines
-//
+/*
+ *
+ *  Stats about outlines
+ *
+ */
 
 function MetaCountOutlines( $outlines, &$max_level, $cur_level = 1 )
 {

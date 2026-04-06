@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// QR codes producing links and injecting into pdfff
-//
-//
+/*
+ *
+ *
+ *  QR codes producing links and injecting into pdfff
+ *
+ *
+ */
 
 
 

@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Delete cookies older than 12 months
-//
-//
+/*
+ *
+ *
+ *  Delete cookies older than 12 months
+ *
+ *
+ */
 
 function ExpiredCookiesDelete()
 {

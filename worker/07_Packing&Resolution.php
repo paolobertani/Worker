@@ -1,15 +1,19 @@
 <?php
 
-//
-//
-// Packing and Resolutions
-//
-//
+/*
+ *
+ *
+ *  Packing and Resolutions
+ *
+ *
+ */
 
 
-//
-// Packing and quality for each cached v2 resolution
-//
+/*
+ *
+ *  Packing and quality for each cached v2 resolution
+ *
+ */
 
 function CachedResolutionsV2()
 {
@@ -23,9 +27,11 @@ function CachedResolutionsV2()
 
 
 
-//
-// Quality for each cover resolution/size
-//
+/*
+ *
+ *  Quality for each cover resolution/size
+ *
+ */
 
 function CoverResolutions()
 {
@@ -44,9 +50,11 @@ function CoverResolutions()
 
 
 
-//
-// Returns how many pages are packed in each image for a given resolution in cache v2
-//
+/*
+ *
+ *  Returns how many pages are packed in each image for a given resolution in cache v2
+ *
+ */
 
 function PackForResolutionV2( $dpi, $raiseError = true )
 {
@@ -73,9 +81,11 @@ function PackForResolutionV2( $dpi, $raiseError = true )
 
 
 
-//
-// Returns the image format for a given resolution in cache v2
-//
+/*
+ *
+ *  Returns the image format for a given resolution in cache v2
+ *
+ */
 
 function FormatForResolutionV2( $dpi, $raiseError = true )
 {
@@ -102,9 +112,11 @@ function FormatForResolutionV2( $dpi, $raiseError = true )
 
 
 
-//
-// Returns whether the average page color has to be computed when rendering the page at a given resolution in cache v2
-//
+/*
+ *
+ *  Returns whether the average page color has to be computed when rendering the page at a given resolution in cache v2
+ *
+ */
 
 function GetColorForResolutionV2( $dpi, $raiseError = True )
 {
@@ -131,9 +143,11 @@ function GetColorForResolutionV2( $dpi, $raiseError = True )
 
 
 
-//
-// Returns the jpeg quality level for a given resolution in cache v2
-//
+/*
+ *
+ *  Returns the jpeg quality level for a given resolution in cache v2
+ *
+ */
 
 function QualityForResolutionV2( $dpi, $raiseError = True )
 {
@@ -160,9 +174,11 @@ function QualityForResolutionV2( $dpi, $raiseError = True )
 
 
 
-//
-// Returns the jpeg quality level for a given resolution
-//
+/*
+ *
+ *  Returns the jpeg quality level for a given resolution
+ *
+ */
 
 function QualityForResolution( $dpi, $hd, $raiseError = True )
 {
@@ -188,9 +204,11 @@ function QualityForResolution( $dpi, $hd, $raiseError = True )
 }
 
 
-//
-// Returns the jpeg quality level for the cover image at a given resolution
-//
+/*
+ *
+ *  Returns the jpeg quality level for the cover image at a given resolution
+ *
+ */
 
 
 

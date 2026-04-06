@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Updates the QR Count Table Blog Page
-//
-//
+/*
+ *
+ *
+ *  Updates the QR Count Table Blog Page
+ *
+ *
+ */
 
 function UpdateQrCountTablePage()
 {

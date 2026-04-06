@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Extract codes from price list
-//
-//
+/*
+ *
+ *
+ *  Extract codes from price list
+ *
+ *
+ */
 
 function ManageTranscode()
 {

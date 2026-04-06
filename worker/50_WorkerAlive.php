@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// WorkerAlive
-//
-//
+/*
+ *
+ *
+ *  WorkerAlive
+ *
+ *
+ */
 
 $gWorkerLive = 0;
 

@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Trials
-//
-//
+/*
+ *
+ *
+ *  Trials
+ *
+ *
+ */
 
 function Trials()
 {
@@ -13,9 +15,11 @@ function Trials()
 
 
 
-//
-// TrialsExpired
-//
+/*
+ *
+ *  TrialsExpired
+ *
+ */
 
 function TrialsExpired()
 {

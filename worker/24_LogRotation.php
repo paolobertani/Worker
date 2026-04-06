@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Log rotation
-//
-//
+/*
+ *
+ *
+ *  Log rotation
+ *
+ *
+ */
 
 
 function LogRotate()

@@ -1,10 +1,12 @@
 <?php
 
-//
-//
-// Auto exire documents after a given amount of years
-//
-//
+/*
+ *
+ *
+ *  Auto exire documents after a given amount of years
+ *
+ *
+ */
 
 function AutoExpire()
 {
