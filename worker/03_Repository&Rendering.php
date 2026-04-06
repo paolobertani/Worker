@@ -226,6 +226,22 @@ function MakePathToCacheV2Maybe( $document_id )
 
 /*
  *
+ *  Make path to meta dir if not present
+ *
+ */
+
+function MakePathToMetaMaybe( $document_id )
+{
+    if( ! DirectoryExists( PathToMeta( $document_id ) ) )
+    {
+        MakeDirectoryTree( PathToMeta( $document_id ) );
+    }
+}
+
+
+
+/*
+ *
  *  Render the pages in the interval at each resolution (a packed group is rendered when is requested rendering of the first page)
  *
  */

@@ -156,6 +156,32 @@ function PathToCacheV2( $document_id )
 
 /*
  *
+ *  Path to meta
+ *
+ */
+
+function PathToMeta( $document_id )
+{
+    return PathToDocument( $document_id ) . $document_id . '.meta/';
+}
+
+
+
+/*
+ *
+ *  Path to "quick" meta
+ *
+ */
+
+function PathToQuickMeta( $document_id )
+{
+    return PathToDocument( $document_id ) . $document_id . ".meta/$document_id.meta.json";
+}
+
+
+
+/*
+ *
  *  Path to the sub-cache v2 directory (inside the cache directory) that contains the images at a given and allowed dpi
  *
  */

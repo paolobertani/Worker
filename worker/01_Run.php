@@ -614,17 +614,17 @@ function RunDocumentToMeta()
 
     DbDocumentLock( $document_id );
 
-    $meta = [];
+    $quickMeta = [];
 
-    $result = MetaDataProduce( $document_id, $meta );
+    $result = MetaDataProduce( $document_id, $quickMeta );
 
     if( $result )
     {
-        $document['meta_md5'] = $document['md5'];
-        $document['pdf_modified'] = $meta['pdf_modified'];
-        $document['pdf_created']  = $meta['pdf_created'];
-        $document['has_outlines'] = $meta['has_outlines'];
-        $document['pages_count']  = $meta['pages_count'];
+        $document['meta_md5']     = $document['md5'];
+        $document['pdf_modified'] = $quickMeta['pdf_modified'];
+        $document['pdf_created']  = $quickMeta['pdf_created'];
+        $document['has_outlines'] = $quickMeta['has_outlines'];
+        $document['pages_count']  = $quickMeta['pages_count'];
     }
 
     DbDocumentUpdateAndUnlock( $document );

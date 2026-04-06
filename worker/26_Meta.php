@@ -16,9 +16,9 @@
  *
  */
 
-function MetaDataProduce( $document_id, &$meta )
+function MetaDataProduce( $document_id, &$quickMeta )
 {
-    $meta = [];
+    $quickMeta = [];
 
     $path_to_pdf = PathToPdf( $document_id );
     if( ! FileExists( $path_to_pdf ) )
@@ -34,9 +34,44 @@ function MetaDataProduce( $document_id, &$meta )
         /*--- EXIT POINT ---*/
     }
 
+    MakePathToMetaMaybe( $document_id );
+
+    $quickMeta = MetaQuickMetaProduce( $document_id );
+
+    return true;
+}
+
+
+
+/*
+ *
+ *  Produce "quick" metadata
+ *
+ */
+
+
+function MetaQuickMetaProduce( $document_id )
+{
+    $path_to_pdf   = PathToPdf  ( $document_id );
+    $path_to_pdfff = PathToPdfff( $document_id );
+
     $actualMD5 = Md5OfFile( $path_to_pdf );
 
-    $path_to_meta = str_replace( '.pdfff', '.meta.json', $path_to_pdfff );
+
+
+    // this may be removed as new meta cache will be regenerated - --- --- --- --- --- --- ---
+
+        $path_to_deprecated_meta = str_replace( '.pdfff', '.meta.json', $path_to_pdfff );
+        if( FileExists( $path_to_deprecated_meta ) )
+        {
+            RemoveFile( $path_to_deprecated_meta, $document_id );
+        }
+
+    // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+
+
+
+    $path_to_meta = PathToQuickMeta( $document_id );
     if( FileExists( $path_to_meta ) )
     {
         RemoveFile( $path_to_meta, $document_id );
@@ -206,7 +241,7 @@ function MetaDataProduce( $document_id, &$meta )
 
     // Build meta and save
 
-    $meta = [
+    $quickMeta = [
         'md5' => $actualMD5,
         'pages_count' => $pages_count,
         'pdf_size' => GetFileSize( $path_to_pdf ),
@@ -220,15 +255,17 @@ function MetaDataProduce( $document_id, &$meta )
     ];
 
 
-    file_put_contents( $path_to_meta, json_encode( $meta, JSON_PRETTY_PRINT ) );
+    file_put_contents( $path_to_meta, json_encode( $quickMeta, JSON_PRETTY_PRINT ) );
 
-    return true;
+
+    // Retruns meta so basic info can be estracted
+
+    return $quickMeta;
 }
 
 
 
 /*
- *
  *  Stats about outlines
  *
  */
