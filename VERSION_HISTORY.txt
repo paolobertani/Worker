@@ -1,3 +1,8 @@
+3.7.17
+
+`worker_cmd = pdfff` now supports documents that do not yet have `pdfff` and `pdfidx`; worker updates `pdfff_size` after generation so Pinaxo API can defer heavy PDF derivatives asynchronously
+
+
 3.7.15
 
 `worker_tasks.last_run` now accepts only `NEVER` or mdate; scheduling sentinel is `NEVER`

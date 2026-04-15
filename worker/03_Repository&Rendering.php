@@ -158,7 +158,7 @@ function CommandSupported( $command )
  *
  */
 
-function ConsistencyCheck( $document_id )
+function ConsistencyCheck( $document_id, $require_pdfff = true, $require_pdfidx = true )
 {
     if( ! DirectoryExists( MASTER_STORAGE_DIR ) )
     {
@@ -188,17 +188,14 @@ function ConsistencyCheck( $document_id )
     //      /*--- QUIT POINT ---*/
     //  }
 
-    // Before a document record is unlocked allowing client access and worker operation
-    // pdfff and pdfidx must have been already created by the web process
-
-    if( ! FileExists( PathToPdfff( $document_id ) ) )
+    if( $require_pdfff && ! FileExists( PathToPdfff( $document_id ) ) )
     {
         WorkerLog( WORKER_ERROR, "ConsistencyCkeck: pdfff not found", $document_id, true, true, true );
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
 
-    if( ! FileExists( PathToPdfidx( $document_id ) ) )
+    if( $require_pdfidx && ! FileExists( PathToPdfidx( $document_id ) ) )
     {
         WorkerLog( WORKER_ERROR, "ConsistencyCkeck: pdfidx not found", $document_id, true, true, true );
         WorkerQuitNow();
@@ -452,5 +449,4 @@ function SentDocumentPdfffPdfidx( $sent_document_id )
 
     return true;
 }
-
 

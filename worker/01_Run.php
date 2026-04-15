@@ -108,7 +108,10 @@ function RunDocumentWithCommand()
 
     // Check requirements to handle a command on a regular document
 
-    ConsistencyCheck( $document_id );
+    $command_requires_pdfff = ! in_array( $command, [ 'all', 'pdfff' ] );
+    $command_requires_pdfidx = ! in_array( $command, [ 'all', 'pdfff', 'pdfidx' ] );
+
+    ConsistencyCheck( $document_id, $command_requires_pdfff, $command_requires_pdfidx );
 
 
     // Execute the command
@@ -119,6 +122,11 @@ function RunDocumentWithCommand()
 
     if( $result )
     {
+        if( $command == 'all' || $command == 'pdfff' || $command == 'pdfidx' )
+        {
+            $document['pdfff_size'] = DocumentPdfffSize( $document_id ) + DocumentPdfidxSize( $document_id );
+        }
+
         if( $command == 'all' || $command == 'covers' )
         {
             $cover = DocumentCoverMeasure( $document_id );
@@ -672,5 +680,4 @@ function RunDocumentToFixMD5()
 
     return $document_id;
 }
-
 
