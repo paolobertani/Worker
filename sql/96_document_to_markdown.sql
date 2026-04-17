@@ -12,6 +12,7 @@ FROM
 WHERE
     `pdf` = 1 AND
     `primary` = 1 AND
+    `release` = "UNDEFINED" AND
     `status` = "" AND
     `worker_cmd` = "" AND
     `md5` != "" AND
