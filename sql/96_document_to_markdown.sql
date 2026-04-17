@@ -11,6 +11,7 @@ FROM
     `documents`
 WHERE
     `pdf` = 1 AND
+    `primary` = 1 AND
     `status` = "" AND
     `worker_cmd` = "" AND
     `md5` != "" AND
