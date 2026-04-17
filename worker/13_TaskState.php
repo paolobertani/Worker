@@ -73,6 +73,13 @@ function WorkerTaskSpecs()
             'run'        => 'WorkerTaskRunQrTable',
         ],
 
+        'hd.markdown' => [
+            'label'      => 'hd.markdown',
+            'interval'   => WORKER_INTERVAL_MARKDOWN,
+            'enabled_if' => 'WorkerTaskIsHeavyDuty',
+            'run'        => 'WorkerTaskRunMarkdown',
+        ],
+
         'light.keep_drives_spinning' => [
             'label'      => 'light.keep_drives_spinning',
             'interval'   => WORKER_INTERVAL_TOUCH,
@@ -418,6 +425,19 @@ function WorkerTaskRunStatsSearches()
 function WorkerTaskRunQrTable()
 {
     UpdateQrCountTablePage();
+}
+
+
+
+/*
+ *
+ *  Run markdown chunks task
+ *
+ */
+
+function WorkerTaskRunMarkdown()
+{
+    WorkerMarkdown();
 }
 
 

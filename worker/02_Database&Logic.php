@@ -168,6 +168,45 @@ function DbDocumentToMeta()
 
 
 
+/*
+ *
+ *  Get one document candidate for markdown pages/chunks generation
+ *
+ */
+
+function DbDocumentToMarkdown( $brand_ids )
+{
+    $params = [ '::brand_ids' => $brand_ids ];
+
+    return DbDocumentQuery( '96_document_to_markdown.sql', $params );
+}
+
+
+
+/*
+ *
+ *  Update markdown pages/chunks state fields on a document
+ *
+ */
+
+function DbDocumentMarkdownStateUpdate( $document_id, $md_md5, $md_page_index, $lock )
+{
+    $params = [
+        'id' => $document_id,
+        'md_md5' => $md_md5,
+        'md_page_index' => $md_page_index,
+        'lock' => $lock,
+    ];
+
+    $result = DbDocumentQuery( '97_document_markdown_update.sql', $params );
+
+    InvalidateCache( 'documents' );
+
+    return $result;
+}
+
+
+
 function DbDocumentToUncacheV2()
 {
     return DbDocumentQuery( '06_document_to_uncachev2.sql' );

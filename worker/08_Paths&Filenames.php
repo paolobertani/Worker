@@ -182,6 +182,71 @@ function PathToQuickMeta( $document_id )
 
 /*
  *
+ *  Path to the markdown pages directory
+ *
+ */
+
+function PathToMarkdownPages( $document_id )
+{
+    return PathToDocument( $document_id ) . $document_id . '.pages/';
+}
+
+
+
+/*
+ *
+ *  Path to one markdown page file
+ *
+ */
+
+function PathToMarkdownPage( $document_id, $page )
+{
+    return PathToMarkdownPages( $document_id ) . $document_id . '.' . str_pad( (string)$page, 4, '0', STR_PAD_LEFT ) . '.page.md';
+}
+
+
+
+/*
+ *
+ *  Path to the markdown chunks directory
+ *
+ */
+
+function PathToMarkdownChunks( $document_id )
+{
+    return PathToDocument( $document_id ) . 'chunks/';
+}
+
+
+
+/*
+ *
+ *  Path to one markdown chunk file
+ *
+ */
+
+function PathToMarkdownChunk( $document_id, $page_start, $page_end )
+{
+    return PathToMarkdownChunks( $document_id ) . sprintf( '%06d.%04d-%04d.chunk.md', $document_id, $page_start, $page_end );
+}
+
+
+
+/*
+ *
+ *  Path to the markdown chunks manifest
+ *
+ */
+
+function PathToMarkdownManifest( $document_id )
+{
+    return PathToMarkdownChunks( $document_id ) . 'manifest.json';
+}
+
+
+
+/*
+ *
  *  Path to the sub-cache v2 directory (inside the cache directory) that contains the images at a given and allowed dpi
  *
  */

@@ -658,3 +658,109 @@ function Pdfffoutlines( $f )
 
 
 
+
+
+
+/*
+ *
+ *  Decode the JSON payload emitted by markdown helper commands
+ *
+ */
+
+function MarkdownHelperDecodeJson( $output )
+{
+    $output = trim( $output );
+    if( $output === '' )
+    {
+        return false;
+        /*--- EXIT POINT ---*/
+    }
+
+    $json = json_decode( $output, true );
+    if( is_array( $json ) )
+    {
+        return $json;
+        /*--- EXIT POINT ---*/
+    }
+
+    $lines = explode( "\n", $output );
+
+    while( count( $lines ) > 0 )
+    {
+        $line = trim( array_pop( $lines ) );
+        if( $line === '' )
+        {
+            continue;
+        }
+
+        $json = json_decode( $line, true );
+        if( is_array( $json ) )
+        {
+            return $json;
+            /*--- EXIT POINT ---*/
+        }
+    }
+
+    return false;
+}
+
+
+
+/*
+ *
+ *  Get the installed Docling version through the markdown helper
+ *
+ */
+
+function MarkdownDoclingVersion()
+{
+    $toolcall = [ PATH_TO_DOCLING_PYTHON, PATH_TO_DOCLING_MARKDOWN, '--version' ];
+
+    $output = Execute( $toolcall, $exitStatus );
+    $result = MarkdownHelperDecodeJson( $output );
+
+    if( $exitStatus !== 0 || ! is_array( $result ) || ! isset( $result['status'] ) || $result['status'] !== 'ok' )
+    {
+        $toolcall = implode( ' ', $toolcall );
+        WorkerLog( WORKER_WARNING, "Failed reading Docling version - $output - command: $toolcall", 0, true, true, true );
+        return false;
+        /*--- EXIT POINT ---*/
+    }
+
+    return $result['docling_version'];
+}
+
+
+
+/*
+ *
+ *  Export one batch of markdown pages through Docling
+ *
+ */
+
+function MarkdownExportPagesWithDocling( $document_id, $batch_start, $batch_end )
+{
+    $batch_page_count = $batch_end - $batch_start + 1;
+
+    $toolcall = [
+        PATH_TO_DOCLING_PYTHON,
+        PATH_TO_DOCLING_MARKDOWN,
+        '--pdf', PathToPdf( $document_id ),
+        '--page-start-zero', $batch_start,
+        '--page-count', $batch_page_count,
+        '--output-dir', PathToMarkdownPages( $document_id ),
+    ];
+
+    $output = Execute( $toolcall, $exitStatus );
+    $result = MarkdownHelperDecodeJson( $output );
+
+    if( $exitStatus !== 0 || ! is_array( $result ) || ! isset( $result['status'] ) || $result['status'] !== 'ok' )
+    {
+        $toolcall = implode( ' ', $toolcall );
+        WorkerLog( WORKER_ERROR, "FATAL - Docling markdown export failed - $output - command: $toolcall", $document_id, true, true, true );
+        WorkerQuitNow();
+        /*--- QUIT POINT ---*/
+    }
+
+    return $result;
+}

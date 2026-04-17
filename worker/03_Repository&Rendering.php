@@ -239,6 +239,38 @@ function MakePathToMetaMaybe( $document_id )
 
 /*
  *
+ *  Make path to markdown pages dir if not present
+ *
+ */
+
+function MakePathToMarkdownPagesMaybe( $document_id )
+{
+    if( ! DirectoryExists( PathToMarkdownPages( $document_id ) ) )
+    {
+        MakeDirectoryTree( PathToMarkdownPages( $document_id ) );
+    }
+}
+
+
+
+/*
+ *
+ *  Make path to markdown chunks dir if not present
+ *
+ */
+
+function MakePathToMarkdownChunksMaybe( $document_id )
+{
+    if( ! DirectoryExists( PathToMarkdownChunks( $document_id ) ) )
+    {
+        MakeDirectoryTree( PathToMarkdownChunks( $document_id ) );
+    }
+}
+
+
+
+/*
+ *
  *  Render the pages in the interval at each resolution (a packed group is rendered when is requested rendering of the first page)
  *
  */
@@ -328,6 +360,42 @@ function RemoveCacheV2( $document_id )
     if( DirectoryExists( $cache ) )
     {
         RemoveDirectory( $cache, $document_id );
+    }
+}
+
+
+
+/*
+ *
+ *  Remove markdown pages directory and its files
+ *
+ */
+
+function RemoveMarkdownPages( $document_id )
+{
+    $pages = PathToMarkdownPages( $document_id );
+
+    if( DirectoryExists( $pages ) )
+    {
+        RemoveDirectory( $pages, $document_id );
+    }
+}
+
+
+
+/*
+ *
+ *  Remove markdown chunks directory and its files
+ *
+ */
+
+function RemoveMarkdownChunks( $document_id )
+{
+    $chunks = PathToMarkdownChunks( $document_id );
+
+    if( DirectoryExists( $chunks ) )
+    {
+        RemoveDirectory( $chunks, $document_id );
     }
 }
 

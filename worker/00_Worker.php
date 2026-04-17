@@ -235,6 +235,14 @@ function WorkerRun()
 
 
 
+        /*
+         *
+         *  Markdown pages & chunks
+         *
+         */
+
+        WorkerTaskRun( 'hd.markdown' );
+
 
 
         // ------------------
