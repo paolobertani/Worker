@@ -683,6 +683,21 @@ function MarkdownHelperDecodeJson( $output )
         /*--- EXIT POINT ---*/
     }
 
+    $json_start = strpos( $output, '{' );
+    $json_end = strrpos( $output, '}' );
+
+    if( $json_start !== false && $json_end !== false && $json_end >= $json_start )
+    {
+        $json_text = substr( $output, $json_start, $json_end - $json_start + 1 );
+        $json = json_decode( $json_text, true );
+
+        if( is_array( $json ) )
+        {
+            return $json;
+            /*--- EXIT POINT ---*/
+        }
+    }
+
     $lines = explode( "\n", $output );
 
     while( count( $lines ) > 0 )

@@ -30,6 +30,25 @@ define( 'WORKER_INFO',          1 );
 define( 'WORKER_NOTICE',        2 );
 define( 'WORKER_WARNING',       3 );
 define( 'WORKER_ERROR',         4 );
+define( 'WORKER_LOG_MAX_MESSAGE_LENGTH', 1000 );
+
+
+
+/*
+ *
+ *  Truncate a worker log message to the maximum allowed length
+ *
+ */
+
+function WorkerLogMessageTruncate( $message )
+{
+    if( strlen( $message ) > WORKER_LOG_MAX_MESSAGE_LENGTH )
+    {
+        $message = substr( $message, 0, WORKER_LOG_MAX_MESSAGE_LENGTH );
+    }
+
+    return $message;
+}
 
 
 
@@ -66,6 +85,8 @@ function WorkerLog( $type, $message, $document_id, $db = true, $email = true, $t
     {
         $message = "<HDTY> $message";
     }
+
+    $message = WorkerLogMessageTruncate( $message );
 
 
     // Write on terminal

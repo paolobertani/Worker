@@ -89,6 +89,49 @@ function WorkerMarkdownBatchEnd( $document )
 
 /*
  *
+ *  Return current worker memory usage in megabytes
+ *
+ */
+
+function WorkerMarkdownMemoryUsedMegabytes()
+{
+    return intdiv( memory_get_usage( true ), 1000 * 1000 );
+}
+
+
+
+/*
+ *
+ *  Build the single-line terminal progress message for one markdown batch
+ *
+ */
+
+function WorkerMarkdownTerminalProgressMessage( $document_id, $batch_start, $batch_end, $pages_count )
+{
+    $memory_used = WorkerMarkdownMemoryUsedMegabytes();
+
+    return 'Producing markdown via Docling - Mem ' . $memory_used . ' MB - Block ' . ($batch_start + 1) . '-' . ($batch_end + 1) . '/' . $pages_count;
+}
+
+
+
+/*
+ *
+ *  Write single-line markdown batch progress on terminal
+ *
+ */
+
+function WorkerMarkdownLogTerminalProgress( $document_id, $batch_start, $batch_end, $pages_count )
+{
+    $message = WorkerMarkdownTerminalProgressMessage( $document_id, $batch_start, $batch_end, $pages_count );
+
+    WorkerLog( WORKER_INFO, $message, $document_id, false, false, 1 );
+}
+
+
+
+/*
+ *
  *  Build the relative chunks directory path for the manifest
  *
  */
@@ -369,7 +412,7 @@ function WorkerMarkdownInitialize( $document )
 {
     $document_id = $document['id'];
 
-    WorkerLog( WORKER_INFO, 'Initializing markdown pages/chunks', $document_id, true, false, true );
+    WorkerLog( WORKER_INFO, 'Initializing markdown pages/chunks', $document_id, true, false, false );
 
     RemoveMarkdownPages( $document_id );
     RemoveMarkdownChunks( $document_id );
@@ -399,11 +442,8 @@ function WorkerMarkdownRenderNextBatch( $document )
     $batch_start = WorkerMarkdownBatchStart( $document );
     $batch_end = WorkerMarkdownBatchEnd( $document );
     $expected_pages = $batch_end - $batch_start + 1;
-    $batch_number = intval( floor( $batch_start / WORKER_MARKDOWN_PAGE_BATCH ) ) + 1;
-    $total_batches = intval( ceil( $document['pages_count'] / WORKER_MARKDOWN_PAGE_BATCH ) );
-    $completed_pages = $batch_end + 1;
 
-    WorkerLog( WORKER_INFO, 'Markdown batch ' . $batch_number . '/' . $total_batches . ' started - pages ' . ($batch_start + 1) . '-' . ($batch_end + 1) . ' of ' . $document['pages_count'], $document_id, true, false, true );
+    WorkerMarkdownLogTerminalProgress( $document_id, $batch_start, $batch_end, $document['pages_count'] );
 
     MakePathToMarkdownPagesMaybe( $document_id );
 
@@ -425,7 +465,7 @@ function WorkerMarkdownRenderNextBatch( $document )
 
     DbDocumentMarkdownStateUpdate( $document_id, $document['md_md5'], $batch_end, WORKER_MARKDOWN_LOCK );
 
-    WorkerLog( WORKER_INFO, 'Markdown batch ' . $batch_number . '/' . $total_batches . ' completed in ' . StringFromFloat( $result['seconds'], 3 ) . ' s - pages ' . ($batch_start + 1) . '-' . ($batch_end + 1) . ' of ' . $document['pages_count'] . ' - progress ' . $completed_pages . '/' . $document['pages_count'], $document_id, true, false, true );
+    WorkerMarkdownLogTerminalProgress( $document_id, $batch_start, $batch_end, $document['pages_count'] );
 
     WorkerAlive();
 
@@ -444,7 +484,7 @@ function WorkerMarkdownFinalize( $document )
 {
     $document_id = $document['id'];
 
-    WorkerLog( WORKER_INFO, 'Generating markdown chunks', $document_id, true, false, true );
+    WorkerLog( WORKER_INFO, 'Generating markdown chunks', $document_id, true, false, false );
 
     $result = WorkerMarkdownBuildChunks( $document_id, $document['pages_count'] );
     if( ! $result )
@@ -455,7 +495,7 @@ function WorkerMarkdownFinalize( $document )
 
     DbDocumentMarkdownStateUpdate( $document_id, $document['md5'], $document['pages_count'], '' );
 
-    WorkerLog( WORKER_INFO, 'Markdown generation completed - pages and chunks are aligned with current PDF', $document_id, true, false, true );
+    WorkerLog( WORKER_INFO, 'Markdown generation completed - pages and chunks are aligned with current PDF', $document_id, true, false, false );
 
     WorkerAlive();
 

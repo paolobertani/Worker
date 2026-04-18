@@ -32,6 +32,8 @@ ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
  */
 
 define( 'ROOT',                     __DIR__ );  // Path to script's directory without trailing slash
+define( 'PATH_TO_CACHE',            ROOT . '/cache' );              // Path to worker cache directory
+define( 'PATH_TO_HF_CACHE',         ROOT . '/cache/huggingface' );  // Path to Hugging Face cache directory
 
 define( 'WORKER_VERSION',           '4.0.0' );  // Worker version number
 
@@ -103,7 +105,18 @@ define( 'WORKER_AUTOEXPIRE_YEARS_UPL',        2 );   // The old document is set 
 define( 'WORKER_DONT_CACHE_YEARS_OLD',        3 );   // After this amount of years from expiring a document is considered old
 define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this OLD document has never been read: do not cache it
 
-define( 'MD_BRAND_IDS',                    [] );   // Pilot brands for markdown pages/chunks generation; empty = disabled
+define( 'MD_BRAND_IDS',     						 // Pilot brands for markdown pages/chunks generation; empty = disabled              
+						[ 160 ] );  
+
+if( ! is_dir( PATH_TO_HF_CACHE ) )
+{
+    mkdir( PATH_TO_HF_CACHE, 0755, true );
+}
+
+putenv( 'HF_TOKEN=' . HF_TOKEN );
+putenv( 'HF_HOME=' . PATH_TO_CACHE );
+putenv( 'HF_HUB_CACHE=' . PATH_TO_HF_CACHE );
+putenv( 'HUGGINGFACE_HUB_CACHE=' . PATH_TO_HF_CACHE );
 
 /*
  *
