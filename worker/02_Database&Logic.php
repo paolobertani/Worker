@@ -185,6 +185,21 @@ function DbDocumentToMarkdown( $brand_ids )
 
 /*
  *
+ *  Check whether a markdown document is currently in progress
+ *
+ */
+
+function DbDocumentMarkdownInProgress( $brand_ids )
+{
+    $params = [ '::brand_ids' => $brand_ids ];
+
+    return DbDocumentQuery( '98_document_markdown_in_progress.sql', $params );
+}
+
+
+
+/*
+ *
  *  Update markdown pages/chunks state fields on a document
  *
  */

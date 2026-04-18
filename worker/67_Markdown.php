@@ -10,6 +10,12 @@
 
 
 
+define( 'WORKER_MARKDOWN_RESULT_NO_WORK',          0 );
+define( 'WORKER_MARKDOWN_RESULT_BATCH_PROCESSED',  1 );
+define( 'WORKER_MARKDOWN_RESULT_COMPLETED',        2 );
+
+
+
 /*
  *
  *  Build a safe comma-separated SQL list of pilot markdown brand ids
@@ -36,6 +42,29 @@ function WorkerMarkdownBrandIdsSql()
     }
 
     return implode( ',', $brand_ids );
+}
+
+
+
+/*
+ *
+ *  Check whether there is a markdown document already in progress
+ *
+ */
+
+function WorkerMarkdownHasDocumentInProgress()
+{
+    $brand_ids = WorkerMarkdownBrandIdsSql();
+
+    if( $brand_ids === false )
+    {
+        return false;
+        /*--- EXIT POINT ---*/
+    }
+
+    $document = DbDocumentMarkdownInProgress( $brand_ids );
+
+    return $document !== false;
 }
 
 
@@ -515,14 +544,14 @@ function WorkerMarkdown()
     $brand_ids = WorkerMarkdownBrandIdsSql();
     if( $brand_ids === false )
     {
-        return false;
+        return WORKER_MARKDOWN_RESULT_NO_WORK;
         /*--- EXIT POINT ---*/
     }
 
     $document = DbDocumentToMarkdown( $brand_ids );
     if( $document === false )
     {
-        return false;
+        return WORKER_MARKDOWN_RESULT_NO_WORK;
         /*--- EXIT POINT ---*/
     }
 
@@ -537,15 +566,29 @@ function WorkerMarkdown()
 
     if( $document['md_page_index'] < $document['pages_count'] - 1 )
     {
-        return WorkerMarkdownRenderNextBatch( $document );
+        $result = WorkerMarkdownRenderNextBatch( $document );
+        if( $result === false )
+        {
+            return false;
+            /*--- EXIT POINT ---*/
+        }
+
+        return WORKER_MARKDOWN_RESULT_BATCH_PROCESSED;
         /*--- EXIT POINT ---*/
     }
 
     if( $document['md_page_index'] == $document['pages_count'] - 1 )
     {
-        return WorkerMarkdownFinalize( $document );
+        $result = WorkerMarkdownFinalize( $document );
+        if( $result === false )
+        {
+            return false;
+            /*--- EXIT POINT ---*/
+        }
+
+        return WORKER_MARKDOWN_RESULT_COMPLETED;
         /*--- EXIT POINT ---*/
     }
 
-    return false;
+    return WORKER_MARKDOWN_RESULT_NO_WORK;
 }

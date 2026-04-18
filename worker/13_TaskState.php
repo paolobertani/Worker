@@ -12,6 +12,11 @@ $gWorkerTaskState = [];
 
 
 
+define( 'WORKER_TASK_LAST_RUN_SKIP',   0 );
+define( 'WORKER_TASK_LAST_RUN_UPDATE', 1 );
+
+
+
 function WorkerTaskLastRunToUnixtime( $value )
 {
     $value = trim( (string) $value );
@@ -77,6 +82,7 @@ function WorkerTaskSpecs()
             'label'      => 'hd.markdown',
             'interval'   => WORKER_INTERVAL_MARKDOWN,
             'enabled_if' => 'WorkerTaskIsHeavyDuty',
+            'force_if'   => 'WorkerTaskShouldForceMarkdown',
             'run'        => 'WorkerTaskRunMarkdown',
         ],
 
@@ -343,8 +349,13 @@ function WorkerTaskRun( $label )
         /*--- EXIT POINT ---*/
     }
 
-    call_user_func( $spec['run'] );
-    WorkerTaskSetLastRun( $label );
+    $result = call_user_func( $spec['run'] );
+
+    if( $result !== WORKER_TASK_LAST_RUN_SKIP )
+    {
+        WorkerTaskSetLastRun( $label );
+    }
+
     WorkerAlive();
 
     return true;
@@ -401,6 +412,13 @@ function WorkerTaskShouldForceSubscriptions()
 
 
 
+function WorkerTaskShouldForceMarkdown()
+{
+    return WorkerMarkdownHasDocumentInProgress();
+}
+
+
+
 /*
  *
  *  Task wrappers
@@ -437,7 +455,21 @@ function WorkerTaskRunQrTable()
 
 function WorkerTaskRunMarkdown()
 {
-    WorkerMarkdown();
+    $result = WorkerMarkdown();
+
+    if( $result === WORKER_MARKDOWN_RESULT_BATCH_PROCESSED )
+    {
+        return WORKER_TASK_LAST_RUN_SKIP;
+        /*--- EXIT POINT ---*/
+    }
+
+    if( $result === WORKER_MARKDOWN_RESULT_NO_WORK || $result === WORKER_MARKDOWN_RESULT_COMPLETED )
+    {
+        return WORKER_TASK_LAST_RUN_UPDATE;
+        /*--- EXIT POINT ---*/
+    }
+
+    return WORKER_TASK_LAST_RUN_SKIP;
 }
 
 
