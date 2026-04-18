@@ -167,7 +167,7 @@ function WorkerMarkdownLogTerminalProgress( $document_id, $batch_start, $batch_e
 
 function WorkerMarkdownRelativeChunksDirectory( $document_id )
 {
-    return 'docs/' . ((int)($document_id / 100)) . '/' . $document_id . '/chunks/';
+    return 'docs/' . ((int)($document_id / 100)) . '/' . $document_id . '/' . $document_id . '.chunks/';
 }
 
 
@@ -443,7 +443,6 @@ function WorkerMarkdownInitialize( $document )
 
     WorkerLog( WORKER_INFO, 'Initializing markdown pages/chunks', $document_id, true, false, false );
 
-    RemoveMarkdownPages( $document_id );
     RemoveMarkdownChunks( $document_id );
 
     MakePathToMarkdownPagesMaybe( $document_id );

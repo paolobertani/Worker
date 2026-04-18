@@ -35,7 +35,7 @@ define( 'ROOT',                     __DIR__ );  // Path to script's directory wi
 define( 'PATH_TO_CACHE',            ROOT . '/cache' );              // Path to worker cache directory
 define( 'PATH_TO_HF_CACHE',         ROOT . '/cache/huggingface' );  // Path to Hugging Face cache directory
 
-define( 'WORKER_VERSION',           '4.0.0' );  // Worker version number
+define( 'WORKER_VERSION',           '4.0.1' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
 define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root

@@ -1,3 +1,23 @@
+4.0.1
+
+Markdown page files are now stored in `{document_id}.pagesmd/` and markdown chunks in `{document_id}.chunks/`
+
+
+
+***
+
+
+
+4.0.0
+
+First implementation of PDF to Markdown document conversion via Docling
+
+
+
+***
+
+
+
 3.7.17
 
 `worker_cmd = pdfff` now supports documents that do not yet have `pdfff` and `pdfidx`; worker updates `pdfff_size` after generation so Pinaxo API can defer heavy PDF derivatives asynchronously
@@ -28,7 +48,7 @@ Added weekly background RenewCerts task in non-heavy-duty worker
 Persist interval tasks last run in `worker_tasks` across worker restarts
 
 
-3.7.10 
+3.7.10
 
 Disabled php-fpm (wordpress) check
 
@@ -489,7 +509,12 @@ run/ files are deleted on quit
 
 Introduced constants support in queries
 run/ directory with process running
-Intrduced normal mode and heavy duty mode
+Introduced normal mode and heavy duty mode
+
+
+
+***
+
 
 
 2.9.0

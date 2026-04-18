@@ -188,7 +188,7 @@ function PathToQuickMeta( $document_id )
 
 function PathToMarkdownPages( $document_id )
 {
-    return PathToDocument( $document_id ) . $document_id . '.pages/';
+    return PathToDocument( $document_id ) . $document_id . '.pagesmd/';
 }
 
 
@@ -214,7 +214,7 @@ function PathToMarkdownPage( $document_id, $page )
 
 function PathToMarkdownChunks( $document_id )
 {
-    return PathToDocument( $document_id ) . 'chunks/';
+    return PathToDocument( $document_id ) . $document_id . '.chunks/';
 }
 
 
@@ -420,6 +420,5 @@ function PathToBrandDirectoryInSlave( $brand_id )
 
     return $path;
 }
-
 
 
