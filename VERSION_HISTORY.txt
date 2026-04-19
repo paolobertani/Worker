@@ -1,3 +1,13 @@
+4.1.0
+
+Disabled automatic AutoUncache policy: the worker no longer sets new documents to `dont_cache = 1`
+
+
+
+***
+
+
+
 4.0.2
 
 Adaptive cache v2 for 348 dpi pages: compare pdfjpg 216 dpi vs imgresize 348->216 cycles and discard the 348 cache page when direct render is cheaper than resize within a 1.10 ratio; QR and pagescolor rebuild a temporary 348 page when needed
