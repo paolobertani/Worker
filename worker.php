@@ -35,7 +35,7 @@ define( 'ROOT',                     __DIR__ );  // Path to script's directory wi
 define( 'PATH_TO_CACHE',            ROOT . '/cache' );              // Path to worker cache directory
 define( 'PATH_TO_HF_CACHE',         ROOT . '/cache/huggingface' );  // Path to Hugging Face cache directory
 
-define( 'WORKER_VERSION',           '4.0.1' );  // Worker version number
+define( 'WORKER_VERSION',           '4.0.2' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
 define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root
@@ -96,6 +96,10 @@ define( 'WORKER_MEMORY_LIMIT_MB',          1024 );   // If exceeded then the wor
 define( 'WORKER_CACHE_PAGE_LOTS',           100 );   // How many pages to render at each iteration; set to 0 to render every page
 define( 'WORKER_CACHE_PAUSE',       '1:30-8:00' );   // Pause cache generation around backups
 define( 'WORKER_CACHE_MAKES_COLORS',      false );   // Are pagescolor built during cache generation
+define( 'WORKER_CACHE_COMPARE_SOURCE_DPI',  348 );   // Cached page dpi used as source for adaptive keep/discard decision
+define( 'WORKER_CACHE_COMPARE_TARGET_DPI',  216 );   // Target dpi used to compare direct render vs resize from cache
+define( 'WORKER_CACHE_COMPARE_QUALITY',    0.70 );   // JPEG quality used for adaptive keep/discard decision at target dpi
+define( 'WORKER_CACHE_COMPARE_RATIO',      1.10 );   // Discard cached page when direct render cycles are below resize cycles * ratio
 define( 'WORKER_CASHIN_START_AT',			 10 );	 // Subscription automatic cash-in daily inretval (hour from-to)
 define( 'WORKER_CASHIN_END_AT',			     20 );	 // Create a directory named CASHIN/ at ROOT to force immediate cashin
 define( 'WORKER_AUTOEXPIRE_YEARS_OLD',        5 );   // After this amount of years from release date a document is considered old

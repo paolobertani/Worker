@@ -48,13 +48,40 @@ function PagesColorString( $document )
     for( $page = 0; $page < $pages_count; $page++ )
     {
         $path = PathToPageImageV2( $document_id, $dpi, $page );
+        $temporaryPath = false;
+
         if( ! is_file( $path ) )
         {
-            return false;
-            /*--- EXIT POINT ---*/
+            $temporaryPath = PathToDocument( $document_id ) . $document_id . ".tmp.pagescolor.dpi$dpi.page$page.jpg";
+
+            if( FileExists( $temporaryPath ) )
+            {
+                RemoveFile( $temporaryPath, $document_id );
+            }
+
+            $milliseconds = PdfJpg( PathToPdf( $document_id ), $dpi, $page, $temporaryPath, QualityForResolutionV2( $dpi ) );
+
+            if( $milliseconds === false )
+            {
+                if( FileExists( $temporaryPath ) )
+                {
+                    RemoveFile( $temporaryPath, $document_id );
+                }
+
+                return false;
+                /*--- EXIT POINT ---*/
+            }
+
+            $path = $temporaryPath;
         }
 
         $color = PagesColorGetFromFile( $path );
+
+        if( $temporaryPath !== false && FileExists( $temporaryPath ) )
+        {
+            RemoveFile( $temporaryPath, $document_id );
+        }
+
         if( $color === false )
         {
             return false;

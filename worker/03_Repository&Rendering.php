@@ -439,6 +439,102 @@ function RenderCover( $document_id, $dpi, $hd )
 
 /*
  *
+ *  Measure direct render vs resize cost for a cached page
+ *
+ *  Returns false if profiling cannot be completed; in that case the cached page must be kept
+ *
+ */
+
+function CacheProfileForPageV2( $document_id, $pageNum, $cachedPagePath )
+{
+    $targetDpi = WORKER_CACHE_COMPARE_TARGET_DPI;
+    $targetQuality = WORKER_CACHE_COMPARE_QUALITY;
+
+    $pdf = PathToPdf( $document_id );
+
+    $pdfJpgTestPath = PathToDocument( $document_id ) . $document_id . ".cachetest.pdfjpg.dpi$targetDpi.page$pageNum.jpg";
+    $imgResizeTestPath = PathToDocument( $document_id ) . $document_id . ".cachetest.imgresize.dpi$targetDpi.page$pageNum.jpg";
+
+    if( FileExists( $pdfJpgTestPath ) )
+    {
+        RemoveFile( $pdfJpgTestPath, $document_id );
+    }
+
+    if( FileExists( $imgResizeTestPath ) )
+    {
+        RemoveFile( $imgResizeTestPath, $document_id );
+    }
+
+    $pdfJpgProfile = PdfJpgCycles( $pdf, $targetDpi, $pageNum, $pdfJpgTestPath, $targetQuality );
+
+    $imgResizeProfile = false;
+
+    if( $pdfJpgProfile !== false )
+    {
+        $imgResizeProfile = ImgResizeCycles( $cachedPagePath, $imgResizeTestPath, WORKER_CACHE_COMPARE_SOURCE_DPI, $targetDpi, $targetQuality );
+    }
+
+    if( FileExists( $pdfJpgTestPath ) )
+    {
+        RemoveFile( $pdfJpgTestPath, $document_id );
+    }
+
+    if( FileExists( $imgResizeTestPath ) )
+    {
+        RemoveFile( $imgResizeTestPath, $document_id );
+    }
+
+    if( $pdfJpgProfile === false || $imgResizeProfile === false )
+    {
+        return false;
+        /*--- EXIT POINT ---*/
+    }
+
+    return [
+                'pdfjpg_cycles' => $pdfJpgProfile['cycles'],
+                'pdfjpg_milliseconds' => $pdfJpgProfile['milliseconds'],
+                'imgresize_cycles' => $imgResizeProfile['cycles'],
+                'imgresize_milliseconds' => $imgResizeProfile['milliseconds']
+           ];
+}
+
+
+
+/*
+ *
+ *  Discard a freshly rendered 348 dpi cached page when direct 216 dpi rendering is cheap enough
+ *
+ */
+
+function MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $cachedPagePath )
+{
+    if( $dpi != WORKER_CACHE_COMPARE_SOURCE_DPI )
+    {
+        return;
+        /*--- EXIT POINT ---*/
+    }
+
+    $profile = CacheProfileForPageV2( $document_id, $pageNum, $cachedPagePath );
+
+    if( $profile === false )
+    {
+        return;
+        /*--- EXIT POINT ---*/
+    }
+
+    if( $profile['pdfjpg_cycles'] < $profile['imgresize_cycles'] * WORKER_CACHE_COMPARE_RATIO )
+    {
+        if( FileExists( $cachedPagePath ) )
+        {
+            RemoveFile( $cachedPagePath, $document_id );
+        }
+    }
+}
+
+
+
+/*
+ *
  *  Render all the pages in the interval at a given dpi for cache v2
  *
  */
@@ -488,6 +584,11 @@ function RenderPagesAtResolutionV2( $document_id, $dpi, $start, $end, $pagesCoun
             file_put_contents( PathToDocument( $document_id ) . "$document_id.pagescolor.txt", $color, FILE_APPEND );
         }
 
+        if( $pack == 1 )
+        {
+            MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $img );
+        }
+
         WorkerQuitMaybe();
         WorkerAlive();
     }
@@ -517,4 +618,3 @@ function SentDocumentPdfffPdfidx( $sent_document_id )
 
     return true;
 }
-
