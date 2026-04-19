@@ -525,6 +525,12 @@ function RunSentDocumentToPdfff()
 
 function RunDocumentToIdrolabTag( $tag )
 {
+    if( ! WORKER_ENABLE_IDROLAB_TAGS )
+    {
+        return false;
+        /*--- EXIT POINT ---*/
+    }
+
     if( WorkerShouldPause( IDR_PAUSE ) ) // Pause during backup
     {
         return false;
@@ -680,4 +686,3 @@ function RunDocumentToFixMD5()
 
     return $document_id;
 }
-

@@ -167,8 +167,11 @@ function WorkerRun()
             $document_id[] = RunDocumentToUncacheV2();
             $document_id[] = RunDocumentToRemove();
             $document_id[] = RunSentDocumentToPdfff(); // always return `true` or `false`
-            $document_id[] = RunDocumentToIdrolabTag( true ); // apply
-            $document_id[] = RunDocumentToIdrolabTag( false ); // remove
+            if( WORKER_ENABLE_IDROLAB_TAGS )
+            {
+                $document_id[] = RunDocumentToIdrolabTag( true ); // apply
+                $document_id[] = RunDocumentToIdrolabTag( false ); // remove
+            }
 
 
 
