@@ -18,10 +18,10 @@
 function CachedResolutionsV2()
 {
     return [
-            [ 'dpi' =>  12, 'pack' =>  16, 'quality' =>  0.80, 'format' => 'jpg', 'getcolor' => false ],
-            [ 'dpi' =>  20, 'pack' =>   9, 'quality' =>  0.80, 'format' => 'jpg', 'getcolor' => false ],
-            [ 'dpi' =>  32, 'pack' =>   4, 'quality' =>  0.80, 'format' => 'jpg', 'getcolor' => false ],
-            [ 'dpi' => 348, 'pack' =>   1, 'quality' =>  0.80, 'format' => 'jpg', 'getcolor' => true  ]
+            [ 'dpi' =>  12, 'pack' =>  16, 'quality' =>  0.85, 'format' => 'jpg', 'getcolor' => false ],
+            [ 'dpi' =>  20, 'pack' =>   9, 'quality' =>  0.85, 'format' => 'jpg', 'getcolor' => false ],
+            [ 'dpi' =>  32, 'pack' =>   4, 'quality' =>  0.85, 'format' => 'jpg', 'getcolor' => false ],
+            [ 'dpi' => 348, 'pack' =>   1, 'quality' =>  0.85, 'format' => 'jpg', 'getcolor' => true  ]
            ];
 }
 
@@ -36,15 +36,15 @@ function CachedResolutionsV2()
 function CoverResolutions()
 {
     return [
-            [ 'dpi' =>  12, 'quality' =>  0.80 /* 0.75 */, 'hdquality' =>  0.80 /* 0.75 */ ],
-            [ 'dpi' =>  20, 'quality' =>  0.80 /* 0.72 */, 'hdquality' =>  0.80 /* 0.72 */ ],
-            [ 'dpi' =>  32, 'quality' =>  0.80 /* 0.70 */, 'hdquality' =>  0.80 /* 0.70 */ ],
-            [ 'dpi' =>  52, 'quality' =>  0.80 /* 0.65 */, 'hdquality' =>  0.80 /* 0.70 */ ],
-            [ 'dpi' =>  82, 'quality' =>  0.80 /* 0.60 */, 'hdquality' =>  0.80 /* 0.70 */ ],
+            [ 'dpi' =>  12, 'quality' =>  0.85 /* 0.75 */, 'hdquality' =>  0.85 /* 0.75 */ ],
+            [ 'dpi' =>  20, 'quality' =>  0.85 /* 0.72 */, 'hdquality' =>  0.85 /* 0.72 */ ],
+            [ 'dpi' =>  32, 'quality' =>  0.85 /* 0.70 */, 'hdquality' =>  0.85 /* 0.70 */ ],
+            [ 'dpi' =>  52, 'quality' =>  0.85 /* 0.65 */, 'hdquality' =>  0.85 /* 0.70 */ ],
+            [ 'dpi' =>  82, 'quality' =>  0.85 /* 0.60 */, 'hdquality' =>  0.85 /* 0.70 */ ],
             //--------------- over 216 `dpi` value is cover width in pixels --------------//
-            [ 'dpi' => 236, 'quality' =>  0.80 /* 0.70 */, 'hdquality' =>  0.80 /* 0.72 */ ],
-            [ 'dpi' => 472, 'quality' =>  0.80 /* 0.65 */, 'hdquality' =>  0.80 /* 0.70 */ ],
-            [ 'dpi' => 944, 'quality' =>  0.80 /* 0.65 */, 'hdquality' =>  0.80 /* 0.70 */ ]
+            [ 'dpi' => 236, 'quality' =>  0.85 /* 0.70 */, 'hdquality' =>  0.85 /* 0.72 */ ],
+            [ 'dpi' => 472, 'quality' =>  0.85 /* 0.65 */, 'hdquality' =>  0.85 /* 0.70 */ ],
+            [ 'dpi' => 944, 'quality' =>  0.85 /* 0.65 */, 'hdquality' =>  0.85 /* 0.70 */ ]
            ];
 }
 
@@ -234,5 +234,4 @@ function CoverQualityForResolution( $dpi, $hd, $raiseError = True )
 
     return 0;
 }
-
 

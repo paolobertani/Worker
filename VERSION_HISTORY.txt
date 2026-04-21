@@ -1,3 +1,13 @@
+4.3.0
+
+Raised Worker JPEG quality to 0.85 for cache v2, cover cache and adaptive render-vs-resize profiling
+
+
+
+***
+
+
+
 4.2.0
 
 Disabled Idrolab document tagging in Worker; both apply and remove passes are skipped while Idrolab stats remain active
