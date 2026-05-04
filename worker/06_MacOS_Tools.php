@@ -102,82 +102,6 @@ function PdfJpg( $pdf, $dpi, $page, $out, $quality=0, $count=1, $left=0, $top=0,
 
 /*
  *
- *  Extract retired CPU cycles from profiler wrapper output
- *
- *  Returns false when the expected `cycles={n}` line is missing
- *
- */
-
-function CyclesFromProfiledToolOutput( $output )
-{
-    $matchCount = preg_match( '/(?:^|\n)cycles=([0-9]+)(?:\n|$)/', trim( $output ), $matches );
-
-    if( $matchCount !== 1 )
-    {
-        return false;
-        /*--- EXIT POINT ---*/
-    }
-
-    return (int)$matches[1];
-}
-
-
-
-/*
- *
- *  PdfJpg with cycles profiling
- *
- *  Returns false on error, otherwise an array with elapsed milliseconds and retired cycles
- *
- */
-
-function PdfJpgCycles( $pdf, $dpi, $page, $out, $quality = 0, $count = 1 )
-{
-    $toolcall = [ PATH_TO_TOOLS . 'pdfjpgcycles -cachev2 yes -pdf', $pdf, '-dpi', StringFromFloat( $dpi ), '-page', $page, '-out', $out ];
-
-    if( $quality != 0 )
-    {
-        $toolcall[] = '-quality';
-        $toolcall[] = StringFromFloat( $quality, 2 );
-    }
-
-    if( $count != 1 )
-    {
-        $toolcall[] = '-count';
-        $toolcall[] = $count;
-    }
-
-    $milliseconds = Milliseconds();
-
-    $output = Execute( $toolcall, $exitStatus );
-
-    $milliseconds = Milliseconds( $milliseconds );
-
-    if( $exitStatus != 0 )
-    {
-        $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_WARNING, "pdfjpgcycles failed with status: $exitStatus - $output - command: $toolcall", DocumentIdFromPath( $pdf ), true, true, true );
-        return false;
-        /*--- EXIT POINT ---*/
-    }
-
-    $cycles = CyclesFromProfiledToolOutput( $output );
-
-    if( $cycles === false )
-    {
-        $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_WARNING, "pdfjpgcycles returned no cycles data - $output - command: $toolcall", DocumentIdFromPath( $pdf ), true, true, true );
-        return false;
-        /*--- EXIT POINT ---*/
-    }
-
-    return [ 'milliseconds' => $milliseconds, 'cycles' => $cycles ];
-}
-
-
-
-/*
- *
  *  PdfJpgV2
  *
  *  Returns false on error, true or avarage page color string on success
@@ -561,16 +485,16 @@ function ImgQR( $f, $page )
 
 /*
  *
- *  Resize a cached image with cycles profiling
+ *  Resize a cached image and return elapsed milliseconds
  *
- *  Returns false on error, otherwise an array with elapsed milliseconds and retired cycles
+ *  Returns false on error
  *
  */
 
-function ImgResizeCycles( $img, $out, $inDpi, $outDpi, $quality = 0.8 )
+function ImgResize( $img, $out, $inDpi, $outDpi, $quality = 0.8 )
 {
     $toolcall = [
-                    PATH_TO_TOOLS . 'imgresizecycles -img',
+                    PATH_TO_TOOLS . 'imgresize -img',
                     $img,
                     '-out',
                     $out,
@@ -591,22 +515,12 @@ function ImgResizeCycles( $img, $out, $inDpi, $outDpi, $quality = 0.8 )
     if( $exitStatus != 0 )
     {
         $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_WARNING, "imgresizecycles failed with status: $exitStatus - $output - command: $toolcall", DocumentIdFromPath( $img ), true, true, true );
+        WorkerLog( WORKER_WARNING, "imgresize failed with status: $exitStatus - $output - command: $toolcall", DocumentIdFromPath( $img ), true, true, true );
         return false;
         /*--- EXIT POINT ---*/
     }
 
-    $cycles = CyclesFromProfiledToolOutput( $output );
-
-    if( $cycles === false )
-    {
-        $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_WARNING, "imgresizecycles returned no cycles data - $output - command: $toolcall", DocumentIdFromPath( $img ), true, true, true );
-        return false;
-        /*--- EXIT POINT ---*/
-    }
-
-    return [ 'milliseconds' => $milliseconds, 'cycles' => $cycles ];
+    return $milliseconds;
 }
 
 

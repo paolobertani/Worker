@@ -4,7 +4,8 @@ UPDATE
 
 SET
 
-`cachev2_md5` = ""
+`cachev2_md5` = "",
+`cached_pages_count` = 0
 
 WHERE
 

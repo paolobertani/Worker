@@ -103,6 +103,7 @@ function RunDocumentWithCommand()
     if( $command == 'all' || $command == 'cache' )
     {
         $document['cachev2_md5'] = '';
+        $document['cached_pages_count'] = 0;
     }
 
 
@@ -230,6 +231,7 @@ function RunDocumentToCacheV2()
     $md5           = $document['md5'];
     $cachev2_md5   = $document['cachev2_md5'];
     $cachev2_pages = $document['cachev2_pages'];
+    $cachedPagesCount = (int)$document['cached_pages_count'];
 
     // get pages count from the pdfff instead that from the db
     $pdfff = PathToPdfff( $document_id );
@@ -241,6 +243,8 @@ function RunDocumentToCacheV2()
     if( $md5 !== $cachev2_md5 )
     {
         $cachev2_pages = 0;
+        $cachedPagesCount = 0;
+        $document['cached_pages_count'] = 0;
     }
 
     $firstPageNum = $cachev2_pages;
@@ -262,9 +266,9 @@ function RunDocumentToCacheV2()
         file_put_contents( PathToDocument( $document_id ) . "$document_id.pagescolor.txt", "" );
     }
 
-    $result = RenderPagesForEachResolutionV2( $document_id, $firstPageNum, $lastPageNum, $pagesCount );
+    $cachedPagesCountInBatch = RenderPagesForEachResolutionV2( $document_id, $firstPageNum, $lastPageNum, $pagesCount );
 
-    if( ! $result )
+    if( $cachedPagesCountInBatch === false )
     {
         $document['pdf'] = -1;
         $document['pages_count'] = $pagesCount;
@@ -273,6 +277,7 @@ function RunDocumentToCacheV2()
     {
         $document['cachev2_md5'] = $md5;                // `cachev2_md5` is set to `md5` as cache rendering starts
         $document['cachev2_pages'] = $lastPageNum + 1;  // cache rendering is over when `cachev2_pages` equals `pages_count`
+        $document['cached_pages_count'] = $cachedPagesCount + $cachedPagesCountInBatch;
         $document['pages_count'] = $pagesCount;
 
         if( WORKER_CACHE_MAKES_COLORS )
@@ -412,6 +417,7 @@ function RunDocumentToUncacheV2()
     RemoveCacheV2( $document_id );
 
     $document['cachev2_md5'] = '';
+    $document['cached_pages_count'] = 0;
 
     $document['cache_size'] = DocumentCacheSize( $document_id );
 
@@ -453,6 +459,7 @@ function RunDocumentToRemove()
     $document['cover_width']        = 0.0;
     $document['cover_height']       = 0.0;
     $document['cache_size']         = 0;
+    $document['cached_pages_count'] = 0;
     $document['has_slow_pages']     = 0;
     $document['slow_pages']         = '[]';
     $document['slow_milliseconds']  = '[]';

@@ -122,6 +122,7 @@ function ExecuteCommand( $command, &$document )
     {
         RemoveCacheV2( $document_id );
         $document['cachev2_md5'] = '';
+        $document['cached_pages_count'] = 0;
     }
 
 
@@ -278,20 +279,23 @@ function MakePathToMarkdownChunksMaybe( $document_id )
 function RenderPagesForEachResolutionV2( $document_id, $start, $end, $pagesCount )
 {
     $resolutions = CachedResolutionsV2();
+    $cachedPagesCount = 0;
 
     ArraySortByKey( $resolutions, 'dpiDESC' );
 
     foreach( $resolutions as $res )
     {
         $result = RenderPagesAtResolutionV2( $document_id, $res['dpi'], $start, $end, $pagesCount );
-        if( ! $result )
+        if( $result === false )
         {
             return false;
             /*--- EXIT POINT ---*/
         }
+
+        $cachedPagesCount += $result;
     }
 
-    return true;
+    return $cachedPagesCount;
 }
 
 
@@ -439,74 +443,43 @@ function RenderCover( $document_id, $dpi, $hd )
 
 /*
  *
- *  Measure direct render vs resize cost for a cached page
+ *  Measure resize time for a cached page
  *
- *  Returns false if profiling cannot be completed; in that case the cached page must be kept
+ *  Returns false if resize cannot be completed; in that case the cached page must be kept
  *
  */
 
-function CacheProfileForPageV2( $document_id, $pageNum, $cachedPagePath )
+function CacheResizeMillisecondsForPageV2( $document_id, $pageNum, $cachedPagePath )
 {
     $targetDpi = WORKER_CACHE_COMPARE_TARGET_DPI;
     $targetQuality = WORKER_CACHE_COMPARE_QUALITY;
 
-    $pdf = PathToPdf( $document_id );
-
-    $pdfJpgTestPath = PathToDocument( $document_id ) . $document_id . ".cachetest.pdfjpg.dpi$targetDpi.page$pageNum.jpg";
     $imgResizeTestPath = PathToDocument( $document_id ) . $document_id . ".cachetest.imgresize.dpi$targetDpi.page$pageNum.jpg";
 
-    if( FileExists( $pdfJpgTestPath ) )
+    if( FileExists( $imgResizeTestPath ) )
     {
-        RemoveFile( $pdfJpgTestPath, $document_id );
+        RemoveFile( $imgResizeTestPath, $document_id );
     }
+
+    $imgResizeMilliseconds = ImgResize( $cachedPagePath, $imgResizeTestPath, WORKER_CACHE_COMPARE_SOURCE_DPI, $targetDpi, $targetQuality );
 
     if( FileExists( $imgResizeTestPath ) )
     {
         RemoveFile( $imgResizeTestPath, $document_id );
     }
 
-    $pdfJpgProfile = PdfJpgCycles( $pdf, $targetDpi, $pageNum, $pdfJpgTestPath, $targetQuality );
-
-    $imgResizeProfile = false;
-
-    if( $pdfJpgProfile !== false )
-    {
-        $imgResizeProfile = ImgResizeCycles( $cachedPagePath, $imgResizeTestPath, WORKER_CACHE_COMPARE_SOURCE_DPI, $targetDpi, $targetQuality );
-    }
-
-    if( FileExists( $pdfJpgTestPath ) )
-    {
-        RemoveFile( $pdfJpgTestPath, $document_id );
-    }
-
-    if( FileExists( $imgResizeTestPath ) )
-    {
-        RemoveFile( $imgResizeTestPath, $document_id );
-    }
-
-    if( $pdfJpgProfile === false || $imgResizeProfile === false )
-    {
-        return false;
-        /*--- EXIT POINT ---*/
-    }
-
-    return [
-                'pdfjpg_cycles' => $pdfJpgProfile['cycles'],
-                'pdfjpg_milliseconds' => $pdfJpgProfile['milliseconds'],
-                'imgresize_cycles' => $imgResizeProfile['cycles'],
-                'imgresize_milliseconds' => $imgResizeProfile['milliseconds']
-           ];
+    return $imgResizeMilliseconds;
 }
 
 
 
 /*
  *
- *  Discard a freshly rendered 348 dpi cached page when direct 216 dpi rendering is cheap enough
+ *  Discard a freshly rendered 348 dpi cached page when PDF rendering is cheap enough
  *
  */
 
-function MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $cachedPagePath )
+function MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $cachedPagePath, $pdfJpgMilliseconds )
 {
     if( $dpi != WORKER_CACHE_COMPARE_SOURCE_DPI )
     {
@@ -514,15 +487,15 @@ function MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $cachedPagePath
         /*--- EXIT POINT ---*/
     }
 
-    $profile = CacheProfileForPageV2( $document_id, $pageNum, $cachedPagePath );
+    $imgResizeMilliseconds = CacheResizeMillisecondsForPageV2( $document_id, $pageNum, $cachedPagePath );
 
-    if( $profile === false )
+    if( $imgResizeMilliseconds === false )
     {
         return;
         /*--- EXIT POINT ---*/
     }
 
-    if( $profile['pdfjpg_cycles'] < $profile['imgresize_cycles'] * WORKER_CACHE_COMPARE_RATIO )
+    if( $pdfJpgMilliseconds < $imgResizeMilliseconds * WORKER_CACHE_COMPARE_RATIO )
     {
         if( FileExists( $cachedPagePath ) )
         {
@@ -542,6 +515,7 @@ function MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $cachedPagePath
 function RenderPagesAtResolutionV2( $document_id, $dpi, $start, $end, $pagesCount )
 {
     $pagesDir = PathToImagesV2( $document_id, $dpi );
+    $cachedPagesCount = 0;
 
     if( ! DirectoryExists( $pagesDir ) )
     {
@@ -569,8 +543,20 @@ function RenderPagesAtResolutionV2( $document_id, $dpi, $start, $end, $pagesCoun
         }
 
         $img = PathToPageImageV2( $document_id, $dpi, $pageNum );
+        $adaptiveCacheCandidate = $dpi == WORKER_CACHE_COMPARE_SOURCE_DPI && $pack == 1;
 
-        $result = PdfJpgV2( $pdf, $dpi, $pageNum, $img, $quality, $pack, $getColor );
+        if( $adaptiveCacheCandidate )
+        {
+            $pdfJpgMilliseconds = Milliseconds();
+
+            $result = PdfJpgV2( $pdf, $dpi, $pageNum, $img, $quality, $pack, $getColor );
+
+            $pdfJpgMilliseconds = Milliseconds( $pdfJpgMilliseconds );
+        }
+        else
+        {
+            $result = PdfJpgV2( $pdf, $dpi, $pageNum, $img, $quality, $pack, $getColor );
+        }
 
         if( $result === false )
         {
@@ -584,16 +570,21 @@ function RenderPagesAtResolutionV2( $document_id, $dpi, $start, $end, $pagesCoun
             file_put_contents( PathToDocument( $document_id ) . "$document_id.pagescolor.txt", $color, FILE_APPEND );
         }
 
-        if( $pack == 1 )
+        if( $adaptiveCacheCandidate )
         {
-            MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $img );
+            MaybeDiscardCachedPageV2( $document_id, $dpi, $pageNum, $img, $pdfJpgMilliseconds );
+
+            if( FileExists( $img ) )
+            {
+                $cachedPagesCount++;
+            }
         }
 
         WorkerQuitMaybe();
         WorkerAlive();
     }
 
-    return true;
+    return $cachedPagesCount;
 }
 
 

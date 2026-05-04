@@ -23,6 +23,7 @@ SET
 `pages_count`       = {{pages_count}},
 `cachev2_md5`       = {{cachev2_md5}},
 `cachev2_pages`     = {{cachev2_pages}},
+`cached_pages_count` = {{cached_pages_count}},
 `covers_md5`        = {{covers_md5}},
 `pagescolor_md5`    = {{pagescolor_md5}},
 `qr_md5`            = {{qr_md5}},

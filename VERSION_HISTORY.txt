@@ -1,3 +1,15 @@
+4.4.0
+
+Cache v2 adaptive keep/discard now compares PHP wall-clock milliseconds for 348 dpi PDF rendering against imgresize 348->216 milliseconds with a 1.20 ratio; retired-cycle profiling wrappers have been removed
+
+Worker now tracks `cached_pages_count`, the number of 348 dpi PDF pages physically kept in cache after adaptive discard decisions
+
+
+
+***
+
+
+
 4.3.0
 
 Raised Worker JPEG quality to 0.85 for cache v2, cover cache and adaptive render-vs-resize profiling
