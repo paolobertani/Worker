@@ -449,7 +449,7 @@ function WorkerTaskRunQrTable()
 
 /*
  *
- *  Run markdown chunks task
+ *  Run markdown pages task
  *
  */
 

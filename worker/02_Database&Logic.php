@@ -170,7 +170,7 @@ function DbDocumentToMeta()
 
 /*
  *
- *  Get one document candidate for markdown pages/chunks generation
+ *  Get one document candidate for markdown pages generation
  *
  */
 
@@ -200,14 +200,15 @@ function DbDocumentMarkdownInProgress( $brand_ids )
 
 /*
  *
- *  Update markdown pages/chunks state fields on a document
+ *  Update markdown pages state fields on a document
  *
  */
 
-function DbDocumentMarkdownStateUpdate( $document_id, $md_md5, $md_page_index, $lock )
+function DbDocumentMarkdownStateUpdate( $document_id, $md, $md_md5, $md_page_index, $lock )
 {
     $params = [
         'id' => $document_id,
+        'md' => $md,
         'md_md5' => $md_md5,
         'md_page_index' => $md_page_index,
         'lock' => $lock,

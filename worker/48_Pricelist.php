@@ -424,6 +424,7 @@ function ManagePricelist()
 
     // Log into pricelists per brand
 
+    $issues = substr( $issues, 0, 255 );
     $result = QueryExecute( '75_pricelists_per_brand.sql', $error, [ 'brand_id' => $brand_id, 'pricelist' => $description, 'issues' => $issues, 'uploaded' => str_replace( '.', ':', $uploaded ), 'user_id' => $user_id ] );
     if( $result === false )
     {

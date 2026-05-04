@@ -242,16 +242,16 @@ function MetaQuickMetaProduce( $document_id )
     // Build meta and save
 
     $quickMeta = [
-        'md5' => $actualMD5,
-        'pages_count' => $pages_count,
-        'pdf_size' => GetFileSize( $path_to_pdf ),
-        'pdf_modified' => $info['modified'],
-        'pdf_created' => $info['created'],
-        'has_outlines' => $has_outlines,
-        'outlines_count' => $labels_count,
-        'outlines_depth' => $levels_count,
-        'outlines' => $outlines,
-        'key_rows' => $key_rows
+        'md5'           => $actualMD5,
+        'pages_count'   => $pages_count,
+        'pdf_size'      => GetFileSize( $path_to_pdf ),
+        'pdf_modified'  => $info['modified'],
+        'pdf_created'   => $info['created'],
+        'has_outlines'  => $has_outlines,
+        'outlines_count'=> $labels_count,
+        'outlines_depth'=> $levels_count,
+        'outlines'      => $outlines,
+        'key_rows'      => $key_rows
     ];
 
 

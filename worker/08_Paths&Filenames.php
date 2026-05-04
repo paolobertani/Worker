@@ -208,39 +208,13 @@ function PathToMarkdownPage( $document_id, $page )
 
 /*
  *
- *  Path to the markdown chunks directory
+ *  Path to the obsolete markdown chunks directory
  *
  */
 
 function PathToMarkdownChunks( $document_id )
 {
     return PathToDocument( $document_id ) . $document_id . '.chunks/';
-}
-
-
-
-/*
- *
- *  Path to one markdown chunk file
- *
- */
-
-function PathToMarkdownChunk( $document_id, $page_start, $page_end )
-{
-    return PathToMarkdownChunks( $document_id ) . sprintf( '%06d.%04d-%04d.chunk.md', $document_id, $page_start, $page_end );
-}
-
-
-
-/*
- *
- *  Path to the markdown chunks manifest
- *
- */
-
-function PathToMarkdownManifest( $document_id )
-{
-    return PathToMarkdownChunks( $document_id ) . 'manifest.json';
 }
 
 
@@ -420,5 +394,4 @@ function PathToBrandDirectoryInSlave( $brand_id )
 
     return $path;
 }
-
 

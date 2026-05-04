@@ -256,22 +256,6 @@ function MakePathToMarkdownPagesMaybe( $document_id )
 
 /*
  *
- *  Make path to markdown chunks dir if not present
- *
- */
-
-function MakePathToMarkdownChunksMaybe( $document_id )
-{
-    if( ! DirectoryExists( PathToMarkdownChunks( $document_id ) ) )
-    {
-        MakeDirectoryTree( PathToMarkdownChunks( $document_id ) );
-    }
-}
-
-
-
-/*
- *
  *  Render the pages in the interval at each resolution (a packed group is rendered when is requested rendering of the first page)
  *
  */
@@ -389,7 +373,7 @@ function RemoveMarkdownPages( $document_id )
 
 /*
  *
- *  Remove markdown chunks directory and its files
+ *  Remove obsolete markdown chunks directory and its files
  *
  */
 

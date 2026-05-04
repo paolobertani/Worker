@@ -240,7 +240,7 @@ function WorkerRun()
 
         /*
          *
-         *  Markdown pages & chunks
+         *  Markdown pages
          *
          */
 

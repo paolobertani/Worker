@@ -77,12 +77,9 @@ define( 'WORKER_INTERVAL_CHECK_CERT',     86400 );   // 24h - Check cert every d
 define( 'WORKER_INTERVAL_RENEW_CERTS',   604800 );   // 7d - Launch RenewCerts weekly
 define( 'WORKER_INTERVAL_AUTO_EXPIRE',     1801 );   // Check autoexpire
 define( 'WORKER_INTERVAL_AUTO_UNCACHE',    1802 );   // Check remove from cache
-define( 'WORKER_INTERVAL_MARKDOWN',         15 );   // Check markdown pages/chunks generation
+define( 'WORKER_INTERVAL_MARKDOWN',         15 );   // Check markdown pages generation
 define( 'WORKER_MARKDOWN_PAGE_BATCH',       20 );   // How many PDF pages Docling will process per iteration
-define( 'WORKER_MARKDOWN_CHUNK_CORE',       12 );   // Markdown chunk core size in pages
-define( 'WORKER_MARKDOWN_CHUNK_BACK',        6 );   // Markdown chunk backward overlap in pages
-define( 'WORKER_MARKDOWN_CHUNK_FORWARD',     6 );   // Markdown chunk forward overlap in pages
-define( 'WORKER_MARKDOWN_LOCK', 'worker markdown' ); // Document lock while markdown pages/chunks are being generated
+define( 'WORKER_MARKDOWN_LOCK', 'worker markdown' ); // Document lock while markdown pages are being generated
 
 
 define( 'WORKER_SIGNALS',                  true );   // Use signals (must be supported by PHP)
@@ -110,7 +107,7 @@ define( 'WORKER_AUTOEXPIRE_YEARS_UPL',        2 );   // The old document is set 
 define( 'WORKER_DONT_CACHE_YEARS_OLD',        3 );   // After this amount of years from expiring a document is considered old
 define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this OLD document has never been read: do not cache it
 
-define( 'MD_BRAND_IDS',     						 // Pilot brands for markdown pages/chunks generation; empty = disabled              
+define( 'MD_BRAND_IDS',     						 // Pilot brands for markdown pages generation; empty = disabled
 						[ 160 ] );  
 
 if( ! is_dir( PATH_TO_HF_CACHE ) )
