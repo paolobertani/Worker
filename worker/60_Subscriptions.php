@@ -114,8 +114,9 @@ function SubscriptionsBTSuspendExpired()
             break;
         }
 
-        $subscription_id = $result[ 0 ][ 'id' ];
-        $description = $result[ 0 ][ 'description' ];
+        $subscription = $result[ 0 ];
+        $subscription_id = $subscription[ 'id' ];
+        $description = $subscription[ 'description' ];
         $count++;
 
         $error = '';
@@ -135,7 +136,7 @@ function SubscriptionsBTSuspendExpired()
 
         SubscriptionSetGroup( $subscription_id, NEXI_EMPTY_GROUP_ID );
 
-        SubscriptionSendMailAsBankTransferIsExpected( $result[ 0 ] );
+        SubscriptionSendMailAsBankTransferIsExpected( $subscription );
     }
 
     $logdb = $count > 0 ? true : false;
@@ -445,7 +446,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
 
     if( $status < 200 || $status > 399 )
     {
-        WorkerLog( WORKER_ERROR, "FATAL - Subscriptions: CURL failed with status $errnum", 0, true, true, true );
+        WorkerLog( WORKER_ERROR, "FATAL - Subscriptions: CURL failed with status $status", 0, true, true, true );
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
@@ -632,12 +633,13 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     }
 
     $result = $mailer->Send();
+    $mailerErrorInfo = $mailer->ErrorInfo;
 
     unset( $mailer );
 
     if( ! $result )
     {
-        $mail_error = "FATAL - Subscriptions - Failed sending email to payments@pinaxo.com - Error: {$mailer->ErrorInfo}";
+        $mail_error = "FATAL - Subscriptions - Failed sending email to payments@pinaxo.com - Error: {$mailerErrorInfo}";
     }
 
     sleep( 1 );
@@ -739,6 +741,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     }
 
     $result = $mailer->Send();
+    $mailerErrorInfo = $mailer->ErrorInfo;
 
     unset( $mailer );
 
@@ -746,7 +749,7 @@ function SubscriptionsCashIn( $subscription, &$mail_error )
     {
         if( $mail_error === '' )
         {
-            $mail_error = "FATAL - Subscriptions - Failed sending email to $email - Error: {$mailer->ErrorInfo}";
+            $mail_error = "FATAL - Subscriptions - Failed sending email to $email - Error: {$mailerErrorInfo}";
         }
         else
         {
@@ -999,8 +1002,8 @@ function SubscriptionsGetValidUntil( $valid_until_day, $valid_until, $duration )
 
 function SubscriptionSendMailAsBankTransferIsExpected( $subscription )
 {
-    $from = $subscription[ 'description' ];
+    $subscriptionDescription = $subscription[ 'description' ];
     $amount = round( $subscription[ 'amount' ] * ( 100 + $subscription[ 'vat' ] ) / 100, 2 );
 
-    WorkerLog( WORKER_INFO, "Expected incoming bank transfer from `$subscription", 0 );
+    WorkerLog( WORKER_INFO, "Expected incoming bank transfer for `$subscriptionDescription` - amount: $amount euro", 0 );
 }

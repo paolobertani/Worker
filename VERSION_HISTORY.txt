@@ -1,3 +1,73 @@
+4.4.8
+
+PHP-FPM and NGINX logs now share the same copytruncate implementation: every 60 seconds, logs at 10,000,000 bytes are copied into their own timestamped .history archive, truncated in place and pruned to retain ten archives. PHP-FPM keeps the same active log inode; the rotation marker, separate archive pruning and MacStack monitor reopening step are no longer needed. Failed copies preserve the active log; the accepted copytruncate window still applies.
+
+
+
+***
+
+
+
+4.4.7
+
+NGINX log maintenance now runs every 60 seconds. Each log gets a dedicated .history directory; at 10,000,000 bytes it is copied to a timestamped archive, truncated in place, then its oldest archives are removed to retain ten copies. History directories are excluded from recursive scans. Failed copies leave the active log intact; the small copytruncate window for concurrent writes is accepted.
+
+
+
+***
+
+
+
+4.4.6
+
+The light Worker checks the PHP-FPM error log every 60 seconds, archives it above 10,000,000 bytes and retains ten archives. A rotated-php-fpm-log marker requests log reopening from the root MacStack monitor; further rotations wait until reopening is confirmed and the marker is removed.
+
+
+
+***
+
+
+
+4.4.5
+
+Unreadable pricelist Excel files now raise a recoverable warning to terminal, email and `system_log`, are ignored without replacing the previous valid pricelist, and are archived so the worker does not retry them
+
+
+
+***
+
+
+
+4.4.3
+
+QR link production now treats imgqr non-zero exits and non-JSON output as recoverable page-level warnings: it logs to terminal, email and `system_log`, assumes the affected page has no QR codes, and keeps processing the document
+
+
+
+***
+
+
+
+4.4.2
+
+ConsistencyCheck now treats missing `pdfff`/`pdfidx` derivatives as recoverable: it logs a warning to terminal, email and `system_log`, locks the document, regenerates the missing files in dependency order, unlocks on success or before a fatal recovery failure, and writes a recovery record to `system_log`
+
+
+
+***
+
+
+
+4.4.1
+
+PdfInfo now logs invalid or failed pdfinfo output as a WARNING to terminal, database and email, including the beginning of the pdfinfo output for diagnosis
+
+
+
+***
+
+
+
 4.4.0
 
 Cache v2 adaptive keep/discard now compares PHP wall-clock milliseconds for 348 dpi PDF rendering against imgresize 348->216 milliseconds with a 1.20 ratio; retired-cycle profiling wrappers have been removed

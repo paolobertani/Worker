@@ -4,6 +4,7 @@ INSERT IGNORE INTO
         last_run
     )
 VALUES
+    ('hd.markdown', 'NEVER'),
     ('hd.qr_table', 'NEVER'),
     ('hd.stats_searches', 'NEVER'),
     ('hd.updates_mailing', 'NEVER'),
@@ -20,6 +21,7 @@ VALUES
     ('light.log_rotate', 'NEVER'),
     ('light.manage_pricelist', 'NEVER'),
     ('light.manage_transcode', 'NEVER'),
+    ('light.php_fpm_log_rotate', 'NEVER'),
     ('light.purge_sent_documents', 'NEVER'),
     ('light.rebuild_brands_per_category', 'NEVER'),
     ('light.renew_certs', 'NEVER'),

@@ -183,11 +183,12 @@ function PdfJpgV2( $pdf, $dpi, $page, $out, $quality = 0, $count = 1, $color = f
  *
  *  Pdfff
  *
- *  Returns true on success, false on failure
+ *  Returns true on success, false on failure.
+ *  Fatal tool failures stop the worker unless `$quit_on_failure` is false.
  *
  */
 
-function Pdfff( $pdf, $out )
+function Pdfff( $pdf, $out, $quit_on_failure = true )
 {
     $is_sent_document = StringBegins( $pdf, PATH_TO_INBOX );
     if( $is_sent_document ) { $document_id = 0; $sent_document = ' - on sent document ' . DocumentIdFromPath( $pdf ); }
@@ -201,8 +202,15 @@ function Pdfff( $pdf, $out )
     {
         $toolcall = implode( ' ', $toolcall );
         WorkerLog( WORKER_ERROR, "FATAL - pdfff failed with status: $exitStatus - $output - command: $toolcall $sent_document", $document_id, true, true, true );
-        WorkerQuitNow();
-        /*--- QUIT POINT ---*/
+
+        if( $quit_on_failure )
+        {
+            WorkerQuitNow();
+            /*--- QUIT POINT ---*/
+        }
+
+        return false;
+        /*--- EXIT POINT ---*/
     }
 
     if( $exitStatus != 0 )
@@ -222,9 +230,11 @@ function Pdfff( $pdf, $out )
  *
  *  Pdfidx
  *
+ *  Returns true on success, false on failure when `$quit_on_failure` is false.
+ *
  */
 
-function Pdfidx( $pdfff, $out )
+function Pdfidx( $pdfff, $out, $quit_on_failure = true )
 {
     $is_sent_document = StringBegins( $pdfff, PATH_TO_INBOX );
     if( $is_sent_document ) { $document_id = 0; $sent_document = ' - on sent document ' . DocumentIdFromPath( $pdfff ); }
@@ -238,9 +248,18 @@ function Pdfidx( $pdfff, $out )
     {
         $toolcall = implode( ' ', $toolcall );
         WorkerLog( WORKER_ERROR, "FATAL - pdfidx failed with status: $exitStatus - $output - command: $toolcall $sent_document", $document_id, true, true, true );
-        WorkerQuitNow();
-        /*--- QUIT POINT ---*/
+
+        if( $quit_on_failure )
+        {
+            WorkerQuitNow();
+            /*--- QUIT POINT ---*/
+        }
+
+        return false;
+        /*--- EXIT POINT ---*/
     }
+
+    return true;
 }
 
 
@@ -422,7 +441,8 @@ function PdfffLinks( $f )
 
 /*
  *
- *  Get the document QR codes links from the page image
+ *  Get the document QR codes links from the page image, returning false when imgqr itself fails
+ *  The caller treats false as a page without QR codes after this function logs the warning
  *
  */
 
@@ -473,9 +493,10 @@ function ImgQR( $f, $page )
     if( $exitStatus != 0 )
     {
         $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_ERROR, "FATAL - imgqr failed with status: $exitStatus - $output - command: $toolcall", DocumentIdFromPath( $f ), true, true, true );
-        WorkerQuitNow();
-        /*--- QUIT POINT ---*/
+        WorkerLog( WORKER_WARNING, "imgqr failed with status: $exitStatus on page " . ( $page + 1 ) . " - $output - command: $toolcall", DocumentIdFromPath( $f ), true, true, true );
+
+        return false;
+        /*--- EXIT POINT ---*/
     }
 
     return trim( $output );
@@ -622,7 +643,7 @@ function PdfffText( $f, $p )
 
 /*
  *
- *  Get info on Pdf
+ *  Get PDF information through pdfinfo, normalize date fields, and stop with a warning when output is not valid JSON
  *
  */
 
@@ -632,22 +653,39 @@ function PdfInfo( $f )
 
     $output = Execute( $toolcall, $exitStatus );
 
+    $pdfinfoOutput = trim( $output );
+    $pdfinfoOutputExcerpt = substr( str_replace( array( "\r", "\n" ), ' ', $pdfinfoOutput ), 0, 700 );
+
     if( $exitStatus != 0 )
     {
         $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_ERROR, "FATAL - pdfinfo failed with status: $exitStatus - command: $toolcall", DocumentIdFromPath( $f ), true, true, true );
+        WorkerLog( WORKER_WARNING, "pdfinfo failed with status: $exitStatus - output: $pdfinfoOutputExcerpt - command: $toolcall", DocumentIdFromPath( $f ), true, true, true );
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
 
-    $output = trim( $output );
+    $jsonStartPosition = strpos( $pdfinfoOutput, '{"error": 0' );
 
-    $output = substr( $output, strpos( $output, '{"error": 0' ) ); // Strip away CoreGraphics messages
+    if( $jsonStartPosition !== false )
+    {
+        $pdfinfoOutput = substr( $pdfinfoOutput, $jsonStartPosition ); // Strip away CoreGraphics messages
+    }
 
-    $output = json_decode( $output, true );
+    $output = json_decode( $pdfinfoOutput, true );
 
-    $crt = trim( $output['created']  ) === '' ? false : new DateTime( $output['created']  );
-    $mod = trim( $output['modified'] ) === '' ? false : new DateTime( $output['modified'] );
+    if( $output === null )
+    {
+        $toolcall = implode( ' ', $toolcall );
+        WorkerLog( WORKER_WARNING, "pdfinfo output cannot be json decoded: " . json_last_error_msg() . " - output: $pdfinfoOutputExcerpt - command: $toolcall", DocumentIdFromPath( $f ), true, true, true );
+        WorkerQuitNow();
+        /*--- QUIT POINT ---*/
+    }
+
+    $created = $output['created'] ?? '';
+    $modified = $output['modified'] ?? '';
+
+    $crt = trim( $created  ) === '' ? false : new DateTime( $created  );
+    $mod = trim( $modified ) === '' ? false : new DateTime( $modified );
 
     if( $crt !== false && ( $crt->format('Y') < '2000' || $crt->format('Y') > '2100' ) ) $crt = false;
     if( $mod !== false && ( $mod->format('Y') < '2000' || $mod->format('Y') > '2100' ) ) $mod = false;
@@ -673,14 +711,6 @@ function PdfInfo( $f )
 
     $output['created']  = $crt->format('Y-m-d H:i:s');
     $output['modified'] = $mod->format('Y-m-d H:i:s');
-
-    if( $output === null )
-    {
-        $toolcall = implode( ' ', $toolcall );
-        WorkerLog( WORKER_ERROR, "FATAL - pdfinfo output cannot be json decoded; command: $toolcall", DocumentIdFromPath( $f ), true, true, true );
-        WorkerQuitNow();
-        /*--- QUIT POINT ---*/
-    }
 
     return $output;
 }

@@ -11,8 +11,11 @@
 
 
 /*
+ *  WorkerRunWithArgs
  *
- *  Excute in immediate mode (maybe)
+ *  Run an immediate command or synchronization request when arguments select one.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
  *
  */
 
@@ -49,8 +52,11 @@ function WorkerRunWithArgs()
 
 
 /*
+ *  WorkerRun
  *
- *  Run tasks
+ *  Run the scheduled tasks for the light or heavy-duty Worker.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
  *
  */
 
@@ -321,6 +327,16 @@ function WorkerRun()
 
             /*
              *
+             *  Rotate PHP-FPM errors with the shared copytruncate procedure
+             *
+             */
+
+            WorkerTaskRun( 'light.php_fpm_log_rotate' );
+
+
+
+            /*
+             *
              *  Generate Idrolab Stats
              *
              */
@@ -538,8 +554,11 @@ function WorkerRun()
 
 
 /*
+ *  WorkerQuitMaybe
  *
- *  Check if should quit
+ *  Stop the Worker when a shutdown signal or stop file is detected.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
  *
  */
 
@@ -572,8 +591,11 @@ function WorkerQuitMaybe()
 
 
 /*
+ *  WorkerQuitNow
  *
- *  Stop execution immediatedly
+ *  Terminate the current Worker process immediately.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
  *
  */
 
@@ -585,10 +607,12 @@ function WorkerQuitNow()
 
 
 /*
+ *  WorkerShouldPause
  *
- *  Return true if present time
- *  falls into passed interval
- *  in the form 'h:mm-h:mm'
+ *  Check whether the current time is within the supplied 'h:mm-h:mm' interval.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
+ *
  */
 
 function WorkerShouldPause( $when )
@@ -613,8 +637,11 @@ function WorkerShouldPause( $when )
 
 
 /*
+ *  Restart
  *
- *  Restart the worker
+ *  Restart the Worker, preserving its arguments and marking the new execution as a restart.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
  *
  */
 

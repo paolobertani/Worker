@@ -8,6 +8,76 @@
  *
  */
 
+
+
+/*
+ *
+ *  Convert spreadsheet drawings to an empty value so embedded images are ignored during pricelist imports
+ *
+ */
+
+function NormalizePricelistCellValue( $value )
+{
+    if( $value instanceof \PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing )
+    {
+        return '';
+    }
+
+    return $value;
+}
+
+
+
+/*
+ *
+ *  Ignore an unreadable pricelist upload, archive the file and preserve the previous valid pricelist state
+ *
+ */
+
+function IgnoreUnreadablePricelistUpload( $brand_id, $brand, $description, $uploaded, $user_id, $filepath, $issues )
+{
+    $error = '';
+
+    WorkerLog( WORKER_WARNING, "Unreadable pricelist uploaded on $brand ($brand_id): $issues - file ignored", 0, true, true, true );
+
+    $brand_dir = PathToBrandDirectory( $brand_id );
+
+    FSMakeDir( "$brand_dir/uploaded_pricelists" );
+    rename( $filepath, "$brand_dir/uploaded_pricelists/$uploaded $description" );
+
+    $result = QueryExecute( '75_brand_with_pricelist_update2.sql', $error, [ 'brand_id' => $brand_id ] );
+
+    if( $result === false )
+    {
+        WorkerLog( WORKER_ERROR, "FATAL - 75_brand_with_pricelist_update2.sql: query failed - Error: $error", 0, true, true, true );
+        WorkerQuitNow();
+        /*--- QUIT POINT ---*/
+    }
+
+    InvalidateCache( 'brands' );
+
+    $result = QueryExecute( '75_pricelists_per_brand.sql', $error, [ 'brand_id' => $brand_id, 'pricelist' => $description, 'issues' => $issues, 'uploaded' => str_replace( '.', ':', $uploaded ), 'user_id' => $user_id ] );
+
+    if( $result === false )
+    {
+        WorkerLog( WORKER_ERROR, "FATAL - 75_pricelists_per_brand.sql: query failed - Error: $error", 0, true, true, true );
+        WorkerQuitNow();
+        /*--- QUIT POINT ---*/
+    }
+
+    InvalidateCache( 'pricelists_per_brand' );
+
+    WorkerAlive();
+}
+
+
+
+/*
+ *
+ *  Process the next pending brand pricelist and keep the previous valid pricelist when the uploaded spreadsheet cannot be opened
+ *
+ */
+
 function ManagePricelist()
 {
     // Get a brand with a pricelist received
@@ -105,7 +175,25 @@ function ManagePricelist()
     }
 
     $reader->setReadDataOnly( true );
-    $spreadsheet = $reader->load( $filepath );
+
+    try
+    {
+        $spreadsheet = $reader->load( $filepath );
+    }
+    catch( \PhpOffice\PhpSpreadsheet\Reader\Exception $exception )
+    {
+        $issues = 'Unreadable Excel file';
+        $exceptionMessage = trim( $exception->getMessage() );
+
+        if( $exceptionMessage !== '' )
+        {
+            $issues .= ': ' . $exceptionMessage;
+        }
+
+        IgnoreUnreadablePricelistUpload( $brand_id, $brand, $description, $uploaded, $user_id, $filepath, $issues );
+
+        return $brand_id;
+    }
 
     $sheetCount = $spreadsheet->getSheetCount();
 
@@ -131,6 +219,7 @@ function ManagePricelist()
             for( $x = 1; $x <= 52; $x++ )
             {
                 $value = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $x, $header_y ] )->getValue();
+                $value = NormalizePricelistCellValue( $value );
                 $value = strtolower( trim( (string)$value ) );
 
                 if( $value == 'codice'       && $codeColumn === 0 ) { $codeColumn = $x; }
@@ -200,11 +289,11 @@ function ManagePricelist()
                 $type = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->getDataType();
                 if( $type === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA )
                 {
-                    $code = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->getCalculatedValue();
+                    $code = (string)NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->getCalculatedValue() );
                 }
                 else
                 {
-                    $code = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+                    $code = (string)NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $codeColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
                 }
             }
             if( $cod2Column !== 0 )
@@ -212,11 +301,11 @@ function ManagePricelist()
                 $type = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->getDataType();
                 if( $type === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA )
                 {
-                    $cod2 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->getCalculatedValue();
+                    $cod2 = (string)NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->getCalculatedValue() );
                 }
                 else
                 {
-                    $cod2 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+                    $cod2 = (string)NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod2Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
                 }
             }
             if( $cod3Column !== 0 )
@@ -224,20 +313,20 @@ function ManagePricelist()
                 $type = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->getDataType();
                 if( $type === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA )
                 {
-                    $cod3 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->getCalculatedValue();
+                    $cod3 = (string)NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->getCalculatedValue() );
                 }
                 else
                 {
-                    $cod3 = (string)$spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+                    $cod3 = (string)NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $cod3Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
                 }
             }
-            $prce = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $prceColumn, $y ] )->getCalculatedValue();
-            $dscr = $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dscrColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc2 = $dsc2Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc2Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc3 = $dsc3Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc3Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc4 = $dsc4Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc4Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $dsc5 = $dsc5Column === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc5Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
-            $date = $dateColumn === 0 ? '' : $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dateColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue();
+            $prce = NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $prceColumn, $y ] )->getCalculatedValue() );
+            $dscr = NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dscrColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
+            $dsc2 = $dsc2Column === 0 ? '' : NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc2Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
+            $dsc3 = $dsc3Column === 0 ? '' : NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc3Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
+            $dsc4 = $dsc4Column === 0 ? '' : NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc4Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
+            $dsc5 = $dsc5Column === 0 ? '' : NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dsc5Column, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
+            $date = $dateColumn === 0 ? '' : NormalizePricelistCellValue( $spreadsheet->getSheet( $sheetIdx )->getCell( [ $dateColumn, $y ] )->setDataType( \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING )->getValue() );
 
             $code = StringReplace( "$code $cod2 $cod3", "\r", "\n" );
             $code = StringReplace( $code, "\n", " " );
@@ -295,7 +384,7 @@ function ManagePricelist()
             /*--- QUIT POINT ---*/
         }
         InvalidateCache( 'pricelists_per_brand' );
-        return false;
+        return $brand_id;
     }
 
     if( ! $missing_column )

@@ -10,6 +10,13 @@
 
 
 
+/*
+ *
+ *  Detect QR code links on every document page, tag them into pdfff links, and return the unique QR count
+ *  Pages where imgqr returns invalid data are logged as warnings and treated as pages without QR codes
+ *
+ */
+
 function QRTagPdfff( $document_id )
 {
     $links = PdfffLinks( PathToPdfff( $document_id ) );
@@ -62,13 +69,22 @@ function QRTagPdfff( $document_id )
     {
         $json = ImgQR( $document_id, $pageIdx );
 
-        $qr_links = json_decode( $json, true );
-
-        if( $qr_links === null )
+        if( $json === false )
         {
-            WorkerLog( WORKER_ERROR, "FATAL - imgqr failed returning non-JSON data: " . substr( $json, 0, 20), $document_id, true, true, true );
-            WorkerQuitNow();
-            /*--- QUIT POINT ---*/
+            $qr_links = [];
+        }
+        else
+        {
+            $qr_links = json_decode( $json, true );
+
+            if( $qr_links === null )
+            {
+                $imgqrOutputExcerpt = substr( str_replace( array( "\r", "\n" ), ' ', $json ), 0, 700 );
+
+                WorkerLog( WORKER_WARNING, "imgqr failed returning non-JSON data on page " . ( $pageIdx + 1 ) . ": " . json_last_error_msg() . " - output: $imgqrOutputExcerpt", $document_id, true, true, true );
+
+                $qr_links = [];
+            }
         }
 
         foreach( $qr_links as $link )
@@ -116,6 +132,5 @@ function QRTagPdfff( $document_id )
 
     return $qr_count;
 }
-
 
 

@@ -42,8 +42,11 @@ function WorkerTaskLastRunToUnixtime( $value )
 
 
 /*
+ *  WorkerTaskSpecs
  *
- *  Task specs
+ *  Describe the interval, conditions and callback of each scheduled task.
+ *
+ *  edited by Samantha Allman (aka Codex GPT-6 Default)
  *
  */
 
@@ -123,6 +126,12 @@ function WorkerTaskSpecs()
             'interval'   => WORKER_INTERVAL_LOGROTATE,
             'enabled_if' => 'WorkerTaskIsLightDuty',
             'run'        => 'WorkerTaskRunLogRotate',
+        ],
+        'light.php_fpm_log_rotate' => [
+            'label'      => 'light.php_fpm_log_rotate',
+            'interval'   => WORKER_INTERVAL_PHP_FPM_LOGROTATE,
+            'enabled_if' => 'WorkerTaskIsLightDuty',
+            'run'        => 'WorkerTaskRunPhpFpmLogRotate',
         ],
         'light.idrolab_stats' => [
             'label'      => 'light.idrolab_stats',
@@ -517,6 +526,22 @@ function WorkerTaskRunBackupDatabases()
 function WorkerTaskRunLogRotate()
 {
     LogRotate();
+}
+
+
+
+/*
+ *  WorkerTaskRunPhpFpmLogRotate
+ *
+ *  Check PHP-FPM error log rotation on the light Worker schedule.
+ *
+ *  by Samantha Allman (aka Codex GPT-6 Default)
+ *
+ */
+
+function WorkerTaskRunPhpFpmLogRotate()
+{
+    RotatePhpFpmErrorLog();
 }
 
 

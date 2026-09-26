@@ -28,7 +28,7 @@ function RunDocumentAutolocked()
     $document_id = $document['id'];
     $hd = 1;
     MakePathToCacheV2Maybe( $document_id );
-    ConsistencyCheck( $document_id );
+    ConsistencyCheck( $document_id, true, true, true );
 
     WorkerLog( WORKER_INFO, "Detected locked document. Rebuild all.", $document_id, true, false, 1 );
 
@@ -112,7 +112,7 @@ function RunDocumentWithCommand()
     $command_requires_pdfff = ! in_array( $command, [ 'all', 'pdfff' ] );
     $command_requires_pdfidx = ! in_array( $command, [ 'all', 'pdfff', 'pdfidx' ] );
 
-    ConsistencyCheck( $document_id, $command_requires_pdfff, $command_requires_pdfidx );
+    ConsistencyCheck( $document_id, $command_requires_pdfff, $command_requires_pdfidx, true );
 
 
     // Execute the command
@@ -233,12 +233,12 @@ function RunDocumentToCacheV2()
     $cachev2_pages = $document['cachev2_pages'];
     $cachedPagesCount = (int)$document['cached_pages_count'];
 
+    MakePathToCacheV2Maybe( $document_id );
+    ConsistencyCheck( $document_id );
+
     // get pages count from the pdfff instead that from the db
     $pdfff = PathToPdfff( $document_id );
     $pagesCount = PdfSize( $pdfff, '', '', false, true );
-
-    MakePathToCacheV2Maybe( $document_id );
-    ConsistencyCheck( $document_id );
 
     if( $md5 !== $cachev2_md5 )
     {

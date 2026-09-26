@@ -299,6 +299,25 @@ function DbDocumentLock( $document_id )
 
 
 
+/*
+ *
+ *  Unlock a document without changing its state fields
+ *
+ */
+
+function DbDocumentUnlock( $document_id )
+{
+    $params = [ 'id' => $document_id ];
+
+    $result = DbDocumentQuery( '09_document_unlock.sql', $params );
+
+    InvalidateCache( 'documents' );
+
+    return $result;
+}
+
+
+
 function DbDocumentUpdateAndUnlock( $document )
 {
 

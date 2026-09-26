@@ -24,15 +24,31 @@ function WorkerStoreRedisConnect()
 
     $redis = new Redis();
 
-    if( ! $redis->connect( WORKER_REDIS_HOST, WORKER_REDIS_PORT, WORKER_REDIS_TIMEOUT ) )
+    try
     {
-        return false;
-        /*--- EXIT POINT ---*/
-    }
+        if( ! $redis->connect( WORKER_REDIS_HOST, WORKER_REDIS_PORT, WORKER_REDIS_TIMEOUT ) )
+        {
+            return false;
+            /*--- EXIT POINT ---*/
+        }
 
-    if( ! $redis->select( WORKER_REDIS_STORE_DB ) )
+        if( ! $redis->select( WORKER_REDIS_STORE_DB ) )
+        {
+            $redis->close();
+            return false;
+            /*--- EXIT POINT ---*/
+        }
+    }
+    catch( Throwable $e )
     {
-        $redis->close();
+        try
+        {
+            $redis->close();
+        }
+        catch( Throwable $e2 )
+        {
+        }
+
         return false;
         /*--- EXIT POINT ---*/
     }

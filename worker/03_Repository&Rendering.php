@@ -155,11 +155,79 @@ function CommandSupported( $command )
 
 /*
  *
- *  Checks minimal requirements, breaks loud if not met.
+ *  Regenerates missing pdfff/pdfidx files discovered by ConsistencyCheck.
+ *  If caller already owns the document lock, a successful run leaves it in place.
  *
  */
 
-function ConsistencyCheck( $document_id, $require_pdfff = true, $require_pdfidx = true )
+function ConsistencyCheckRegenerateMissingDerivatives( $document_id, $generate_pdfff, $generate_pdfidx, $document_is_locked )
+{
+    $missing_files = [];
+
+    if( $generate_pdfff )
+    {
+        $missing_files[] = 'pdfff';
+    }
+
+    if( $generate_pdfidx )
+    {
+        $missing_files[] = 'pdfidx';
+    }
+
+    $missing_files_description = implode( ' and ', $missing_files );
+
+    WorkerLog( WORKER_WARNING, "ConsistencyCheck: $missing_files_description not found; generating missing files", $document_id, true, true, true );
+
+    if( ! $document_is_locked )
+    {
+        DbDocumentLock( $document_id );
+    }
+
+    if( $generate_pdfff )
+    {
+        $result = Pdfff( PathToPdf( $document_id ), PathToPdfff( $document_id ), false );
+        WorkerAlive();
+
+        if( ! $result )
+        {
+            DbDocumentUnlock( $document_id );
+            WorkerLog( WORKER_ERROR, "ConsistencyCheck: pdfff generation failed; document unlocked", $document_id, true, true, true );
+            WorkerQuitNow();
+            /*--- QUIT POINT ---*/
+        }
+    }
+
+    if( $generate_pdfidx )
+    {
+        $result = Pdfidx( PathToPdfff( $document_id ), PathToPdfidx( $document_id ), false );
+        WorkerAlive();
+
+        if( ! $result )
+        {
+            DbDocumentUnlock( $document_id );
+            WorkerLog( WORKER_ERROR, "ConsistencyCheck: pdfidx generation failed; document unlocked", $document_id, true, true, true );
+            WorkerQuitNow();
+            /*--- QUIT POINT ---*/
+        }
+    }
+
+    if( ! $document_is_locked )
+    {
+        DbDocumentUnlock( $document_id );
+    }
+
+    WorkerLog( WORKER_INFO, "ConsistencyCheck: regenerated missing $missing_files_description", $document_id, true, false, true );
+}
+
+
+
+/*
+ *
+ *  Checks minimal requirements and regenerates missing pdfff/pdfidx derivatives when possible.
+ *
+ */
+
+function ConsistencyCheck( $document_id, $require_pdfff = true, $require_pdfidx = true, $document_is_locked = false )
 {
     if( ! DirectoryExists( MASTER_STORAGE_DIR ) )
     {
@@ -189,18 +257,20 @@ function ConsistencyCheck( $document_id, $require_pdfff = true, $require_pdfidx 
     //      /*--- QUIT POINT ---*/
     //  }
 
-    if( $require_pdfff && ! FileExists( PathToPdfff( $document_id ) ) )
+    $pdfff_missing = ! FileExists( PathToPdfff( $document_id ) );
+    $pdfidx_missing = ! FileExists( PathToPdfidx( $document_id ) );
+
+    $generate_pdfff = $require_pdfff && $pdfff_missing;
+    $generate_pdfidx = $require_pdfidx && $pdfidx_missing;
+
+    if( $generate_pdfidx && $pdfff_missing )
     {
-        WorkerLog( WORKER_ERROR, "ConsistencyCkeck: pdfff not found", $document_id, true, true, true );
-        WorkerQuitNow();
-        /*--- QUIT POINT ---*/
+        $generate_pdfff = true;
     }
 
-    if( $require_pdfidx && ! FileExists( PathToPdfidx( $document_id ) ) )
+    if( $generate_pdfff || $generate_pdfidx )
     {
-        WorkerLog( WORKER_ERROR, "ConsistencyCkeck: pdfidx not found", $document_id, true, true, true );
-        WorkerQuitNow();
-        /*--- QUIT POINT ---*/
+        ConsistencyCheckRegenerateMissingDerivatives( $document_id, $generate_pdfff, $generate_pdfidx, $document_is_locked );
     }
 }
 

@@ -23,7 +23,7 @@
  */
 
 ini_set( 'serialize_precision', 6 );    // 6 decimal digits for float exported into JSON
-ini_set( 'memory_limit', '2048M'  );    // 2GB max memory
+ini_set( 'memory_limit', '4096M'  );    // 4GB max memory
 
 /*
  *
@@ -35,7 +35,7 @@ define( 'ROOT',                     __DIR__ );  // Path to script's directory wi
 define( 'PATH_TO_CACHE',            ROOT . '/cache' );              // Path to worker cache directory
 define( 'PATH_TO_HF_CACHE',         ROOT . '/cache/huggingface' );  // Path to Hugging Face cache directory
 
-define( 'WORKER_VERSION',           '4.4.0' );  // Worker version number
+define( 'WORKER_VERSION',           '4.4.8' );  // Worker version number
 
 define( 'PATH_TO_TOOLS',            '/Users/administrator/www/www.pinaxo.com/MacOS/' );             // Path to Pinaxo macOS tools
 define( 'PATH_TO_MACSTACK',         '/Applications/MacStack.app/Contents/Resources/usr/local' );    // Path to MacStack runtime root
@@ -55,7 +55,8 @@ define( 'WORKER_INTERVAL_CACHE',             11 );   // PDF Cache operations tim
 define( 'WORKER_INTERVAL_TOUCH',             90 );   // Touch time interval to keep drives spinning
 define( 'WORKER_INTERVAL_DELETEBOTS',     10000 );   // Bot generated records removal time interval
 define( 'WORKER_INTERVAL_DATABASES',       1700 );   // Database backup time interval
-define( 'WORKER_INTERVAL_LOGROTATE',        509 );   // Log rotation time interval
+define( 'WORKER_INTERVAL_LOGROTATE',         60 );   // Log rotation time interval
+define( 'WORKER_INTERVAL_PHP_FPM_LOGROTATE', 60 );   // PHP-FPM log rotation check interval
 define( 'WORKER_INTERVAL_IDROLABSTATS',    1508 );   // Idrolab stats generation interval
 define( 'WORKER_INTERVAL_EVENTSSMALL',     2100 );   // Cut events_small and recalcs 30days user usage
 define( 'WORKER_INTERVAL_PURGESDOCS',      2000 );   // Purge Sent Documents table from spurious records
@@ -108,7 +109,7 @@ define( 'WORKER_DONT_CACHE_YEARS_OLD',        3 );   // After this amount of yea
 define( 'WORKER_DONT_CACHE_YEARS_IGN',        2 );   // In the past X years this OLD document has never been read: do not cache it
 
 define( 'MD_BRAND_IDS',     						 // Pilot brands for markdown pages generation; empty = disabled
-						[ 160 ] );  
+						[ 160 ] );
 
 if( ! is_dir( PATH_TO_HF_CACHE ) )
 {
@@ -241,7 +242,10 @@ define( 'IDR_PAUSE',        '0:00-6:59' );                                      
  */
 
 define( 'LOG_DIRECTORIES',  [ PATH_TO_NGINX_LOG_DIR ] );                                       // Path to log directories without trailing slash
-define( 'LOG_SIZE',         1024 * 1024 * 2 );                                                  // Max size of log file
+define( 'LOG_SIZE',         10 * 1000 * 1000 );                                                // Log rotation threshold in bytes
+define( 'LOG_HISTORY_FILES_TO_KEEP', 10 );                                                     // Archives retained for each log
+
+define( 'PHP_FPM_ERROR_LOG_PATH',       PATH_TO_MACSTACK . '/php/log/php-error.log' );
 
 /*
  *

@@ -3,6 +3,62 @@
 /*
  *
  *
+ *  Extract the total errors count returned by updates.php
+ *
+ *
+ */
+
+function UpdatesReturnedErrorsCount( $output )
+{
+    if( preg_match( '/^Done - ([0-9]+) errors\.\s*$/m', $output, $matches ) )
+    {
+        return intval( $matches[1] );
+        /*--- EXIT POINT ---*/
+    }
+
+    return false;
+}
+
+
+
+/*
+ *
+ *
+ *  Emit the standard worker warning when updates.php reported too many errors
+ *
+ *
+ */
+
+function UpdatesWarnForReturnedErrors( $action, $from, $recipients_count, $errors_count, $status )
+{
+    if( $errors_count <= 15 && $status == 0 )
+    {
+        return;
+        /*--- EXIT POINT ---*/
+    }
+
+    if( $errors_count > 15 && $status != 0 )
+    {
+        WorkerLog( WORKER_WARNING, "Updates mailing [$action] returned $errors_count errors for $recipients_count recipients from $from and exited with status $status", 0, true, true, true );
+        return;
+        /*--- EXIT POINT ---*/
+    }
+
+    if( $errors_count > 15 )
+    {
+        WorkerLog( WORKER_WARNING, "Updates mailing [$action] returned $errors_count errors for $recipients_count recipients from $from", 0, true, true, true );
+        return;
+        /*--- EXIT POINT ---*/
+    }
+
+    WorkerLog( WORKER_WARNING, "Updates mailing [$action] exited with status $status after returning $errors_count errors", 0, true, true, true );
+}
+
+
+
+/*
+ *
+ *
  *  Notify the imminent mailing of price list updates
  *
  *
@@ -144,12 +200,22 @@ function UpdatesSend()
 
     $output = FSExecute( [ PATH_TO_PHP_BIN, '/Users/administrator/Scripts/Php/Newsletter/updates.php', "--$action", $from ], $status );
 
-    if( $status != 0 )
+    $errors_count = UpdatesReturnedErrorsCount( $output );
+
+    if( $status != 0 && $errors_count === false )
     {
         WorkerLog( WORKER_ERROR, "FATAL - php updates.php --$action $from failed - Error: $output", 0, true, true, true );
         WorkerQuitNow();
         /*--- QUIT POINT ---*/
     }
+
+    if( $errors_count === false )
+    {
+        WorkerLog( WORKER_WARNING, "Updates mailing [$action] did not return the total errors count", 0, true, true, true );
+        $errors_count = 0;
+    }
+
+    UpdatesWarnForReturnedErrors( $action, $from, $recipients_count, $errors_count, $status );
 
     $elapsed_time = intval( Milliseconds( $milliseconds ) / 1000 );
 
